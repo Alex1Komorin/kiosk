@@ -1,0 +1,109 @@
+/* src/components/InactivityWarning.css */
+.inactivity-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+}
+
+.inactivity-modal {
+  background: linear-gradient(135deg, #1e30d3 0%, #2c3eff 100%);
+  padding: 60px 80px;
+  border-radius: 30px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  max-width: 800px;
+  animation: pulse 2s infinite;
+}
+
+.warning-icon {
+  font-size: 80px;
+  margin-bottom: 30px;
+  animation: bounce 1s infinite;
+}
+
+.inactivity-modal h2 {
+  font-size: 52px;
+  margin-bottom: 20px;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.inactivity-modal p {
+  font-size: 36px;
+  margin-bottom: 25px;
+  opacity: 0.9;
+}
+
+.countdown {
+  font-size: 42px;
+  margin: 30px 0;
+  font-weight: 600;
+}
+
+.countdown-number {
+  color: #ff6b6b;
+  font-size: 48px;
+  font-weight: 800;
+  text-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+}
+
+.instruction {
+  font-size: 32px;
+  color: #a8d5ff;
+  font-style: italic;
+  margin-top: 40px;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Адаптивность */
+@media (max-width: 2160px) {
+  .inactivity-modal {
+    padding: 40px 60px;
+    max-width: 600px;
+  }
+  
+  .warning-icon {
+    font-size: 60px;
+  }
+  
+  .inactivity-modal h2 {
+    font-size: 42px;
+  }
+  
+  .inactivity-modal p {
+    font-size: 28px;
+  }
+  
+  .countdown {
+    font-size: 34px;
+  }
+  
+  .countdown-number {
+    font-size: 38px;
+  }
+  
+  .instruction {
+    font-size: 26px;
+  }
+}

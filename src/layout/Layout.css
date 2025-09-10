@@ -1,0 +1,457 @@
+.layout {
+  width: 2160px;
+  height: 3840px;
+  display: flex;
+  background: #e7f0f7;
+  overflow: hidden;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Основное содержимое */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  width: 75%;
+}
+
+.content {
+  flex: 1;
+  padding: 0;
+  background: #ffffff;
+}
+
+/* Боковая панель справа */
+.sidebar {
+  width: 25%;
+  max-width: 540px;
+  height: calc(100% - 80px);
+  background: linear-gradient(135deg, #1e30d3 0%, #2c3eff 100%);
+  display: flex;
+  flex-direction: column;
+  padding: 40px 30px;
+  box-shadow: -6px 0 40px rgba(30, 48, 211, 0.4);
+}
+
+/* Верхний контейнер с кнопками - 20% */
+.top-buttons-container {
+  height: calc(30% - 8vh);
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 4vh;
+  margin-top: 4vh;
+}
+
+/* Вертикальные навигационные кнопки */
+.main-buttons-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  width: 100%;
+}
+
+.main-btn {
+  padding: 50px 30px;
+  border: none;
+  border-radius: 20px;
+  background: #ffffff;
+  color: #1e30d3;
+  font-size: 42px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  min-height: 300px;
+  border: 3px solid transparent;
+  text-align: center;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.main-btn:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  background: #f8f9ff;
+  border-color: #1e30d3;
+}
+
+.main-btn.active {
+  background: #1e30d3;
+  color: #ffffff;
+  box-shadow: 0 12px 30px rgba(30, 48, 211, 0.4);
+  transform: translateY(-3px);
+  border-color: #ffffff;
+}
+
+.main-btn .fas {
+  font-size: 48px;
+}
+
+/* Контейнер с контентом - 40% высоты */
+.scroll-content-container {
+  height: calc(40% - 4vh);
+  min-height: 600px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 0;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 4vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-container {
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.content-header {
+  background: rgba(255, 255, 255, 0.18);
+  padding: 35px;
+  border-bottom: 3px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(6px);
+  border-radius: 20px 20px 0 0;
+}
+
+.content-title {
+  font-size: 48px;
+  margin: 0;
+  text-align: center;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.content-title .fas {
+  font-size: 52px;
+}
+
+.content-scrollable {
+  flex: 1;
+  overflow-y: auto;
+  padding: 35px;
+}
+
+.content-items {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* Кнопки-ссылки */
+.content-item {
+  background: rgba(255, 255, 255, 0.18);
+  padding: 40px 30px;
+  border-radius: 15px;
+  border: 3px solid rgba(255, 255, 255, 0.25);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(6px);
+  cursor: pointer;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.content-item:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateX(8px);
+  box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.content-item h4 {
+  margin: 0 0 10px 0;
+  font-size: 36px;
+  font-weight: 600;
+  color: #ffffff;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.content-item .fas {
+  font-size: 42px;
+  width: 50px;
+  text-align: center;
+}
+
+.content-item p {
+  margin: 8px 0;
+  font-size: 28px;
+  opacity: 0.9;
+  color: #e7f0f7;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+/* Папки документов */
+.folder-item {
+  background: rgba(86, 104, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.folder-item:hover {
+  background: rgba(86, 104, 255, 0.35);
+}
+
+/* Нижний контейнер - 40% высоты */
+.bottom-container {
+  height: calc(30% - 80px);
+  min-height: 600px;
+  display: flex;
+  align-items: start;
+  justify-content: center;
+}
+
+/* Кнопка дома */
+.home-button-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.home-button {
+  padding: 60px 80px;
+  border: none;
+  border-radius: 25px;
+  background: linear-gradient(135deg, #ffffff 0%, #e7f0f7 100%);
+  color: #1e30d3;
+  font-size: 52px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  min-width: 450px;
+  min-height: 200px;
+  justify-content: center;
+}
+
+.home-button:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  background: linear-gradient(135deg, #e7f0f7 0%, #d0e0f0 100%);
+}
+
+.home-button .fas {
+  font-size: 64px;
+}
+
+/* Стили для iframe */
+.website-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #ffffff;
+}
+
+/* Стили для скроллбара */
+.content-scrollable::-webkit-scrollbar {
+  width: 16px;
+}
+
+.content-scrollable::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.content-scrollable::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #ffffff 0%, #e7f0f7 100%);
+  border-radius: 10px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+.content-scrollable::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #e7f0f7 0%, #d0e0f0 100%);
+}
+
+/* Анимации */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.content-item {
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* Адаптация */
+@media (max-width: 2160px) {
+  .main-btn {
+    padding: 40px 25px;
+    font-size: 36px;
+    min-height: 250px;
+  }
+  
+  .main-btn .fas {
+    font-size: 42px;
+  }
+  
+  .content-header {
+    padding: 30px;
+  }
+  
+  .content-title {
+    font-size: 42px;
+  }
+  
+  .content-title .fas {
+    font-size: 46px;
+  }
+  
+  .content-scrollable {
+    padding: 30px;
+  }
+  
+  .content-item {
+    padding: 35px 25px;
+    min-height: 100px;
+  }
+  
+  .content-item h4 {
+    font-size: 32px;
+  }
+  
+  .content-item .fas {
+    font-size: 38px;
+  }
+  
+  .content-item p {
+    font-size: 26px;
+  }
+  
+  .home-button {
+    padding: 50px 70px;
+    font-size: 46px;
+    min-width: 400px;
+    min-height: 180px;
+  }
+  
+  .home-button .fas {
+    font-size: 58px;
+  }
+}
+
+/* Стили для страницы документов */
+.documents-info {
+  text-align: center;
+  color: #ffffff;
+  padding: 40px;
+}
+
+.documents-info p {
+  font-size: 32px;
+  margin-bottom: 40px;
+  opacity: 0.9;
+  line-height: 1.4;
+}
+
+.go-to-documents-btn {
+  padding: 35px 50px;
+  border: none;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #ffffff 0%, #e7f0f7 100%);
+  color: #1e30d3;
+  font-size: 36px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-width: 400px;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.go-to-documents-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, #e7f0f7 0%, #d0e0f0 100%);
+}
+
+.go-to-documents-btn .fas {
+  font-size: 42px;
+}
+
+/* Специфичные стили для разных секций */
+.content-item.link-item {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.content-item.document-item {
+  background: rgba(86, 104, 255, 0.25);
+}
+
+.content-item.other-item {
+  background: rgba(255, 193, 7, 0.2);
+}
+
+/* Эффекты при наведении для разных типов элементов */
+.content-item.link-item:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.content-item.document-item:hover {
+  background: rgba(86, 104, 255, 0.35);
+}
+
+.content-item.other-item:hover {
+  background: rgba(255, 193, 7, 0.3);
+}
+
+/* Плавная прокрутка */
+.content-scrollable {
+  scroll-behavior: smooth;
+}
+
+/* Улучшенная анимация появления */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.content-item {
+  animation: slideInRight 0.5s ease-out;
+}
+
+/* Задержка анимации для последовательного появления
+.content-item:nth-child(1) { animation-delay: 0.1s; }
+.content-item:nth-child(2) { animation-delay: 0.2s; }
+.content-item:nth-child(3) { animation-delay: 0.3s; }
+.content-item:nth-child(4) { animation-delay: 0.4s; }
+.content-item:nth-child(5) { animation-delay: 0.5s; }
+.content-item:nth-child(6) { animation-delay: 0.6s; }
+.content-item:nth-child(7) { animation-delay: 0.7s; }
+.content-item:nth-child(8) { animation-delay: 0.8s; }
+.content-item:nth-child(9) { animation-delay: 0.9s; }
+.content-item:nth-child(10) { animation-delay: 1.0s; } */

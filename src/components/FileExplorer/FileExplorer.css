@@ -1,0 +1,130 @@
+/* src/components/FileExplorer.css */
+.file-explorer {
+  width: 100%;
+  font-family: 'Arial', sans-serif;
+}
+
+.folder-item, .file-item {
+  display: flex;
+  align-items: center;
+  padding: 25px 15px;
+  margin: 8px 0;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid transparent;
+}
+
+.folder-item:hover, .file-item:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateX(5px);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.folder-item.selected, .file-item.selected {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: #ffffff;
+}
+
+.folder-item .fas, .file-item .fas {
+  font-size: 32px;
+  margin-right: 20px;
+  width: 40px;
+  text-align: center;
+}
+
+.folder-item .fa-folder {
+  color: #ffd700;
+}
+
+.folder-item .fa-folder-open {
+  color: #ffed4e;
+}
+
+.file-item .fa-file-pdf {
+  color: #ff6b6b;
+}
+
+.file-item .fa-file-word {
+  color: #4b6bc6;
+}
+
+.file-item .fa-file-powerpoint {
+  color: #f39c12;
+}
+
+.file-item .fa-file-excel {
+  color: #27ae60;
+}
+
+.folder-name, .file-name {
+  font-size: 32px;
+  font-weight: 600;
+  color: #ffffff;
+  flex: 1;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.file-size {
+  font-size: 28px;
+  color: #b4e0ff;
+  font-style: italic;
+  margin-left: 20px;
+}
+
+.arrow {
+  font-size: 24px;
+  color: #ffffff;
+  margin-left: 15px;
+  transition: transform 0.3s ease;
+}
+
+.folder-item.expanded .arrow {
+  transform: rotate(90deg);
+}
+
+.folder-children {
+  margin-left: 30px;
+  border-left: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Анимации */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 1000px;
+  }
+}
+
+.folder-children {
+  animation: slideDown 0.3s ease-out;
+}
+
+/* Адаптивность */
+@media (max-width: 2160px) {
+  .folder-item, .file-item {
+    padding: 20px 12px;
+  }
+  
+  .folder-item .fas, .file-item .fas {
+    font-size: 28px;
+    margin-right: 15px;
+  }
+  
+  .folder-name, .file-name {
+    font-size: 28px;
+  }
+  
+  .file-size {
+    font-size: 24px;
+  }
+  
+  .arrow {
+    font-size: 20px;
+  }
+}

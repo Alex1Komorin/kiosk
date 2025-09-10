@@ -1,0 +1,294 @@
+.document-page {
+  width: calc(100% - 80px);
+  height: 100%;
+  padding: 40px 60px;
+  background: #ffffff;
+  overflow-y: auto;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 42px;
+  color: #1e30d3;
+}
+
+/* Хлебные крошки */
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 20px 25px;
+  background: #f8f9ff;
+  border-radius: 12px;
+  border: 2px solid #e7f0f7;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+}
+
+.breadcrumb-separator {
+  margin: 0 15px;
+  font-size: 28px;
+  color: #1e30d3;
+  font-weight: bold;
+}
+
+.breadcrumb-link {
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: #1e30d3;
+  cursor: pointer;
+  padding: 12px 18px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+.breadcrumb-link:hover:not(.current) {
+  background: #1e30d3;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.breadcrumb-link.current {
+  color: #2c3eff;
+  cursor: default;
+  font-weight: 700;
+}
+
+.breadcrumb-link:disabled {
+  cursor: default;
+}
+
+/* Заголовок страницы */
+.page-title {
+  font-size: 48px;
+  color: #1e30d3;
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-weight: 700;
+}
+
+.page-title .fas {
+  font-size: 52px;
+  color: #ffd700;
+}
+
+/* Сетка как в Google Документов - 2 в ряд */
+.folder-content {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+  margin-bottom: 40px;
+}
+
+/* Элементы сетки */
+.content-item {
+  background: #ffffff;
+  border: 2px solid #e7f0f7;
+  border-radius: 15px;
+  padding: 30px 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 180px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.content-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  border-color: #1e30d3;
+}
+
+.content-item.folder:hover {
+  background: linear-gradient(135deg, #f8f9ff 0%, #e7f0f7 100%);
+}
+
+.content-item.file:hover {
+  background: linear-gradient(135deg, #ffffff 0%, #f5f8ff 100%);
+}
+
+.content-item h4 {
+  margin: 0 0 12px 0;
+  font-size: 32px;
+  font-weight: 600;
+  color: #1e30d3;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  line-height: 1.3;
+}
+
+.content-item .fas {
+  font-size: 36px;
+  width: 40px;
+  text-align: center;
+}
+
+.content-item.folder .fas {
+  color: #ffd700;
+}
+
+.content-item.file .fas.fa-file-pdf {
+  color: #ff6b6b;
+}
+
+.content-item.file .fas.fa-file-word {
+  color: #4b6bc6;
+}
+
+.content-item.file .fas.fa-file-excel {
+  color: #27ae60;
+}
+
+.content-item.file .fas.fa-file-powerpoint {
+  color: #f39c12;
+}
+
+.content-item.file .fas.fa-file {
+  color: #95a5a6;
+}
+
+.size {
+  font-size: 24px;
+  color: #7f8c8d;
+  font-style: italic;
+  margin: 5px 0 0 0;
+  font-weight: 500;
+}
+
+/* Индикатор загрузки при переходе */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.loading-spinner {
+  font-size: 64px;
+  color: #1e30d3;
+}
+
+/* Анимации */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.folder-content {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.content-item:hover {
+  animation: pulse 0.3s ease-in-out;
+}
+
+/* Адаптивность */
+@media (max-width: 2160px) {
+  .document-page {
+    padding: 30px 40px;
+  }
+  
+  .breadcrumbs {
+    padding: 15px 20px;
+    margin-bottom: 25px;
+  }
+  
+  .breadcrumb-separator {
+    margin: 0 12px;
+    font-size: 24px;
+  }
+  
+  .breadcrumb-link {
+    font-size: 24px;
+    padding: 10px 15px;
+  }
+  
+  .page-title {
+    font-size: 40px;
+    margin-bottom: 30px;
+  }
+  
+  .page-title .fas {
+    font-size: 44px;
+  }
+  
+  .folder-content {
+    gap: 20px;
+  }
+  
+  .content-item {
+    padding: 25px 20px;
+    min-height: 160px;
+  }
+  
+  .content-item h4 {
+    font-size: 28px;
+  }
+  
+  .content-item .fas {
+    font-size: 32px;
+  }
+  
+  .size {
+    font-size: 21px;
+  }
+}
+
+/* Для очень большого количества элементов */
+.folder-content.with-scroll {
+  max-height: 600px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.folder-content.with-scroll::-webkit-scrollbar {
+  width: 12px;
+}
+
+.folder-content.with-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 6px;
+}
+
+.folder-content.with-scroll::-webkit-scrollbar-thumb {
+  background: #1e30d3;
+  border-radius: 6px;
+}
+
+.folder-content.with-scroll::-webkit-scrollbar-thumb:hover {
+  background: #2c3eff;
+}
+
