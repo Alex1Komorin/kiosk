@@ -24,7 +24,7 @@ export const documentsData = {
                 {
                   type: 'file',
                   name: 'Список групп 1 курс.pdf',
-                  path: '/documents/учебные-группы/бакалавриат/1-курс/список-групп.pdf',
+                  path: '/documents/otchet.pdf',
                   size: '1.2 MB',
                   icon: 'fas fa-file-pdf'
                 }
