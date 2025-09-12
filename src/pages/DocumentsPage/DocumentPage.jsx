@@ -13,10 +13,8 @@ const DocumentPage = () => {
   const [breadcrumbs, setBreadcrumbs] = useState([]);
   const [selectedPdf, setSelectedPdf] = useState(null);
   
-  // Получаем функцию продления сессии из контекста
   const { extendSession } = useActivity();
 
-  // Функция для поиска папки по пути
   const findFolderByPath = (data, targetPath) => {
     if (data.path === targetPath) {
       return data;
@@ -32,7 +30,6 @@ const DocumentPage = () => {
     return null;
   };
 
-  // Функция для построения хлебных крошек (ИСПРАВЛЕННАЯ)
   const buildBreadcrumbs = (data, targetPath, crumbs = []) => {
     const newCrumbs = [...crumbs, { name: data.name, path: data.path }];
 
@@ -42,7 +39,6 @@ const DocumentPage = () => {
 
     if (data.children) {
       for (const child of data.children) {
-        // Ищем во всех детях, а не только в папках
         const result = buildBreadcrumbs(child, targetPath, newCrumbs);
         if (result) return result;
       }
@@ -53,45 +49,30 @@ const DocumentPage = () => {
 
   useEffect(() => {
     const decodedPath = folderPath ? decodeURIComponent(`/${folderPath}`) : '/';
-    console.log('Ищем путь:', decodedPath);
-    
     const folder = findFolderByPath(documentsData, decodedPath);
     const crumbs = buildBreadcrumbs(documentsData, decodedPath);
-
-    console.log('Найдена папка:', folder);
-    console.log('Хлебные крошки:', crumbs);
 
     setCurrentFolder(folder || documentsData);
     setBreadcrumbs(crumbs || []);
   }, [folderPath]);
 
   const handleFolderClick = (folder) => {
-    // Кодируем путь для URL
     const encodedPath = encodeURIComponent(folder.path.replace(/^\//, ''));
     navigate(`/documents/${encodedPath}`);
   };
 
   const handleFileClick = (file) => {
-    console.log('Клик по файлу:', file);
-    console.log('Путь файла:', file.path);
-    
     if (file.path.endsWith('.pdf')) {
       const fullPath = file.path;
-      console.log('Полный путь к PDF:', fullPath);
-      
-      // Проверим, существует ли файл
       fetch(fullPath, { method: 'HEAD' })
         .then(response => {
-          console.log('Файл существует:', response.ok);
           if (response.ok) {
             setSelectedPdf(fullPath);
           } else {
-            console.error('Файл не найден:', fullPath);
             alert('Файл не найден: ' + fullPath);
           }
         })
         .catch(error => {
-          console.error('Ошибка проверки файла:', error);
           alert('Ошибка при проверке файла: ' + fullPath);
         });
     } else {
@@ -111,7 +92,7 @@ const DocumentPage = () => {
   if (!currentFolder) {
     return (
       <div className="document-page">
-        <div className="loading">Загрузка...</div>
+        <div className="document-loading">Загрузка...</div>
       </div>
     );
   }
@@ -119,12 +100,12 @@ const DocumentPage = () => {
   return (
     <div className="document-page">
       {/* Хлебные крошки */}
-      <div className="breadcrumbs">
+      <div className="document-breadcrumbs">
         {breadcrumbs.map((crumb, index) => (
-          <span key={crumb.path} className="breadcrumb">
-            {index > 0 && <span className="breadcrumb-separator">/</span>}
+          <span key={crumb.path} className="document-breadcrumb">
+            {index > 0 && <span className="document-breadcrumb-separator">/</span>}
             <button
-              className={`breadcrumb-link ${index === breadcrumbs.length - 1 ? 'current' : ''}`}
+              className={`document-breadcrumb-link ${index === breadcrumbs.length - 1 ? 'current' : ''}`}
               onClick={() => handleBreadcrumbClick(crumb.path)}
               disabled={index === breadcrumbs.length - 1}
             >
@@ -135,17 +116,17 @@ const DocumentPage = () => {
       </div>
 
       {/* Заголовок */}
-      <h1 className="page-title">
+      <h1 className="document-page-title">
         <i className="fas fa-folder"></i>
         {currentFolder.name}
       </h1>
 
       {/* Содержимое папки */}
-      <div className="folder-content">
+      <div className="document-folder-content">
         {currentFolder.children && currentFolder.children.map(item => (
           <div
             key={item.path}
-            className={`content-item ${item.type === 'folder' ? 'folder' : 'file'}`}
+            className={`document-item ${item.type === 'folder' ? 'document-folder' : 'document-file'}`}
             onClick={() => item.type === 'folder' ? handleFolderClick(item) : handleFileClick(item)}
           >
             <h4>
@@ -153,13 +134,13 @@ const DocumentPage = () => {
               {item.name}
             </h4>
             {item.type === 'file' && item.size && (
-              <p className="size">{item.size}</p>
+              <p className="document-size">{item.size}</p>
             )}
           </div>
         ))}
       </div>
 
-      {/* Используем компонент PDFViewer с передачей onUserActivity */}
+      {/* PDF Viewer */}
       {selectedPdf && (
         <PDFViewer
           filePath={selectedPdf}

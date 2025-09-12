@@ -1,6 +1,6 @@
 .layout {
-  width: 100vw; /* Занимаем всю ширину viewport */
-  height: 100vh; /* Занимаем всю высоту viewport */
+  width: 100vw;
+  height: 100vh;
   display: flex;
   background: #e7f0f7;
   overflow: hidden;
@@ -13,7 +13,7 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
-  width: 75%; /* Соотношение 75/25 можно оставить в % */
+  width: 80%; /* Увеличиваем основную область */
 }
 
 .content {
@@ -22,60 +22,57 @@
   background: #ffffff;
 }
 
-/* Боковая панель справа */
+/* Боковая панель справа - уменьшаем ширину */
 .sidebar {
-  width: 25%; /* Ширина в процентах от родителя - ок */
-  height: 100%; /* Занимаем всю высоту .layout */
+  width: 20%; /* Уменьшаем с 25% до 20% */
+  height: 100%;
   background: linear-gradient(135deg, #1e30d3 0%, #2c3eff 100%);
   display: flex;
   flex-direction: column;
-  padding: 2.5vh 1.5vw; /* Адаптивные отступы */
-  box-shadow: -6px 0 40px rgba(30, 48, 211, 0.4);
-  box-sizing: border-box; /* Важно! Чтобы padding не увеличивал ширину */
+  padding: 2vh 1vw; /* Уменьшаем отступы */
+  box-shadow: -4px 0 30px rgba(30, 48, 211, 0.4);
+  box-sizing: border-box;
 }
 
 /* Верхний контейнер с кнопками */
 .top-buttons-container {
-  /* Убираем фиксированную высоту в px и vh, используем гибкий подход */
-  flex: 0 0 auto; /* Не растягивается и не сжимается */
-  margin-bottom: 4vh;
-  margin-top: 4vh;
-  /* min-height лучше задать в rem, если очень нужно, но лучше избегать */
+  flex: 0 0 auto;
+  margin-bottom: 3vh;
+  margin-top: 3vh;
 }
 
 /* Вертикальные навигационные кнопки */
 .main-buttons-vertical {
   display: flex;
   flex-direction: column;
-  gap: 1.5vh; /* Отступ между кнопками относительно высоты */
+  gap: 1vh; /* Уменьшаем отступы */
   width: 100%;
 }
 
 .main-btn {
-  padding: 3vh 2vw; /* Адаптивные отступы */
+  padding: 2vh 1.5vw; /* Уменьшаем отступы */
   border: none;
-  border-radius: 1rem; /* Радиус в rem */
+  border-radius: 0.8rem;
   background: #ffffff;
   color: #1e30d3;
-  font-size: 2.5rem; /* Размер шрифта в rem */
-  font-weight: 700;
+  font-size: 1.6rem; /* Уменьшаем размер шрифта */
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  border: 0.2rem solid transparent; /* Толщина边框 в rem */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  border: 0.15rem solid transparent;
   text-align: center;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem; /* Отступ между иконкой и текстом в rem */
-  /* Убираем фиксированную min-height, пусть контент определяет высоту */
-  box-sizing: border-box; /* Критически важно для корректного размера */
+  gap: 0.8rem;
+  box-sizing: border-box;
 }
 
 .main-btn:hover {
-  transform: translateY(-0.3rem); /* Эффект в rem */
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  transform: translateY(-0.2rem);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
   background: #f8f9ff;
   border-color: #1e30d3;
 }
@@ -83,27 +80,26 @@
 .main-btn.active {
   background: #1e30d3;
   color: #ffffff;
-  box-shadow: 0 12px 30px rgba(30, 48, 211, 0.4);
-  transform: translateY(-0.2rem);
+  box-shadow: 0 8px 25px rgba(30, 48, 211, 0.35);
+  transform: translateY(-0.15rem);
   border-color: #ffffff;
 }
 
 .main-btn .fas {
-  font-size: 2.8rem; /* Относительный размер иконки */
+  font-size: 1.8rem; /* Уменьшаем иконки */
 }
 
 /* Контейнер с контентом */
 .scroll-content-container {
-  /* Заменяем фиксированную высоту на гибкую */
-  flex: 1 1 auto; /* Может растягиваться и сжиматься */
-  min-height: 0; /* Критически важно для Flex/Grid детей с overflow */
+  flex: 0 0 40%; /* Занимает 70% высоты sidebar */
+  min-height: 0;
   background: rgba(255, 255, 255, 0.15);
-  border-radius: 1.2rem;
+  border-radius: 1rem;
   padding: 0;
   overflow: hidden;
-  backdrop-filter: blur(12px);
-  border: 0.2rem solid rgba(255, 255, 255, 0.2);
-  margin-bottom: 4vh;
+  backdrop-filter: blur(10px);
+  border: 0.15rem solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 3vh;
   display: flex;
   flex-direction: column;
 }
@@ -112,92 +108,85 @@
   color: #ffffff;
   display: flex;
   flex-direction: column;
-  height: 100%; /* Занимает всю высоту родителя */
+  height: 100%;
 }
 
 .content-header {
   background: rgba(255, 255, 255, 0.18);
-  padding: 2vh 2vw;
-  border-bottom: 0.2rem solid rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(6px);
-  border-radius: 1.2rem 1.2rem 0 0;
-  flex: 0 0 auto; /* Заголовок не сжимается и не растягивается */
+  padding: 1.5vh 1.5vw;
+  border-bottom: 0.15rem solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+  border-radius: 1rem 1rem 0 0;
+  flex: 0 0 auto;
 }
 
 .content-title {
-  font-size: 2.5rem;
+  font-size: 1.8rem; /* Уменьшаем заголовок */
   margin: 0;
   text-align: center;
-  font-weight: 700;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+  font-weight: 600;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  gap: 0.8rem;
 }
 
 .content-title .fas {
-  font-size: 2.8rem;
+  font-size: 2rem; /* Уменьшаем иконку заголовка */
 }
 
 .content-scrollable {
-  flex: 1 1 auto; /* Занимает всё оставшееся пространство */
+  flex: 1 1 auto;
   overflow-y: auto;
-  padding: 2vh 1.5vw;
+  padding: 1.5vh 1.2vw;
 }
 
 .content-items {
   display: flex;
   flex-direction: column;
-  gap: 1.5vh;
+  gap: 1.2vh;
 }
 
 /* Кнопки-ссылки */
 .content-item {
   background: rgba(255, 255, 255, 0.18);
-  padding: 2vh 1.5vw;
-  border-radius: 1rem;
-  border: 0.2rem solid rgba(255, 255, 255, 0.25);
+  padding: 1vh 0.8vw; /* Уменьшаем отступы */
+  border-radius: 0.6rem;
+  border: 0.1rem solid rgba(255, 255, 255, 0.25);
   transition: all 0.3s ease;
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(5px);
   cursor: pointer;
-  /* min-height лучше убрать, пусть контент определяет высоту */
   display: flex;
   flex-direction: column;
   justify-content: center;
   box-sizing: border-box;
 }
 
-.content-item:hover {
-  background: rgba(255, 255, 255, 0.25);
-  transform: translateX(0.5rem);
-  box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
-}
-
 .content-item h4 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.8rem;
-  font-weight: 600;
+  font-size: 1rem; /* Уменьшаем размер заголовка */
+  font-weight: 500;
   color: #ffffff;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
+  margin: 0;
 }
 
 .content-item .fas {
-  font-size: 2rem;
-  width: 1.2em; /* Ширина относительно размера шрифта */
+  font-size: 1rem; /* Уменьшаем иконки */
+  width: 1em;
   text-align: center;
 }
 
 .content-item p {
-  margin: 0.4rem 0;
-  font-size: 1.4rem;
+  margin: 0.1rem 0;
+  font-size: 0.8rem; /* Уменьшаем текст */
   opacity: 0.9;
   color: #e7f0f7;
-  font-weight: 500;
-  line-height: 1.3;
+  font-weight: 400;
+  line-height: 1.1;
 }
 
 /* Папки документов */
@@ -212,14 +201,14 @@
 
 /* Нижний контейнер */
 .bottom-container {
-  flex: 0 0 auto; /* Не растягивается и не сжимается */
+  flex: 0 0 auto;
   display: flex;
-  align-items: flex-start; /* Было 'start' -> исправлено на стандартное значение */
+  align-items: flex-start;
   justify-content: center;
-  margin-top: 2vh; /* Добавим отступ сверху вместо фиксированной высоты */
+  margin-top: 2vh;
 }
 
-/* Кнопка дома */
+/* Кнопка дома - уменьшаем размер */
 .home-button-container {
   display: flex;
   justify-content: center;
@@ -227,33 +216,32 @@
 }
 
 .home-button {
-  padding: 3vh 4vw;
+  padding: 2vh 3vw; /* Уменьшаем отступы */
   border: none;
-  border-radius: 1.5rem;
+  border-radius: 1.2rem;
   background: linear-gradient(135deg, #ffffff 0%, #e7f0f7 100%);
   color: #1e30d3;
-  font-size: 2.8rem;
-  font-weight: 700;
+  font-size: 2rem; /* Уменьшаем шрифт */
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
-  gap: 1.5rem;
-  /* Заменяем фиксированные min-width/height на max/min где нужно */
-  min-width: min(400px, 90%); /* Не уже 400px, но не шире 90% */
+  gap: 1rem;
+  min-width: min(300px, 85%); /* Уменьшаем минимальную ширину */
   justify-content: center;
   box-sizing: border-box;
 }
 
 .home-button:hover {
-  transform: translateY(-0.3rem);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  transform: translateY(-0.2rem);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
   background: linear-gradient(135deg, #e7f0f7 0%, #d0e0f0 100%);
 }
 
 .home-button .fas {
-  font-size: 3.2rem;
+  font-size: 2.2rem; /* Уменьшаем иконку */
 }
 
 /* Стили для iframe */
@@ -266,18 +254,18 @@
 
 /* Стили для скроллбара */
 .content-scrollable::-webkit-scrollbar {
-  width: 0.8rem;
+  width: 0.6rem;
 }
 
 .content-scrollable::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.1);
-  border-radius: 0.5rem;
+  border-radius: 0.4rem;
 }
 
 .content-scrollable::-webkit-scrollbar-thumb {
   background: linear-gradient(135deg, #ffffff 0%, #e7f0f7 100%);
-  border-radius: 0.5rem;
-  border: 0.2rem solid transparent;
+  border-radius: 0.4rem;
+  border: 0.15rem solid transparent;
   background-clip: content-box;
 }
 
@@ -289,7 +277,7 @@
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(15px);
   }
   to {
     opacity: 1;
@@ -301,43 +289,89 @@
   animation: fadeIn 0.4s ease-out;
 }
 
-/* Адаптация - МЕДИАЗАПРОСЫ НУЖНО ТОЖЕ ПЕРЕПИСАТЬ НА ОТНОСИТЕЛЬНЫЕ ЕДИНИЦЫ */
-/* Этот блок, вероятно, нужно будет полностью переработать */
+/* Адаптация для мобильных устройств */
 @media (max-width: 1600px) {
   .main-btn {
-    font-size: 2rem;
+    font-size: 1.4rem;
+    padding: 1.8vh 1.3vw;
   }
   
   .main-btn .fas {
-    font-size: 2.2rem;
+    font-size: 1.6rem;
   }
   
   .content-title {
-    font-size: 2rem;
+    font-size: 1.6rem;
   }
   
   .content-title .fas {
-    font-size: 2.2rem;
+    font-size: 1.8rem;
   }
   
   .content-item h4 {
-    font-size: 1.5rem;
+    font-size: 1rem;
   }
   
   .content-item .fas {
-    font-size: 1.7rem;
+    font-size: 0.8rem;
   }
   
   .content-item p {
-    font-size: 1.2rem;
+    font-size: 0.8rem;
   }
   
   .home-button {
-    font-size: 2.2rem;
+    font-size: 1.8rem;
+    padding: 1.8vh 2.8vw;
   }
   
   .home-button .fas {
-    font-size: 2.5rem;
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 1200px) {
+  .sidebar {
+    width: 25%; /* Возвращаем стандартную ширину на средних экранах */
+    padding: 1.8vh 1vw;
+  }
+  
+  .main-btn {
+    font-size: 1.2rem;
+    padding: 1.6vh 1.2vw;
+  }
+  
+  .content-title {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column; /* Вертикальная компоновка на мобильных */
+  }
+  
+  .main-content {
+    width: 100%;
+    height: 70%; /* Основная область занимает 70% */
+  }
+  
+  .sidebar {
+    width: 100%; /* На всю ширину */
+    height: 30%; /* Занимает 30% высоты */
+    padding: 1.5vh 3vw;
+  }
+  
+  .main-buttons-vertical {
+    flex-direction: row; /* Горизонтальное расположение кнопок */
+    gap: 1vw;
+    overflow-x: auto;
+  }
+  
+  .main-btn {
+    min-width: 120px;
+    font-size: 1.1rem;
+    padding: 1.2vh 2vw;
   }
 }
 
@@ -345,95 +379,53 @@
 .documents-info {
   text-align: center;
   color: #ffffff;
-  padding: 2vh 2vw;
+  padding: 1.5vh 2vw;
 }
 
 .documents-info p {
-  font-size: 1.6rem;
-  margin-bottom: 2vh;
+  font-size: 1.3rem;
+  margin-bottom: 1.5vh;
   opacity: 0.9;
-  line-height: 1.4;
+  line-height: 1.3;
 }
 
 .go-to-documents-btn {
-  padding: 2vh 3vw;
+  padding: 1.5vh 2.5vw;
   border: none;
-  border-radius: 1.2rem;
+  border-radius: 1rem;
   background: linear-gradient(135deg, #ffffff 0%, #e7f0f7 100%);
   color: #1e30d3;
-  font-size: 1.8rem;
-  font-weight: 700;
+  font-size: 1.4rem;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   display: flex;
   align-items: center;
-  gap: 1rem;
-  min-width: min(350px, 80%);
+  gap: 0.8rem;
+  min-width: min(280px, 75%);
   justify-content: center;
   margin: 0 auto;
   box-sizing: border-box;
 }
 
 .go-to-documents-btn:hover {
-  transform: translateY(-0.2rem);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  transform: translateY(-0.15rem);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
   background: linear-gradient(135deg, #e7f0f7 0%, #d0e0f0 100%);
 }
 
 .go-to-documents-btn .fas {
-  font-size: 2rem;
+  font-size: 1.6rem;
 }
 
-/* Специфичные стили для разных секций */
-.content-item.link-item {
-  background: rgba(255, 255, 255, 0.18);
+/* Базовые настройки для rem */
+:root {
+  font-size: 14px; /* Уменьшаем базовый размер */
 }
 
-.content-item.document-item {
-  background: rgba(86, 104, 255, 0.25);
-}
-
-.content-item.other-item {
-  background: rgba(255, 193, 7, 0.2);
-}
-
-/* Эффекты при наведении для разных типов элементов */
-.content-item.link-item:hover {
-  background: rgba(255, 255, 255, 0.25);
-}
-
-.content-item.document-item:hover {
-  background: rgba(86, 104, 255, 0.35);
-}
-
-.content-item.other-item:hover {
-  background: rgba(255, 193, 7, 0.3);
-}
-
-/* Плавная прокрутка */
-.content-scrollable {
-  scroll-behavior: smooth;
-}
-
-/* Улучшенная анимация появления */
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(30px);
+@media (max-width: 768px) {
+  :root {
+    font-size: 12px;
   }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-.content-item {
-  animation: slideInRight 0.5s ease-out;
-}
-
-/* Базовые настройки для rem (обычно это делается в :root) */
-html {
-  font-size: 16px; /* Базовый размер, от которого считаются rem */
-  /* На очень больших экранах можно увеличить базовый размер */
 }
