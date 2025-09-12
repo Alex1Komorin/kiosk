@@ -17,16 +17,17 @@
   flex-direction: column;
   min-width: 0;
   transition: all 0.3s ease;
-  width: calc(100% - 20%); /* Изначально занимает 80% */
+  width: 100%;
 }
 
-.main-content.expanded {
-  width: 100%; /* При расширении занимает 100% */
+.content {
+  min-height: 100vh;
 }
 
 /* Боковая панель справа */
 .sidebar {
-  width: 20%;
+  width: 100%;
+  max-width: 20vw;
   height: 100%;
   background: linear-gradient(135deg, #1e30d3 0%, #2c3eff 100%);
   display: flex;
@@ -49,26 +50,24 @@
   right: 0;
 }
 
-/* Кнопка переключения сайдбара */
 .sidebar-toggle {
   position: absolute;
-  left: -40px;
+  left: -2.5rem; /* -20px → -1.25rem */
   top: 50%;
   transform: translateY(-50%);
   z-index: 1001;
-  width: 40px;
-  height: 40px;
+  width: 2.5rem; /* 40px → 2.5rem */
+  height: 2.5rem; /* 40px → 2.5rem */
   border: none;
   border-bottom-left-radius: 50%;
   border-top-left-radius: 50%;
-  /* border-radius: 50%; */
   background: linear-gradient(135deg, #1e30d3 0%, #2c3eff 100%);
   color: white;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 15px rgba(30, 48, 211, 0.3);
+  box-shadow: 0 0.25rem 0.9375rem rgba(30, 48, 211, 0.3); /* 4px 15px → 0.25rem 0.9375rem */
   transition: all 0.3s ease;
 }
 

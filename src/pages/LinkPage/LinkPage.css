@@ -1,34 +1,35 @@
-.links-page {
+/* src/pages/LinkPage/LinkPage.css */
+.links-page-container {
   width: 100%;
-  height: 100vh; /* Занимает всю высоту viewport */
+  flex: 1;
   padding: 2.5vh 3vw;
   background: #ffffff;
-  overflow-y: auto; /* Добавляем вертикальную прокрутку при необходимости */
+  overflow-y: auto;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
 }
 
-.links-header {
+.links-page-header {
   text-align: center;
   margin-bottom: 3vh;
   padding: 2vh 2vw;
   background: linear-gradient(135deg, #f8f9ff 0%, #e7f0f7 100%);
   border-radius: 1.2rem;
   border: 0.15rem solid #e0e8ff;
-  flex-shrink: 0; /* Запрещаем сжатие заголовка */
+  flex-shrink: 0;
 }
 
-.links-grid {
+.links-page-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(400px, 90%), 1fr));
   gap: 1.5rem;
   margin-bottom: 3vh;
-  flex: 1; /* Занимает доступное пространство */
+  flex: 1;
   overflow-y: visible;
 }
 
-.links-stats {
+.links-page-stats {
   display: flex;
   justify-content: center;
   gap: 2.5rem;
@@ -37,11 +38,11 @@
   border-radius: 1rem;
   border: 0.15rem solid #e7f0f7;
   flex-wrap: wrap;
-  flex-shrink: 0; /* Запрещаем сжатие статистики */
+  flex-shrink: 0;
 }
 
-/* Остальные стили остаются без изменений */
-.page-title {
+/* Заголовки страницы */
+.links-page-title {
   font-size: 2.8rem;
   color: #1e30d3;
   margin-bottom: 1vh;
@@ -52,19 +53,20 @@
   gap: 1rem;
 }
 
-.page-title .fas {
+.links-page-title .fas {
   font-size: 3rem;
   color: #1e30d3;
 }
 
-.page-subtitle {
+.links-page-subtitle {
   font-size: 1.5rem;
   color: #666;
   margin: 0;
   opacity: 0.8;
 }
 
-.link-card {
+/* Карточки ссылок */
+.links-page-card {
   background: #ffffff;
   border: 0.15rem solid #e7f0f7;
   border-radius: 1rem;
@@ -80,14 +82,14 @@
   box-sizing: border-box;
 }
 
-.link-card:hover {
+.links-page-card:hover {
   transform: translateY(-0.3rem);
   box-shadow: 0 0.5rem 1.5rem rgba(30, 48, 211, 0.15);
   border-color: #1e30d3;
   background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
 }
 
-.link-card::before {
+.links-page-card::before {
   content: '';
   position: absolute;
   top: 0;
@@ -99,11 +101,11 @@
   transition: opacity 0.3s ease;
 }
 
-.link-card:hover::before {
+.links-page-card:hover::before {
   opacity: 1;
 }
 
-.link-icon {
+.links-page-icon {
   width: 4rem;
   height: 4rem;
   background: linear-gradient(135deg, #1e30d3 0%, #2c3eff 100%);
@@ -114,17 +116,17 @@
   flex-shrink: 0;
 }
 
-.link-icon .fas {
+.links-page-icon .fas {
   font-size: 1.8rem;
   color: white;
 }
 
-.link-content {
+.links-page-content {
   flex: 1;
   min-width: 0;
 }
 
-.link-title {
+.links-page-card-title {
   font-size: 1.5rem;
   color: #1e30d3;
   margin: 0 0 0.8rem 0;
@@ -132,14 +134,14 @@
   line-height: 1.3;
 }
 
-.link-description {
+.links-page-card-description {
   font-size: 1rem;
   color: #666;
   margin: 0 0 0.5rem 0;
   line-height: 1.4;
 }
 
-.link-url {
+.links-page-card-url {
   font-size: 0.9rem;
   color: #888;
   font-family: 'Monaco', 'Consolas', monospace;
@@ -148,23 +150,23 @@
   white-space: nowrap;
 }
 
-.link-arrow {
+.links-page-card-arrow {
   opacity: 0;
   transform: translateX(-0.6rem);
   transition: all 0.3s ease;
   color: #1e30d3;
 }
 
-.link-card:hover .link-arrow {
+.links-page-card:hover .links-page-card-arrow {
   opacity: 1;
   transform: translateX(0);
 }
 
-.link-arrow .fas {
+.links-page-card-arrow .fas {
   font-size: 1.3rem;
 }
 
-.stat-item {
+.links-page-stat-item {
   display: flex;
   align-items: center;
   gap: 0.8rem;
@@ -173,11 +175,11 @@
   font-weight: 500;
 }
 
-.stat-item .fas {
+.links-page-stat-item .fas {
   font-size: 1.2rem;
 }
 
-@keyframes fadeInUp {
+@keyframes linksPageFadeInUp {
   from {
     opacity: 0;
     transform: translateY(2rem);
@@ -188,116 +190,116 @@
   }
 }
 
-.link-card {
-  animation: fadeInUp 0.5s ease-out;
+.links-page-card {
+  animation: linksPageFadeInUp 0.5s ease-out;
 }
 
-.link-card:nth-child(odd) {
+.links-page-card:nth-child(odd) {
   animation-delay: 0.1s;
 }
 
-.link-card:nth-child(even) {
+.links-page-card:nth-child(even) {
   animation-delay: 0.2s;
 }
 
 /* Адаптивность */
 @media (max-width: 120em) {
-  .links-page {
+  .links-page-container {
     padding: 2vh 2.5vw;
   }
   
-  .links-header {
+  .links-page-header {
     padding: 1.8vh 1.8vw;
     margin-bottom: 2.5vh;
   }
   
-  .page-title {
+  .links-page-title {
     font-size: 2.4rem;
   }
   
-  .page-title .fas {
+  .links-page-title .fas {
     font-size: 2.6rem;
   }
   
-  .page-subtitle {
+  .links-page-subtitle {
     font-size: 1.3rem;
   }
   
-  .links-grid {
+  .links-page-grid {
     grid-template-columns: repeat(auto-fit, minmax(min(350px, 85%), 1fr));
     gap: 1.2rem;
   }
   
-  .link-card {
+  .links-page-card {
     padding: 1.8vh 1.3vw;
   }
   
-  .link-icon {
+  .links-page-icon {
     width: 3.5rem;
     height: 3.5rem;
   }
   
-  .link-icon .fas {
+  .links-page-icon .fas {
     font-size: 1.6rem;
   }
   
-  .link-title {
+  .links-page-card-title {
     font-size: 1.3rem;
   }
   
-  .links-stats {
+  .links-page-stats {
     gap: 2rem;
     padding: 1.2rem;
   }
   
-  .stat-item {
+  .links-page-stat-item {
     font-size: 1rem;
   }
 }
 
 @media (max-width: 48em) {
-  .links-grid {
+  .links-page-grid {
     grid-template-columns: 1fr;
   }
   
-  .links-stats {
+  .links-page-stats {
     flex-direction: column;
     gap: 1rem;
     text-align: center;
   }
   
-  .stat-item {
+  .links-page-stat-item {
     justify-content: center;
   }
   
-  .page-title {
+  .links-page-title {
     flex-direction: column;
     gap: 0.5rem;
   }
 }
 
 @media (min-width: 120em) {
-  .links-page {
+  .links-page-container {
     padding: 3vh 4vw;
   }
   
-  .page-title {
+  .links-page-title {
     font-size: 3.2rem;
   }
   
-  .page-title .fas {
+  .links-page-title .fas {
     font-size: 3.4rem;
   }
   
-  .page-subtitle {
+  .links-page-subtitle {
     font-size: 1.8rem;
   }
   
-  .link-title {
+  .links-page-card-title {
     font-size: 1.8rem;
   }
   
-  .link-description {
+  .links-page-card-description {
     font-size: 1.2rem;
   }
 }

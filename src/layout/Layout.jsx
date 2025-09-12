@@ -125,7 +125,7 @@ const Layout = ({ children }) => {
 
   return (
     <div className="layout">
-      <div className={`main-content ${isSidebarVisible ? '' : 'expanded'}`}>
+      <div className={`main-content`}>
         <div className="content">
           {currentUrl ? (
             <iframe
