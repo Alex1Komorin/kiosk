@@ -1,3 +1,4 @@
+/* Основные стили layout */
 .layout {
   width: 100vw;
   height: 100vh;
@@ -5,57 +6,102 @@
   background: #e7f0f7;
   overflow: hidden;
   font-family: 'Arial', sans-serif;
+  position: relative;
 }
 
+/* Основное содержимое */
 /* Основное содержимое */
 .main-content {
   flex: 1;
   display: flex;
   flex-direction: column;
   min-width: 0;
-  width: 80%; /* Увеличиваем основную область */
+  transition: all 0.3s ease;
+  width: calc(100% - 20%); /* Изначально занимает 80% */
 }
 
-.content {
-  flex: 1;
-  padding: 0;
-  background: #ffffff;
+.main-content.expanded {
+  width: 100%; /* При расширении занимает 100% */
 }
 
-/* Боковая панель справа - уменьшаем ширину */
+/* Боковая панель справа */
 .sidebar {
-  width: 20%; /* Уменьшаем с 25% до 20% */
+  width: 20%;
   height: 100%;
   background: linear-gradient(135deg, #1e30d3 0%, #2c3eff 100%);
   display: flex;
   flex-direction: column;
-  padding: 2vh 1vw; /* Уменьшаем отступы */
+  padding: 2vh 1vw;
   box-shadow: -4px 0 30px rgba(30, 48, 211, 0.4);
   box-sizing: border-box;
+  position: relative;
+  transition: transform 0.3s ease;
 }
 
-/* Верхний контейнер с кнопками */
+/* Анимация сайдбара */
+.sidebar.visible {
+  transform: translateX(0);
+}
+
+.sidebar.hidden {
+  transform: translateX(100%);
+  position: absolute; /* Чтобы не занимал место в потоке */
+  right: 0;
+}
+
+/* Кнопка переключения сайдбара */
+.sidebar-toggle {
+  position: absolute;
+  left: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1001;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-bottom-left-radius: 50%;
+  border-top-left-radius: 50%;
+  /* border-radius: 50%; */
+  background: linear-gradient(135deg, #1e30d3 0%, #2c3eff 100%);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(30, 48, 211, 0.3);
+  transition: all 0.3s ease;
+}
+
+.sidebar-toggle:hover {
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 6px 20px rgba(30, 48, 211, 0.4);
+}
+
+.sidebar-toggle .fas {
+  font-size: 18px;
+}
+
+/* Остальные стили остаются без изменений */
 .top-buttons-container {
   flex: 0 0 auto;
   margin-bottom: 3vh;
   margin-top: 3vh;
 }
 
-/* Вертикальные навигационные кнопки */
 .main-buttons-vertical {
   display: flex;
   flex-direction: column;
-  gap: 1vh; /* Уменьшаем отступы */
+  gap: 1vh;
   width: 100%;
 }
 
 .main-btn {
-  padding: 2vh 1.5vw; /* Уменьшаем отступы */
+  padding: 2vh 1.5vw;
   border: none;
   border-radius: 0.8rem;
   background: #ffffff;
   color: #1e30d3;
-  font-size: 1.3rem; /* Уменьшаем размер шрифта */
+  font-size: 1.3rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -86,12 +132,11 @@
 }
 
 .main-btn .fas {
-  font-size: 1.8rem; /* Уменьшаем иконки */
+  font-size: 1.8rem;
 }
 
-/* Контейнер с контентом */
 .scroll-content-container {
-  flex: 0 0 40%; /* Занимает 70% высоты sidebar */
+  flex: 0 0 40%;
   min-height: 0;
   background: rgba(255, 255, 255, 0.15);
   border-radius: 1rem;
@@ -121,7 +166,7 @@
 }
 
 .content-title {
-  font-size: 1.0rem; /* Уменьшаем заголовок */
+  font-size: 1.0rem;
   margin: 0;
   text-align: center;
   font-weight: 600;
@@ -133,7 +178,7 @@
 }
 
 .content-title .fas {
-  font-size: 2rem; /* Уменьшаем иконку заголовка */
+  font-size: 2rem;
 }
 
 .content-scrollable {
@@ -148,10 +193,9 @@
   gap: 1.2vh;
 }
 
-/* Кнопки-ссылки */
 .content-item {
   background: rgba(255, 255, 255, 0.18);
-  padding: 1vh 0.8vw; /* Уменьшаем отступы */
+  padding: 1vh 0.8vw;
   border-radius: 0.6rem;
   border: 0.1rem solid rgba(255, 255, 255, 0.25);
   transition: all 0.3s ease;
@@ -164,7 +208,7 @@
 }
 
 .content-item h4 {
-  font-size: 0.6rem; /* Уменьшаем размер заголовка */
+  font-size: 0.6rem;
   font-weight: 500;
   color: #ffffff;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
@@ -175,21 +219,20 @@
 }
 
 .content-item .fas {
-  font-size: 1rem; /* Уменьшаем иконки */
+  font-size: 1rem;
   width: 1em;
   text-align: center;
 }
 
 .content-item p {
   margin: 0.1rem 0;
-  font-size: 0.8rem; /* Уменьшаем текст */
+  font-size: 0.8rem;
   opacity: 0.9;
   color: #e7f0f7;
   font-weight: 400;
   line-height: 1.1;
 }
 
-/* Папки документов */
 .folder-item {
   background: rgba(86, 104, 255, 0.25);
   border-color: rgba(255, 255, 255, 0.3);
@@ -199,7 +242,6 @@
   background: rgba(86, 104, 255, 0.35);
 }
 
-/* Нижний контейнер */
 .bottom-container {
   flex: 0 0 auto;
   display: flex;
@@ -208,43 +250,12 @@
   margin-top: 2vh;
 }
 
-/* Кнопка дома - уменьшаем размер */
 .home-button-container {
   display: flex;
   justify-content: center;
   width: 100%;
 }
 
-.home-button {
-  padding: 2vh 3vw; /* Уменьшаем отступы */
-  border: none;
-  border-radius: 1.2rem;
-  background: linear-gradient(135deg, #ffffff 0%, #e7f0f7 100%);
-  color: #1e30d3;
-  font-size: 2rem; /* Уменьшаем шрифт */
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  min-width: min(300px, 85%); /* Уменьшаем минимальную ширину */
-  justify-content: center;
-  box-sizing: border-box;
-}
-
-.home-button:hover {
-  transform: translateY(-0.2rem);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
-  background: linear-gradient(135deg, #e7f0f7 0%, #d0e0f0 100%);
-}
-
-.home-button .fas {
-  font-size: 1.2rem; /* Уменьшаем иконку */
-}
-
-/* Стили для iframe */
 .website-frame {
   width: 100%;
   height: 100%;
@@ -252,7 +263,6 @@
   background: #ffffff;
 }
 
-/* Стили для скроллбара */
 .content-scrollable::-webkit-scrollbar {
   width: 0.6rem;
 }
@@ -273,7 +283,6 @@
   background: linear-gradient(135deg, #e7f0f7 0%, #d0e0f0 100%);
 }
 
-/* Анимации */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -289,10 +298,6 @@
   animation: fadeIn 0.4s ease-out;
 }
 
-
-
-
-/* Стили для страницы документов */
 .documents-info {
   text-align: center;
   color: #ffffff;
@@ -336,7 +341,6 @@
   font-size: 1.6rem;
 }
 
-/* Базовые настройки для rem */
 :root {
-  font-size: 14px; /* Уменьшаем базовый размер */
+  font-size: 14px;
 }

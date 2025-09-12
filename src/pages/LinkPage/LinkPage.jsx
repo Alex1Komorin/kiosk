@@ -53,18 +53,6 @@ const LinksPage = () => {
           </div>
         ))}
       </div>
-
-      {/* Статистика */}
-      <div className="links-stats">
-        <div className="stat-item">
-          <i className="fas fa-link"></i>
-          <span>{linksData.length} ссылок</span>
-        </div>
-        <div className="stat-item">
-          <i className="fas fa-folder"></i>
-          <span>Разделы: Образование, Документы, Ресурсы</span>
-        </div>
-      </div>
     </div>
   );
 };

@@ -8,9 +8,14 @@ import './Layout.css';
 
 const Layout = ({ children }) => {
   const [activeSection, setActiveSection] = useState(null);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
   const { currentUrl, setCurrentUrl } = useUrl();
   const navigate = useNavigate();
   const location = useLocation();
+
+  const toggleSidebar = () => {
+    setIsSidebarVisible(!isSidebarVisible);
+  };
 
   const handleSectionChange = (section) => {
     if (activeSection !== section) {
@@ -120,7 +125,7 @@ const Layout = ({ children }) => {
 
   return (
     <div className="layout">
-      <div className="main-content">
+      <div className={`main-content ${isSidebarVisible ? '' : 'expanded'}`}>
         <div className="content">
           {currentUrl ? (
             <iframe
@@ -136,7 +141,8 @@ const Layout = ({ children }) => {
         </div>
       </div>
 
-      <div className="sidebar">
+      {/* Сайдбар с анимацией */}
+      <div className={`sidebar ${isSidebarVisible ? 'visible' : 'hidden'}`}>
         <div className="top-buttons-container">
           <div className="main-buttons-vertical">
             <button 
@@ -171,6 +177,14 @@ const Layout = ({ children }) => {
             </div>
           )}
         </div>
+
+        {/* Кнопка переключения сайдбара - внутри сайдбара */}
+        <button 
+          className="sidebar-toggle"
+          onClick={toggleSidebar}
+        >
+          <i className={`fas ${isSidebarVisible ? 'fa-chevron-right' : 'fa-chevron-left'}`}></i>
+        </button>
       </div>
     </div>
   );
