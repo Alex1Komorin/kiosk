@@ -6,6 +6,7 @@ const Index = () => {
   
   // Массив картинок для слайдера
   const slides = [
+    '/images/h0.jpg',
     '/images/h1.jpg',
     '/images/h2.jpg',
     '/images/h3.jpg',
@@ -31,8 +32,13 @@ const Index = () => {
             <div
               key={index}
               className={`slide ${index === currentSlide ? 'active' : ''}`}
-              style={{ backgroundImage: `url(${slide})` }}
-            />
+            >
+              <img 
+                src={slide} 
+                alt={`Slide ${index + 1}`} 
+                className="slide-image"
+              />
+            </div>
           ))}
         </div>
       </div>

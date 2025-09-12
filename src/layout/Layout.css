@@ -55,7 +55,7 @@
   left: -2.5rem; /* -20px → -1.25rem */
   top: 50%;
   transform: translateY(-50%);
-  z-index: 1001;
+  z-index: 100001;
   width: 2.5rem; /* 40px → 2.5rem */
   height: 2.5rem; /* 40px → 2.5rem */
   border: none;

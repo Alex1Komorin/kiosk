@@ -4,11 +4,13 @@ import './PDFViewer.css';
 
 const PDFViewer = ({ filePath, onClose, onUserActivity }) => {
   const canvasRef = useRef(null);
+  const containerRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [scale, setScale] = useState(1.5);
   const [isLoading, setIsLoading] = useState(true);
   const [useFallback, setUseFallback] = useState(false);
+  const [maxContentHeight, setMaxContentHeight] = useState(0);
 
   useEffect(() => {
     // Проверяем, доступен ли PDF.js из CDN
@@ -18,6 +20,26 @@ const PDFViewer = ({ filePath, onClose, onUserActivity }) => {
       // Загружаем PDF.js из CDN
       loadPDFJSLib();
     }
+
+    // Рассчитываем максимальную высоту для контента
+    const calculateMaxHeight = () => {
+      if (containerRef.current) {
+        const viewportHeight = window.innerHeight;
+        const headerHeight = containerRef.current.querySelector('.pdf-viewer-header').offsetHeight;
+        const bottomNavHeight = 60; // Примерная высота нижней навигации
+        
+        // Вычитаем высоту заголовка и нижней навигации плюс отступы
+        const calculatedHeight = viewportHeight - headerHeight - bottomNavHeight - 40;
+        setMaxContentHeight(Math.max(300, calculatedHeight));
+      }
+    };
+
+    calculateMaxHeight();
+    window.addEventListener('resize', calculateMaxHeight);
+    
+    return () => {
+      window.removeEventListener('resize', calculateMaxHeight);
+    };
   }, [filePath]);
 
   const loadPDFJSLib = () => {
@@ -94,9 +116,8 @@ const PDFViewer = ({ filePath, onClose, onUserActivity }) => {
     }
   };
 
-  const goToPreviousPage = () => {
-    if (currentPage > 1) {
-      const newPage = currentPage - 1;
+  const goToPage = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
       setCurrentPage(newPage);
       if (window.pdfjsLib) {
         window.pdfjsLib.getDocument(filePath).promise
@@ -106,17 +127,8 @@ const PDFViewer = ({ filePath, onClose, onUserActivity }) => {
     }
   };
 
-  const goToNextPage = () => {
-    if (currentPage < totalPages) {
-      const newPage = currentPage + 1;
-      setCurrentPage(newPage);
-      if (window.pdfjsLib) {
-        window.pdfjsLib.getDocument(filePath).promise
-          .then(pdfDoc => renderPage(pdfDoc, newPage, scale));
-      }
-      if (onUserActivity) onUserActivity();
-    }
-  };
+  const goToPreviousPage = () => goToPage(currentPage - 1);
+  const goToNextPage = () => goToPage(currentPage + 1);
 
   const zoomIn = () => {
     const newScale = scale + 0.25;
@@ -146,7 +158,7 @@ const PDFViewer = ({ filePath, onClose, onUserActivity }) => {
   if (useFallback) {
     return (
       <div className="pdf-viewer-overlay" onClick={onClose}>
-        <div className="pdf-viewer-container" onClick={(e) => e.stopPropagation()}>
+        <div className="pdf-viewer-container" ref={containerRef} onClick={(e) => e.stopPropagation()}>
           <div className="pdf-viewer-header">
             <div className="pdf-navigation-controls">
               <button className="pdf-viewer-close" onClick={onClose}>
@@ -154,7 +166,7 @@ const PDFViewer = ({ filePath, onClose, onUserActivity }) => {
               </button>
             </div>
           </div>
-          <div className="pdf-viewer-content">
+          <div className="pdf-viewer-content" style={{ maxHeight: maxContentHeight }}>
             <iframe
               src={filePath}
               title="PDF Document"
@@ -163,6 +175,28 @@ const PDFViewer = ({ filePath, onClose, onUserActivity }) => {
               style={{ width: '100%', height: '100%', border: 'none' }}
             />
           </div>
+          {/* Нижняя навигация для fallback режима */}
+          <div className="pdf-bottom-navigation">
+            <button 
+              className="pdf-nav-btn" 
+              onClick={goToPreviousPage}
+              disabled={currentPage <= 1}
+            >
+              <i className="fas fa-chevron-left"></i> Назад
+            </button>
+            
+            <span className="page-info">
+              Страница {currentPage} из {totalPages}
+            </span>
+            
+            <button 
+              className="pdf-nav-btn" 
+              onClick={goToNextPage}
+              disabled={currentPage >= totalPages}
+            >
+              Вперед <i className="fas fa-chevron-right"></i>
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -170,7 +204,7 @@ const PDFViewer = ({ filePath, onClose, onUserActivity }) => {
 
   return (
     <div className="pdf-viewer-overlay" onClick={onClose}>
-      <div className="pdf-viewer-container" onClick={(e) => e.stopPropagation()}>
+      <div className="pdf-viewer-container" ref={containerRef} onClick={(e) => e.stopPropagation()}>
         <div className="pdf-viewer-header">
           <div className="pdf-viewer-controls">
             <button 
@@ -194,29 +228,17 @@ const PDFViewer = ({ filePath, onClose, onUserActivity }) => {
           </div>
 
           <div className="pdf-navigation-controls">
-            <button 
-              className="pdf-nav-btn" 
-              onClick={goToPreviousPage}
-              disabled={currentPage <= 1}
-            >
-              <i className="fas fa-chevron-left"></i>
-            </button>
-            
-            <button 
-              className="pdf-nav-btn" 
-              onClick={goToNextPage}
-              disabled={currentPage >= totalPages}
-            >
-              <i className="fas fa-chevron-right"></i>
-            </button>
-            
             <button className="pdf-viewer-close" onClick={onClose}>
               <i className="fas fa-times"></i>
             </button>
           </div>
         </div>
 
-        <div className="pdf-viewer-content" onClick={handleCanvasClick}>
+        <div 
+          className="pdf-viewer-content" 
+          onClick={handleCanvasClick}
+          style={{ maxHeight: maxContentHeight }}
+        >
           {isLoading && (
             <div className="pdf-loading">
               <i className="fas fa-spinner fa-spin"></i>
@@ -231,6 +253,29 @@ const PDFViewer = ({ filePath, onClose, onUserActivity }) => {
               style={{ display: isLoading ? 'none' : 'block' }}
             />
           </div>
+        </div>
+        
+        {/* Нижняя навигация */}
+        <div className="pdf-bottom-navigation">
+          <button 
+            className="pdf-nav-btn" 
+            onClick={goToPreviousPage}
+            disabled={currentPage <= 1}
+          >
+            <i className="fas fa-chevron-left"></i> Назад
+          </button>
+          
+          <span className="page-info">
+            Страница {currentPage} из {totalPages}
+          </span>
+          
+          <button 
+            className="pdf-nav-btn" 
+            onClick={goToNextPage}
+            disabled={currentPage >= totalPages}
+          >
+            Вперед <i className="fas fa-chevron-right"></i>
+          </button>
         </div>
       </div>
     </div>
