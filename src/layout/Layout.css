@@ -55,7 +55,7 @@
   border-radius: 0.8rem;
   background: #ffffff;
   color: #1e30d3;
-  font-size: 1.6rem; /* Уменьшаем размер шрифта */
+  font-size: 1.3rem; /* Уменьшаем размер шрифта */
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -121,7 +121,7 @@
 }
 
 .content-title {
-  font-size: 1.8rem; /* Уменьшаем заголовок */
+  font-size: 1.0rem; /* Уменьшаем заголовок */
   margin: 0;
   text-align: center;
   font-weight: 600;
@@ -164,7 +164,7 @@
 }
 
 .content-item h4 {
-  font-size: 1rem; /* Уменьшаем размер заголовка */
+  font-size: 0.6rem; /* Уменьшаем размер заголовка */
   font-weight: 500;
   color: #ffffff;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
@@ -241,7 +241,7 @@
 }
 
 .home-button .fas {
-  font-size: 2.2rem; /* Уменьшаем иконку */
+  font-size: 1.2rem; /* Уменьшаем иконку */
 }
 
 /* Стили для iframe */

@@ -6,12 +6,6 @@ export const linksData = [
     icon: 'fas fa-university'
   },
   {
-    id: 2,
-    title: 'Высшая IT школа',
-    url: 'https://itschool.kosgos.ru/',
-    icon: 'fas fa-laptop-code'
-  },
-  {
     id: 3,
     title: 'ЭИОС',
     url: 'https://eios.kosgos.ru/',

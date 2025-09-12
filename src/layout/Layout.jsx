@@ -164,7 +164,7 @@ const Layout = ({ children }) => {
           {/* Показываем кнопку дома если открыта ссылка или выбран какой-то раздел */}
           {(currentUrl || activeSection !== null) && (
             <div className="home-button-container">
-              <button className="home-button" onClick={handleHomeClick}>
+              <button className="main-btn" onClick={handleHomeClick}>
                 <i className="fas fa-home"></i>
                 Вернуться на главную
               </button>

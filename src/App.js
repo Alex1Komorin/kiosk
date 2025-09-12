@@ -22,7 +22,7 @@ const ActivityProviderWithRoute = ({ children }) => {
 
 function App() {
   useGlobalBlocker({
-    disableContextMenu: false,
+    disableContextMenu: true,
     disableTextSelection: false,
     disableDrag: false,
     enableDevTools: true

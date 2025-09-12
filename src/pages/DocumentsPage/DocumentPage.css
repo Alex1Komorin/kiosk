@@ -17,24 +17,30 @@
 }
 
 /* Хлебные крошки */
+/* Обновленные стили для хлебных крошек */
 .document-breadcrumbs {
   display: flex;
   align-items: center;
   margin-bottom: 30px;
-  padding: 20px 25px;
+  padding: 15px 20px;
   background: #f8f9ff;
   border-radius: 12px;
   border: 2px solid #e7f0f7;
+  flex-wrap: wrap;
+  gap: 10px;
+  max-height: 120px;
+  overflow-y: auto;
 }
 
 .document-breadcrumb {
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .document-breadcrumb-separator {
-  margin: 0 15px;
-  font-size: 28px;
+  margin: 0 10px;
+  font-size: 20px;
   color: #1e30d3;
   font-weight: bold;
 }
@@ -42,13 +48,14 @@
 .document-breadcrumb-link {
   background: none;
   border: none;
-  font-size: 28px;
+  font-size: 20px;
   color: #1e30d3;
   cursor: pointer;
-  padding: 12px 18px;
-  border-radius: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
   transition: all 0.3s ease;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .document-breadcrumb-link:hover:not(.current) {
@@ -65,6 +72,45 @@
 
 .document-breadcrumb-link:disabled {
   cursor: default;
+}
+
+/* Стили для скролла */
+.document-breadcrumbs::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.document-breadcrumbs::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.document-breadcrumbs::-webkit-scrollbar-thumb {
+  background: #1e30d3;
+  border-radius: 4px;
+}
+
+.document-breadcrumbs::-webkit-scrollbar-thumb:hover {
+  background: #2c3eff;
+}
+
+/* Адаптивность */
+@media (max-width: 2160px) {
+  .document-breadcrumbs {
+    padding: 12px 16px;
+    margin-bottom: 25px;
+    max-height: 100px;
+  }
+  
+  .document-breadcrumb-separator {
+    margin: 0 8px;
+    font-size: 18px;
+  }
+  
+  .document-breadcrumb-link {
+    font-size: 18px;
+    padding: 6px 10px;
+  }
 }
 
 /* Заголовок страницы */
