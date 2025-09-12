@@ -7,8 +7,8 @@
 
 /* Контейнер слайдера */
 .slider-container {
-  width: calc(100% - 20px);
-  height: calc(100% - 20px);
+  width: calc(100% - 40px);
+  height: calc(100% - 40px);
   position: relative;
   overflow: hidden;
   margin: 20px;
@@ -115,6 +115,7 @@
   backdrop-filter: blur(10px);
   border: 2px solid rgba(255, 255, 255, 0.2);
   min-width: 800px;
+  box-sizing: border-box;
 }
 
 .slider-content h1 {
@@ -123,6 +124,7 @@
   font-weight: 700;
   text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
   color: #ffffff;
+  line-height: 1.2;
 }
 
 .slider-content > p {
@@ -130,6 +132,7 @@
   margin-bottom: 40px;
   opacity: 0.9;
   font-weight: 500;
+  line-height: 1.3;
 }
 
 .slider-info {
@@ -146,6 +149,7 @@
   gap: 15px;
   margin: 0;
   opacity: 0.9;
+  flex-wrap: wrap;
 }
 
 .slider-info .fas {
@@ -170,14 +174,14 @@
 }
 
 /* Адаптивность */
-@media (max-width: 2160px) {
+@media (max-width: 1920px) {
   .slider-content {
-    min-width: 600px;
-    padding: 40px 60px;
+    min-width: 700px;
+    padding: 50px 70px;
   }
   
   .slider-content h1 {
-    font-size: 60px;
+    font-size: 64px;
   }
   
   .slider-content > p {
@@ -187,10 +191,130 @@
   .slider-info p {
     font-size: 28px;
   }
+}
+
+@media (max-width: 1600px) {
+  .slider-content {
+    min-width: 600px;
+    padding: 40px 60px;
+  }
+  
+  .slider-content h1 {
+    font-size: 56px;
+    margin-bottom: 25px;
+  }
+  
+  .slider-content > p {
+    font-size: 32px;
+    margin-bottom: 30px;
+  }
+  
+  .slider-info p {
+    font-size: 24px;
+  }
+  
+  .slider-btn {
+    font-size: 40px;
+    padding: 25px 18px;
+  }
+  
+  .prev-btn {
+    left: 30px;
+  }
+  
+  .next-btn {
+    right: 30px;
+  }
+  
+  .slider-indicators {
+    bottom: 30px;
+  }
+  
+  .indicator {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+@media (max-width: 1366px) {
+  .slider-content {
+    min-width: 550px;
+    padding: 35px 50px;
+  }
+  
+  .slider-content h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+  }
+  
+  .slider-content > p {
+    font-size: 28px;
+    margin-bottom: 25px;
+  }
+  
+  .slider-info p {
+    font-size: 22px;
+    gap: 12px;
+  }
+  
+  .slider-info .fas {
+    font-size: 28px;
+  }
   
   .slider-btn {
     font-size: 36px;
-    padding: 20px 15px;
+    padding: 22px 16px;
+  }
+  
+  .prev-btn {
+    left: 25px;
+  }
+  
+  .next-btn {
+    right: 25px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .slider-container {
+    width: calc(100% - 30px);
+    height: calc(100% - 30px);
+    margin: 15px;
+  }
+  
+  .slider-content {
+    min-width: 450px;
+    padding: 30px 40px;
+    border-radius: 20px;
+  }
+  
+  .slider-content h1 {
+    font-size: 40px;
+    margin-bottom: 15px;
+  }
+  
+  .slider-content > p {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .slider-info {
+    gap: 15px;
+  }
+  
+  .slider-info p {
+    font-size: 20px;
+    gap: 10px;
+  }
+  
+  .slider-info .fas {
+    font-size: 24px;
+  }
+  
+  .slider-btn {
+    font-size: 32px;
+    padding: 20px 14px;
+    border-radius: 8px;
   }
   
   .prev-btn {
@@ -202,11 +326,189 @@
   }
   
   .slider-indicators {
-    bottom: 30px;
+    bottom: 25px;
+    gap: 15px;
+  }
+  
+  .indicator {
+    width: 20px;
+    height: 20px;
+    border-width: 2px;
+  }
+}
+
+@media (max-width: 768px) {
+  .slider-container {
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+    margin: 10px;
+  }
+  
+  .slider-content {
+    min-width: 350px;
+    padding: 25px 30px;
+    border-radius: 15px;
+  }
+  
+  .slider-content h1 {
+    font-size: 32px;
+    margin-bottom: 12px;
+  }
+  
+  .slider-content > p {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+  
+  .slider-info {
+    gap: 12px;
+  }
+  
+  .slider-info p {
+    font-size: 18px;
+    gap: 8px;
+  }
+  
+  .slider-info .fas {
+    font-size: 20px;
+  }
+  
+  .slider-btn {
+    font-size: 28px;
+    padding: 16px 12px;
+    border-radius: 6px;
+  }
+  
+  .prev-btn {
+    left: 15px;
+  }
+  
+  .next-btn {
+    right: 15px;
+  }
+  
+  .slider-indicators {
+    bottom: 20px;
+    gap: 12px;
+  }
+  
+  .indicator {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .slider-container {
+    width: calc(100% - 16px);
+    height: calc(100% - 16px);
+    margin: 8px;
+  }
+  
+  .slider-content {
+    min-width: 280px;
+    padding: 20px;
+    border-radius: 12px;
+  }
+  
+  .slider-content h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .slider-content > p {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+  
+  .slider-info {
+    gap: 10px;
+  }
+  
+  .slider-info p {
+    font-size: 14px;
+    gap: 6px;
+    justify-content: flex-start;
+    text-align: left;
+  }
+  
+  .slider-info .fas {
+    font-size: 16px;
+  }
+  
+  .slider-btn {
+    font-size: 24px;
+    padding: 12px 8px;
+    border-radius: 5px;
+  }
+  
+  .prev-btn {
+    left: 10px;
+  }
+  
+  .next-btn {
+    right: 10px;
+  }
+  
+  .slider-indicators {
+    bottom: 15px;
+    gap: 10px;
+  }
+  
+  .indicator {
+    width: 16px;
+    height: 16px;
+    border-width: 2px;
+  }
+}
+
+/* Для очень маленьких устройств */
+@media (max-width: 320px) {
+  .slider-content {
+    min-width: 250px;
+    padding: 15px;
+  }
+  
+  .slider-content h1 {
+    font-size: 20px;
+  }
+  
+  .slider-content > p {
+    font-size: 14px;
+  }
+  
+  .slider-info p {
+    font-size: 12px;
+  }
+}
+
+/* Поддержка тач-устройств */
+@media (hover: none) and (pointer: coarse) {
+  .slider-btn {
+    padding: 20px 15px;
+    background: rgba(30, 48, 211, 0.9);
+  }
+  
+  .slider-btn:hover {
+    transform: translateY(-50%) scale(1);
   }
   
   .indicator {
     width: 20px;
     height: 20px;
   }
+}
+
+/* Улучшенная доступность */
+.slider-btn:focus,
+.indicator:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 2px;
+}
+
+/* Плавные переходы для всех интерактивных элементов */
+.slider-btn,
+.indicator,
+.slider-content {
+  transition: all 0.3s ease;
 }

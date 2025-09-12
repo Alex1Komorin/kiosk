@@ -11,7 +11,7 @@ export const useActivity = () => {
   return context;
 };
 
-export const ActivityProvider = ({ children }) => {
+export const ActivityProvider = ({ children, currentPath = '/' }) => {
   const [showWarning, setShowWarning] = useState(false);
   const [countdown, setCountdown] = useState(10);
   const [timeUntilWarning, setTimeUntilWarning] = useState(60);
@@ -20,6 +20,9 @@ export const ActivityProvider = ({ children }) => {
   const warningTimerRef = useRef(null);
   const intervalTimerRef = useRef(null);
   const countdownTimerRef = useRef(null);
+
+  // Проверяем, является ли текущая страница главной
+  const isHomePage = currentPath === '/';
 
   // Функция очистки всех таймеров
   const clearAllTimers = useCallback(() => {
@@ -39,6 +42,12 @@ export const ActivityProvider = ({ children }) => {
 
   // Функция запуска таймеров
   const startTimers = useCallback(() => {
+    if (isHomePage) {
+      // Не запускаем таймеры на главной странице
+      clearAllTimers();
+      return;
+    }
+    
     clearAllTimers(); // Очищаем предыдущие таймеры
     
     setShowWarning(false);
@@ -66,16 +75,16 @@ export const ActivityProvider = ({ children }) => {
         return newTime;
       });
     }, 1000);
-  }, [clearAllTimers]);
+  }, [clearAllTimers, isHomePage]);
 
-  // Инициализация таймеров при монтировании
+  // Инициализация таймеров при монтировании и при изменении пути
   useEffect(() => {
     startTimers();
     
     return () => {
       clearAllTimers();
     };
-  }, [startTimers, clearAllTimers]);
+  }, [startTimers, clearAllTimers, currentPath]); // Добавляем currentPath в зависимости
 
   // Сброс сессии
   const resetSession = useCallback(() => {
@@ -86,12 +95,21 @@ export const ActivityProvider = ({ children }) => {
 
   // Продление сессии
   const extendSession = useCallback(() => {
+    if (isHomePage) {
+      // Не продлеваем сессию на главной странице
+      return;
+    }
     console.log('Сессия продлена, перезапускаем таймеры');
     startTimers();
-  }, [startTimers]);
+  }, [startTimers, isHomePage]);
 
   // Таймер обратного отсчета (10 секунд)
   useEffect(() => {
+    if (isHomePage) {
+      // Не запускаем обратный отсчет на главной странице
+      return;
+    }
+    
     if (showWarning && countdown > 0) {
       console.log(`Обратный отсчет: ${countdown} секунд`);
       countdownTimerRef.current = setTimeout(() => {
@@ -106,10 +124,15 @@ export const ActivityProvider = ({ children }) => {
         clearTimeout(countdownTimerRef.current);
       }
     };
-  }, [showWarning, countdown, resetSession]);
+  }, [showWarning, countdown, resetSession, isHomePage]);
 
   // Отслеживание активности пользователя
   useEffect(() => {
+    if (isHomePage) {
+      // Не отслеживаем активность на главной странице
+      return;
+    }
+    
     const handleUserActivity = () => {
       // Перезапускаем таймеры при любой активности
       extendSession();
@@ -129,14 +152,15 @@ export const ActivityProvider = ({ children }) => {
         document.removeEventListener(event, handleUserActivity);
       });
     };
-  }, [extendSession]);
+  }, [extendSession, isHomePage]);
 
   const value = {
     showWarning,
     countdown,
     timeUntilWarning,
     extendSession,
-    resetSession
+    resetSession,
+    isHomePage
   };
 
   return (

@@ -1,13 +1,14 @@
+// src/layout/Layout.jsx
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useUrl } from '../contexts/UrlContext';
 import { linksData } from '../data/linksData';
 import { documentsData } from '../data/documentsData';
-import { otherData } from '../data/otherData';
 import './Layout.css';
 
 const Layout = ({ children }) => {
-  const [activeSection, setActiveSection] = useState('links');
-  const [currentUrl, setCurrentUrl] = useState('');
+  const [activeSection, setActiveSection] = useState(null);
+  const { currentUrl, setCurrentUrl } = useUrl();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -15,6 +16,18 @@ const Layout = ({ children }) => {
     if (activeSection !== section) {
       setActiveSection(section);
       setCurrentUrl('');
+      
+      // Навигация на соответствующие страницы
+      switch(section) {
+        case 'links':
+          navigate('/links');
+          break;
+        case 'documents':
+          navigate('/documents');
+          break;
+        default:
+          navigate('/');
+      }
     }
   };
 
@@ -24,16 +37,18 @@ const Layout = ({ children }) => {
 
   const handleHomeClick = () => {
     setCurrentUrl('');
-    navigate('/'); // Возвращаемся на главную
+    setActiveSection(null);
+    navigate('/');
   };
 
   const handleFolderClick = (folderPath) => {
     navigate(`/documents${folderPath}`);
   };
 
-  // Проверяем, находимся ли мы на странице документов
+  // Проверяем, находимся ли мы на странице документов или ссылок
   const isInDocuments = location.pathname.startsWith('/documents');
-  const isOnHomePage = !currentUrl && !isInDocuments;
+  const isInLinks = location.pathname === '/links';
+  const isOnHomePage = !currentUrl && !isInDocuments && !isInLinks;
 
   const renderContent = () => {
     switch (activeSection) {
@@ -97,46 +112,9 @@ const Layout = ({ children }) => {
           </div>
         );
 
-      case 'other':
-        return (
-          <div className="content-container">
-            <div className="content-header">
-              <h3 className="content-title">
-                <i className="fas fa-ellipsis-h"></i>
-                Прочее
-              </h3>
-            </div>
-            
-            <div className="content-scrollable">
-              <div className="content-items">
-                {otherData.map(item => (
-                  <div 
-                    key={item.id} 
-                    className="content-item"
-                  >
-                    <h4>
-                      <i className={item.icon}></i>
-                      {item.title}
-                    </h4>
-                    {item.description && <p className="description">{item.description}</p>}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        );
-
       default:
-        return (
-          <div className="content-container">
-            <div className="content-header">
-              <h3 className="content-title">
-                <i className="fas fa-link"></i>
-                Ссылки
-              </h3>
-            </div>
-          </div>
-        );
+        // Когда активный раздел null (на главной), не показываем контент
+        return null;
     }
   };
 
@@ -175,13 +153,6 @@ const Layout = ({ children }) => {
               <i className="fas fa-file"></i>
               Документы
             </button>
-            <button 
-              className={`main-btn ${activeSection === 'other' ? 'active' : ''}`}
-              onClick={() => handleSectionChange('other')}
-            >
-              <i className="fas fa-ellipsis-h"></i>
-              Прочее
-            </button>
           </div>
         </div>
 
@@ -190,8 +161,8 @@ const Layout = ({ children }) => {
         </div>
 
         <div className="bottom-container">
-          {/* Показываем кнопку дома если открыта ссылка или мы в документах */}
-          {(currentUrl || isInDocuments) && (
+          {/* Показываем кнопку дома если открыта ссылка или выбран какой-то раздел */}
+          {(currentUrl || activeSection !== null) && (
             <div className="home-button-container">
               <button className="home-button" onClick={handleHomeClick}>
                 <i className="fas fa-home"></i>
