@@ -289,91 +289,8 @@
   animation: fadeIn 0.4s ease-out;
 }
 
-/* Адаптация для мобильных устройств */
-@media (max-width: 1600px) {
-  .main-btn {
-    font-size: 1.4rem;
-    padding: 1.8vh 1.3vw;
-  }
-  
-  .main-btn .fas {
-    font-size: 1.6rem;
-  }
-  
-  .content-title {
-    font-size: 1.6rem;
-  }
-  
-  .content-title .fas {
-    font-size: 1.8rem;
-  }
-  
-  .content-item h4 {
-    font-size: 1rem;
-  }
-  
-  .content-item .fas {
-    font-size: 0.8rem;
-  }
-  
-  .content-item p {
-    font-size: 0.8rem;
-  }
-  
-  .home-button {
-    font-size: 1.8rem;
-    padding: 1.8vh 2.8vw;
-  }
-  
-  .home-button .fas {
-    font-size: 2rem;
-  }
-}
 
-@media (max-width: 1200px) {
-  .sidebar {
-    width: 25%; /* Возвращаем стандартную ширину на средних экранах */
-    padding: 1.8vh 1vw;
-  }
-  
-  .main-btn {
-    font-size: 1.2rem;
-    padding: 1.6vh 1.2vw;
-  }
-  
-  .content-title {
-    font-size: 1.4rem;
-  }
-}
 
-@media (max-width: 768px) {
-  .layout {
-    flex-direction: column; /* Вертикальная компоновка на мобильных */
-  }
-  
-  .main-content {
-    width: 100%;
-    height: 70%; /* Основная область занимает 70% */
-  }
-  
-  .sidebar {
-    width: 100%; /* На всю ширину */
-    height: 30%; /* Занимает 30% высоты */
-    padding: 1.5vh 3vw;
-  }
-  
-  .main-buttons-vertical {
-    flex-direction: row; /* Горизонтальное расположение кнопок */
-    gap: 1vw;
-    overflow-x: auto;
-  }
-  
-  .main-btn {
-    min-width: 120px;
-    font-size: 1.1rem;
-    padding: 1.2vh 2vw;
-  }
-}
 
 /* Стили для страницы документов */
 .documents-info {
@@ -422,10 +339,4 @@
 /* Базовые настройки для rem */
 :root {
   font-size: 14px; /* Уменьшаем базовый размер */
-}
-
-@media (max-width: 768px) {
-  :root {
-    font-size: 12px;
-  }
 }
