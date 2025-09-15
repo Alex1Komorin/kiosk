@@ -343,3 +343,27 @@
 :root {
   font-size: 14px;
 }
+
+/* Стили для контейнера изображения в сайдбаре */
+.sidebar-image-container {
+  padding: 1rem;
+  text-align: center;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.sidebar-image {
+  max-width: 100%;
+  height: auto;
+  max-height: 80px; /* Регулируйте по необходимости */
+  object-fit: contain;
+}
+
+
+.welcome-message {
+  padding: 20px;
+  text-align: center;
+  color: #ffffff;
+  font-style: italic;
+  margin-top: 20px;
+  font-size: 2rem;
+}

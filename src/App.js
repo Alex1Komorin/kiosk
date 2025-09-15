@@ -25,7 +25,7 @@ function App() {
     disableContextMenu: false,
     disableTextSelection: false,
     disableDrag: false,
-    enableDevTools: false
+    enableDevTools: true
   });
 
   return (

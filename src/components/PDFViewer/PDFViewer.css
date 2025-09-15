@@ -125,30 +125,29 @@
   flex-shrink: 0;
 }
 
-/* Адаптивность для мобильных устройств */
-@media (max-width: 768px) {
-  .pdf-viewer-overlay {
-    padding: 10px;
-  }
-  
-  .pdf-viewer-header {
-    flex-direction: column;
-    gap: 10px;
-    padding: 10px;
-  }
-  
-  .pdf-viewer-controls, .pdf-navigation-controls {
-    width: 100%;
-    justify-content: center;
-  }
-  
-  .pdf-bottom-navigation {
-    flex-direction: column;
-    gap: 10px;
-    padding: 10px;
-  }
-  
-  .page-info {
-    margin: 10px 0;
-  }
+/* Добавьте это в PDFViewer.css */
+.pdf-control-btn[title] {
+  position: relative;
 }
+
+.pdf-control-btn[title]:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 1001;
+}
+
+/* Улучшаем видимость активного режима */
+.pdf-control-btn.active-mode {
+  background-color: #007bff;
+  color: white;
+}
+

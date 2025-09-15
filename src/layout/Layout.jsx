@@ -158,6 +158,15 @@ const Layout = ({ children }) => {
 
       {/* Сайдбар с анимацией */}
       <div className={`sidebar ${isSidebarVisible ? 'visible' : 'hidden'}`}>
+        {/* Добавлен тег img для изображения */}
+        <div className="sidebar-image-container">
+          <img 
+            src="/images/logo.png" // Замените на ваш путь к изображению
+            alt="Логотип" 
+            className="sidebar-image"
+          />
+        </div>
+
         <div className="top-buttons-container">
           <div className="main-buttons-vertical">
             <button 
@@ -178,6 +187,12 @@ const Layout = ({ children }) => {
         </div>
 
         <div className="scroll-content-container">
+          {/* Добавляем текст, когда никакой раздел не выбран */}
+          {activeSection === null && (
+            <div className="welcome-message">
+              <p>Выберите интересующий вас раздел!</p>
+            </div>
+          )}
           {renderContent()}
         </div>
 

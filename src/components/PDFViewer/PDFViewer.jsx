@@ -172,7 +172,7 @@ const PDFViewer = ({ filePath, onClose, onUserActivity }) => {
               title="PDF Document"
               className="pdf-iframe"
               frameBorder="0"
-              style={{ width: '100%', height: '100%', border: 'none' }}
+              style={{ width: '300%', height: '100%', border: 'none' }}
             />
           </div>
           {/* Нижняя навигация для fallback режима */}
