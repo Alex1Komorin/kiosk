@@ -1,13 +1,23 @@
 /* src/pages/LinkPage/LinkPage.css */
 .links-page-container {
   width: 100%;
-  flex: 1;
+  height: 100vh; /* Занимает 100% высоты viewport */
   padding: 2.5vh 3vw;
   background: #ffffff;
   overflow-y: auto;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+}
+
+.links-page-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(400px, 90%), 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3vh;
+  flex: 0 0 auto; /* Убираем flex: 1 чтобы сетка не растягивалась */
+  overflow-y: visible;
+  align-content: flex-start; /* Выравнивание содержимого по верху */
 }
 
 .links-page-header {
@@ -20,15 +30,7 @@
   flex-shrink: 0;
 }
 
-.links-page-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(400px, 90%), 1fr));
-  gap: 1.5rem;
-  margin-bottom: 3vh;
-  flex: 1;
-  overflow-y: visible;
-}
-
+/* Остальные стили остаются без изменений */
 .links-page-stats {
   display: flex;
   justify-content: center;
@@ -41,7 +43,6 @@
   flex-shrink: 0;
 }
 
-/* Заголовки страницы */
 .links-page-title {
   font-size: 2.8rem;
   color: #1e30d3;

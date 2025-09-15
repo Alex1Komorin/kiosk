@@ -1,6 +1,6 @@
 /* src/pages/DocumentPage/DocumentPage.css */
 .document-page {
-  width: calc(100% - 80px);
+  width: 100%;
   height: 100%;
   padding: 40px 60px;
   background: #ffffff;
