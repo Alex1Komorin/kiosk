@@ -13,6 +13,14 @@ const useGlobalBlocker = (options = {}) => {
     // Функция для блокировки контекстного меню
     const handleContextMenu = (e) => {
       if (!disableContextMenu) return;
+      
+      // Разрешаем контекстное меню для полей ввода (чтобы работала клавиатура)
+      if (e.target.tagName === 'INPUT' || 
+          e.target.tagName === 'TEXTAREA' ||
+          e.target.isContentEditable) {
+        return;
+      }
+      
       e.preventDefault();
       
       // Дополнительная логика при блокировке (опционально)
@@ -25,8 +33,13 @@ const useGlobalBlocker = (options = {}) => {
     const handleSelection = (e) => {
       if (!disableTextSelection) return;
       
-      // Разрешаем стандартное поведение для комбинаций клавиш
-      if (e.ctrlKey || e.metaKey) return;
+      // Разрешаем стандартное поведение для полей ввода и комбинаций клавиш
+      if (e.target.tagName === 'INPUT' || 
+          e.target.tagName === 'TEXTAREA' ||
+          e.target.isContentEditable ||
+          e.ctrlKey || e.metaKey) {
+        return;
+      }
       
       e.preventDefault();
     };
@@ -36,7 +49,11 @@ const useGlobalBlocker = (options = {}) => {
       if (!disableDrag) return;
       
       // Разрешаем перетаскивание для элементов ввода
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.target.tagName === 'INPUT' || 
+          e.target.tagName === 'TEXTAREA' ||
+          e.target.isContentEditable) {
+        return;
+      }
       
       e.preventDefault();
     };
