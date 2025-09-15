@@ -36,3 +36,20 @@
     transform: rotate(360deg);
   }
 }
+
+/* Добавьте в ваш основной CSS файл */
+.force-keyboard {
+  touch-action: manipulation;
+  -webkit-user-select: text;
+  user-select: text;
+  -webkit-user-modify: read-write;
+}
+
+input, textarea, [contenteditable] {
+  font-size: 16px !important; /* Важно для iOS */
+  touch-action: manipulation !important;
+  -webkit-user-select: text !important;
+  user-select: text !important;
+  -webkit-user-modify: read-write !important;
+  user-modify: read-write !important;
+}

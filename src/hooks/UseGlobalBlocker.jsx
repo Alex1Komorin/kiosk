@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 
-// Хук для блокировки ПКМ, выделения текста и перетаскивания
 const useGlobalBlocker = (options = {}) => {
   const {
     disableContextMenu = true,
@@ -10,78 +9,60 @@ const useGlobalBlocker = (options = {}) => {
   } = options;
 
   useEffect(() => {
-    // Функция для блокировки контекстного меню
     const handleContextMenu = (e) => {
       if (!disableContextMenu) return;
       
-      // Разрешаем контекстное меню для полей ввода (чтобы работала клавиатура)
-      if (e.target.tagName === 'INPUT' || 
-          e.target.tagName === 'TEXTAREA' ||
-          e.target.isContentEditable) {
+      // Разрешаем контекстное меню для всех интерактивных элементов
+      if (e.target.closest('input, textarea, [contenteditable], select')) {
         return;
       }
       
       e.preventDefault();
-      
-      // Дополнительная логика при блокировке (опционально)
-      if (e.target.tagName === 'IMG') {
-        console.log('Защита изображений: контекстное меню заблокировано');
-      }
     };
 
-    // Функция для блокировки выделения текста
     const handleSelection = (e) => {
       if (!disableTextSelection) return;
       
-      // Разрешаем стандартное поведение для полей ввода и комбинаций клавиш
-      if (e.target.tagName === 'INPUT' || 
-          e.target.tagName === 'TEXTAREA' ||
-          e.target.isContentEditable ||
-          e.ctrlKey || e.metaKey) {
+      // Разрешаем выделение для интерактивных элементов
+      if (e.target.closest('input, textarea, [contenteditable]')) {
         return;
       }
+      
+      if (e.ctrlKey || e.metaKey) return;
       
       e.preventDefault();
     };
 
-    // Функция для блокировки перетаскивания
     const handleDragStart = (e) => {
       if (!disableDrag) return;
       
-      // Разрешаем перетаскивание для элементов ввода
-      if (e.target.tagName === 'INPUT' || 
-          e.target.tagName === 'TEXTAREA' ||
-          e.target.isContentEditable) {
+      if (e.target.closest('input, textarea, [contenteditable]')) {
         return;
       }
       
       e.preventDefault();
     };
 
-    // Функция для блокировки DevTools (не полностью надежно)
     const handleDevTools = (e) => {
       if (enableDevTools) return;
       
-      // Блокировка F12
       if (e.key === 'F12') {
         e.preventDefault();
         return false;
       }
       
-      // Блокировка Ctrl+Shift+I / Cmd+Opt+I
       if (e.key === 'I' && (e.ctrlKey || e.metaKey) && e.shiftKey) {
         e.preventDefault();
         return false;
       }
       
-      // Блокировка Ctrl+U / Cmd+Opt+U
       if (e.key === 'U' && (e.ctrlKey || e.metaKey)) {
         e.preventDefault();
         return false;
       }
     };
 
-    // Добавляем обработчики событий
+    // Добавляем обработчики
     if (disableContextMenu) {
       document.addEventListener('contextmenu', handleContextMenu);
     }
@@ -98,7 +79,6 @@ const useGlobalBlocker = (options = {}) => {
       document.addEventListener('keydown', handleDevTools);
     }
 
-    // Убираем обработчики при размонтировании
     return () => {
       document.removeEventListener('contextmenu', handleContextMenu);
       document.removeEventListener('selectstart', handleSelection);
