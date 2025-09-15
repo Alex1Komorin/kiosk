@@ -18,9 +18,24 @@ const Layout = ({ children }) => {
   };
 
   const handleSectionChange = (section) => {
-    if (activeSection !== section) {
+    // Всегда сбрасываем текущий URL при переходе между разделами
+    setCurrentUrl('');
+    
+    // Если кликаем на уже активную секцию, просто переходим на соответствующую страницу
+    if (activeSection === section) {
+      switch(section) {
+        case 'links':
+          navigate('/links');
+          break;
+        case 'documents':
+          navigate('/documents');
+          break;
+        default:
+          navigate('/');
+      }
+    } else {
+      // Если выбираем новую секцию
       setActiveSection(section);
-      setCurrentUrl('');
       
       // Навигация на соответствующие страницы
       switch(section) {
