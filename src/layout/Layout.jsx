@@ -13,15 +13,16 @@ const Layout = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Добавляем состояние для текстового поля
+  const [testInput, setTestInput] = useState('');
+
   const toggleSidebar = () => {
     setIsSidebarVisible(!isSidebarVisible);
   };
 
   const handleSectionChange = (section) => {
-    // Всегда сбрасываем текущий URL при переходе между разделами
     setCurrentUrl('');
     
-    // Если кликаем на уже активную секцию, просто переходим на соответствующую страницу
     if (activeSection === section) {
       switch(section) {
         case 'links':
@@ -34,10 +35,8 @@ const Layout = ({ children }) => {
           navigate('/');
       }
     } else {
-      // Если выбираем новую секцию
       setActiveSection(section);
       
-      // Навигация на соответствующие страницы
       switch(section) {
         case 'links':
           navigate('/links');
@@ -65,7 +64,6 @@ const Layout = ({ children }) => {
     navigate(`/documents${folderPath}`);
   };
 
-  // Проверяем, находимся ли мы на странице документов или ссылок
   const isInDocuments = location.pathname.startsWith('/documents');
   const isInLinks = location.pathname === '/links';
   const isOnHomePage = !currentUrl && !isInDocuments && !isInLinks;
@@ -133,7 +131,6 @@ const Layout = ({ children }) => {
         );
 
       default:
-        // Когда активный раздел null (на главной), не показываем контент
         return null;
     }
   };
@@ -153,15 +150,43 @@ const Layout = ({ children }) => {
           ) : (
             children
           )}
+
+          {/* Добавляем тестовое текстовое поле */}
+          <div style={{ 
+            position: 'absolute', 
+            top: '20px', 
+            right: '20px', 
+            zIndex: 1000,
+            background: 'white',
+            padding: '10px',
+            border: '2px solid #ccc',
+            borderRadius: '5px'
+          }}>
+            <h4>Тестовое поле для клавиатуры:</h4>
+            <input
+              type="text"
+              value={testInput}
+              onChange={(e) => setTestInput(e.target.value)}
+              placeholder="Нажмите для клавиатуры..."
+              style={{
+                width: '200px',
+                height: '40px',
+                fontSize: '16px',
+                padding: '8px',
+                border: '1px solid #999',
+                borderRadius: '4px'
+              }}
+            />
+            <p>Введенный текст: {testInput}</p>
+          </div>
         </div>
       </div>
 
       {/* Сайдбар с анимацией */}
       <div className={`sidebar ${isSidebarVisible ? 'visible' : 'hidden'}`}>
-        {/* Добавлен тег img для изображения */}
         <div className="sidebar-image-container">
           <img 
-            src="/images/logo.png" // Замените на ваш путь к изображению
+            src="/images/logo.png"
             alt="Логотип" 
             className="sidebar-image"
           />
@@ -187,7 +212,6 @@ const Layout = ({ children }) => {
         </div>
 
         <div className="scroll-content-container">
-          {/* Добавляем текст, когда никакой раздел не выбран */}
           {activeSection === null && (
             <div className="welcome-message">
               <p>Выберите интересующий вас раздел!</p>
@@ -197,7 +221,6 @@ const Layout = ({ children }) => {
         </div>
 
         <div className="bottom-container">
-          {/* Показываем кнопку дома если открыта ссылка или выбран какой-то раздел */}
           {(currentUrl || activeSection !== null) && (
             <div className="home-button-container">
               <button className="main-btn" onClick={handleHomeClick}>
@@ -208,7 +231,7 @@ const Layout = ({ children }) => {
           )}
         </div>
 
-        {/* Кнопка переключения сайдбара - внутри сайдбара */}
+        {/* Кнопка переключения сайдбара */}
         <button 
           className="sidebar-toggle"
           onClick={toggleSidebar}

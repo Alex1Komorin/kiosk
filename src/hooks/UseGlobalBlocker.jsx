@@ -12,8 +12,8 @@ const useGlobalBlocker = (options = {}) => {
     const handleContextMenu = (e) => {
       if (!disableContextMenu) return;
       
-      // Разрешаем контекстное меню для всех интерактивных элементов
-      if (e.target.closest('input, textarea, [contenteditable], select')) {
+      // Разрешаем контекстное меню для инпутов, текстовых полей и элементов с contenteditable
+      if (e.target.closest('input, textarea, [contenteditable="true"]')) {
         return;
       }
       
@@ -23,8 +23,8 @@ const useGlobalBlocker = (options = {}) => {
     const handleSelection = (e) => {
       if (!disableTextSelection) return;
       
-      // Разрешаем выделение для интерактивных элементов
-      if (e.target.closest('input, textarea, [contenteditable]')) {
+      // Разрешаем выделение для инпутов, текстовых полей и элементов с contenteditable
+      if (e.target.closest('input, textarea, [contenteditable="true"]')) {
         return;
       }
       
@@ -36,7 +36,8 @@ const useGlobalBlocker = (options = {}) => {
     const handleDragStart = (e) => {
       if (!disableDrag) return;
       
-      if (e.target.closest('input, textarea, [contenteditable]')) {
+      // Разрешаем перетаскивание для инпутов, текстовых полей
+      if (e.target.closest('input, textarea, [contenteditable="true"]')) {
         return;
       }
       
@@ -46,23 +47,32 @@ const useGlobalBlocker = (options = {}) => {
     const handleDevTools = (e) => {
       if (enableDevTools) return;
       
+      // Блокировка F12
       if (e.key === 'F12') {
         e.preventDefault();
         return false;
       }
       
+      // Блокировка Ctrl+Shift+I / Cmd+Opt+I
       if (e.key === 'I' && (e.ctrlKey || e.metaKey) && e.shiftKey) {
         e.preventDefault();
         return false;
       }
       
+      // Блокировка Ctrl+U / Cmd+Opt+U
       if (e.key === 'U' && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        return false;
+      }
+
+      // Блокировка Ctrl+Shift+C / Cmd+Opt+C
+      if (e.key === 'C' && (e.ctrlKey || e.metaKey) && e.shiftKey) {
         e.preventDefault();
         return false;
       }
     };
 
-    // Добавляем обработчики
+    // Добавляем обработчики событий
     if (disableContextMenu) {
       document.addEventListener('contextmenu', handleContextMenu);
     }
@@ -79,6 +89,7 @@ const useGlobalBlocker = (options = {}) => {
       document.addEventListener('keydown', handleDevTools);
     }
 
+    // Убираем обработчики при размонтировании
     return () => {
       document.removeEventListener('contextmenu', handleContextMenu);
       document.removeEventListener('selectstart', handleSelection);
