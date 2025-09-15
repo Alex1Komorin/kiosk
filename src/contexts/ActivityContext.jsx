@@ -14,7 +14,7 @@ export const useActivity = () => {
 export const ActivityProvider = ({ children, currentPath = '/' }) => {
   const [showWarning, setShowWarning] = useState(false);
   const [countdown, setCountdown] = useState(10);
-  const [timeUntilWarning, setTimeUntilWarning] = useState(60);
+  const [timeUntilWarning, setTimeUntilWarning] = useState(300); // Изменено с 60 на 300 (5 минут)
   
   // Используем useRef для хранения таймеров
   const warningTimerRef = useRef(null);
@@ -52,10 +52,10 @@ export const ActivityProvider = ({ children, currentPath = '/' }) => {
     
     setShowWarning(false);
     setCountdown(10);
-    setTimeUntilWarning(60);
-    console.log('Таймер запущен. До предупреждения: 60 секунд');
+    setTimeUntilWarning(300); // Изменено с 60 на 300 (5 минут)
+    console.log('Таймер запущен. До предупреждения: 300 секунд');
 
-    // Таймер для предупреждения (1 минута)
+    // Таймер для предупреждения (5 минут)
     warningTimerRef.current = setTimeout(() => {
       console.log('Показываем предупреждение!');
       setShowWarning(true);
@@ -63,13 +63,13 @@ export const ActivityProvider = ({ children, currentPath = '/' }) => {
         clearInterval(intervalTimerRef.current);
         intervalTimerRef.current = null;
       }
-    }, 60 * 1000);
+    }, 300 * 1000); // Изменено с 60 * 1000 на 300 * 1000 (5 минут)
 
     // Интервал для отслеживания оставшегося времени
     intervalTimerRef.current = setInterval(() => {
       setTimeUntilWarning(prev => {
         const newTime = prev - 1;
-        if (newTime > 0 && (newTime % 10 === 0 || newTime <= 5)) {
+        if (newTime > 0 && (newTime % 60 === 0 || newTime <= 5)) { // Изменено с % 10 на % 60 для отображения каждую минуту
           console.log(`До предупреждения: ${newTime} секунд`);
         }
         return newTime;

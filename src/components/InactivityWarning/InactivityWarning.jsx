@@ -19,14 +19,14 @@ const InactivityWarning = () => {
           <i className="fas fa-clock fa-4x"></i>
         </div>
         <h2>Сессия будет завершена</h2>
-        <p>Вы неактивны в течение 3 минут</p>
+        <p>Вы неактивны в течение 5 минут</p>
         <div className="countdown">
           <i className="fas fa-hourglass-half"></i>
           До завершения сессии: <span className="countdown-number">{countdown}</span> сек.
         </div>
         <p className="instruction">
           <i className="fas fa-hand-pointer"></i>
-          Кликните anywhere чтобы продолжить работу
+          Кликните в любое место чтобы продолжить работу
         </p>
       </div>
     </div>

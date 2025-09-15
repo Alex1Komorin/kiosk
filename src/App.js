@@ -2,7 +2,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { ActivityProvider } from './contexts/ActivityContext';
-import { UrlProvider } from './contexts/UrlContext'; // Добавьте этот импорт
+import { UrlProvider } from './contexts/UrlContext'; 
 import InactivityWarning from './components/InactivityWarning/InactivityWarning';
 import Index from './pages/Index/Index';
 import Layout from './layout/Layout';
@@ -21,12 +21,12 @@ const ActivityProviderWithRoute = ({ children }) => {
 };
 
 function App() {
-  // useGlobalBlocker({
-  //   disableContextMenu: true,
-  //   disableTextSelection: false,
-  //   disableDrag: false,
-  //   enableDevTools: false
-  // });
+  useGlobalBlocker({
+    disableContextMenu: false,
+    disableTextSelection: false,
+    disableDrag: false,
+    enableDevTools: true
+  });
 
   return (
     <Router>

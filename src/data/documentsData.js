@@ -22,11 +22,11 @@ export const documentsData = {
               icon: 'fas fa-folder',
               children: [
                 {
-                  type: 'file',
-                  name: 'Список групп 1 курс.pdf',
-                  path: '/documents/otchet.pdf',
+                  type: 'folder',
+                  name: 'Список групп 1 курс',
+                  path: '/documents/otchet',
                   size: '1.2 MB',
-                  icon: 'fas fa-file-pdf'
+                  icon: 'fas fa-folder-pdf'
                 }
               ]
             },
@@ -37,11 +37,11 @@ export const documentsData = {
               icon: 'fas fa-folder',
               children: [
                 {
-                  type: 'file',
-                  name: 'Список групп 2 курс.pdf',
-                  path: '/documents/учебные-группы/бакалавриат/2-курс/список-групп.pdf',
+                  type: 'folder',
+                  name: 'Список групп 2 курс',
+                  path: '/documents/учебные-группы/бакалавриат/2-курс/список-групп',
                   size: '1.3 MB',
-                  icon: 'fas fa-file-pdf'
+                  icon: 'fas fa-folder-pdf'
                 }
               ]
             },
@@ -52,11 +52,11 @@ export const documentsData = {
               icon: 'fas fa-folder',
               children: [
                 {
-                  type: 'file',
-                  name: 'Список групп 3 курс.pdf',
-                  path: '/documents/учебные-группы/бакалавриат/3-курс/список-групп.pdf',
+                  type: 'folder',
+                  name: 'Список групп 3 курс',
+                  path: '/documents/учебные-группы/бакалавриат/3-курс/список-групп',
                   size: '1.4 MB',
-                  icon: 'fas fa-file-pdf'
+                  icon: 'fas fa-folder-pdf'
                 }
               ]
             },
@@ -67,11 +67,11 @@ export const documentsData = {
               icon: 'fas fa-folder',
               children: [
                 {
-                  type: 'file',
-                  name: 'Список групп 4 курс.pdf',
-                  path: '/documents/учебные-группы/бакалавриат/4-курс/список-групп.pdf',
+                  type: 'folder',
+                  name: 'Список групп 4 курс',
+                  path: '/documents/учебные-группы/бакалавриат/4-курс/список-групп',
                   size: '1.5 MB',
-                  icon: 'fas fa-file-pdf'
+                  icon: 'fas fa-folder-pdf'
                 }
               ]
             }
@@ -84,11 +84,11 @@ export const documentsData = {
           icon: 'fas fa-folder',
           children: [
             {
-              type: 'file',
-              name: 'Список групп магистратура.pdf',
-              path: '/documents/учебные-группы/магистратура/список-групп.pdf',
+              type: 'folder',
+              name: 'Список групп магистратура',
+              path: '/documents/учебные-группы/магистратура/список-групп',
               size: '0.9 MB',
-              icon: 'fas fa-file-pdf'
+              icon: 'fas fa-folder-pdf'
             }
           ]
         }
@@ -113,11 +113,11 @@ export const documentsData = {
               icon: 'fas fa-folder',
               children: [
                 {
-                  type: 'file',
-                  name: 'Темы курсовых 1 курс.pdf',
-                  path: '/documents/темы-проектов/бакалавриат/1-курс/темы-курсовых.pdf',
+                  type: 'folder',
+                  name: 'Темы курсовых 1 курс',
+                  path: '/documents/темы-проектов/бакалавриат/1-курс/темы-курсовых',
                   size: '2.1 MB',
-                  icon: 'fas fa-file-pdf'
+                  icon: 'fas fa-folder-pdf'
                 }
               ]
             },
@@ -128,11 +128,11 @@ export const documentsData = {
               icon: 'fas fa-folder',
               children: [
                 {
-                  type: 'file',
-                  name: 'Темы курсовых 2 курс.pdf',
-                  path: '/documents/темы-проектов/бакалавриат/2-курс/темы-курсовых.pdf',
+                  type: 'folder',
+                  name: 'Темы курсовых 2 курс',
+                  path: '/documents/темы-проектов/бакалавриат/2-курс/темы-курсовых',
                   size: '2.2 MB',
-                  icon: 'fas fa-file-pdf'
+                  icon: 'fas fa-folder-pdf'
                 }
               ]
             },
@@ -143,11 +143,11 @@ export const documentsData = {
               icon: 'fas fa-folder',
               children: [
                 {
-                  type: 'file',
-                  name: 'Темы курсовых 3 курс.pdf',
-                  path: '/documents/темы-проектов/бакалавриат/3-курс/темы-курсовых.pdf',
+                  type: 'folder',
+                  name: 'Темы курсовых 3 курс',
+                  path: '/documents/темы-проектов/бакалавриат/3-курс/темы-курсовых',
                   size: '2.3 MB',
-                  icon: 'fas fa-file-pdf'
+                  icon: 'fas fa-folder-pdf'
                 }
               ]
             },
@@ -158,11 +158,11 @@ export const documentsData = {
               icon: 'fas fa-folder',
               children: [
                 {
-                  type: 'file',
-                  name: 'Темы дипломных проектов.pdf',
-                  path: '/documents/темы-проектов/бакалавриат/4-курс/темы-дипломных.pdf',
+                  type: 'folder',
+                  name: 'Темы дипломных проектов',
+                  path: '/documents/темы-проектов/бакалавриат/4-курс/темы-дипломных',
                   size: '3.5 MB',
-                  icon: 'fas fa-file-pdf'
+                  icon: 'fas fa-folder-pdf'
                 }
               ]
             }
@@ -175,11 +175,11 @@ export const documentsData = {
           icon: 'fas fa-folder',
           children: [
             {
-              type: 'file',
-              name: 'Темы магистерских диссертаций.pdf',
-              path: '/documents/темы-проектов/магистратура/темы-магистерских.pdf',
+              type: 'folder',
+              name: 'Темы магистерских диссертаций',
+              path: '/documents/темы-проектов/магистратура/темы-магистерских',
               size: '2.8 MB',
-              icon: 'fas fa-file-pdf'
+              icon: 'fas fa-folder-pdf'
             }
           ]
         }
@@ -204,11 +204,11 @@ export const documentsData = {
               icon: 'fas fa-folder',
               children: [
                 {
-                  type: 'file',
-                  name: 'Кураторы 1 курс.pdf',
-                  path: '/documents/кураторы/бакалавриат/1-курс/кураторы.pdf',
+                  type: 'folder',
+                  name: 'Кураторы 1 курс',
+                  path: '/documents/кураторы/бакалавриат/1-курс/кураторы',
                   size: '0.8 MB',
-                  icon: 'fas fa-file-pdf'
+                  icon: 'fas fa-folder-pdf'
                 }
               ]
             },
@@ -219,11 +219,11 @@ export const documentsData = {
               icon: 'fas fa-folder',
               children: [
                 {
-                  type: 'file',
-                  name: 'Кураторы 2 курс.pdf',
-                  path: '/documents/кураторы/бакалавриат/2-курс/кураторы.pdf',
+                  type: 'folder',
+                  name: 'Кураторы 2 курс',
+                  path: '/documents/кураторы/бакалавриат/2-курс/кураторы',
                   size: '0.9 MB',
-                  icon: 'fas fa-file-pdf'
+                  icon: 'fas fa-folder-pdf'
                 }
               ]
             },
@@ -234,11 +234,11 @@ export const documentsData = {
               icon: 'fas fa-folder',
               children: [
                 {
-                  type: 'file',
-                  name: 'Кураторы 3 курс.pdf',
-                  path: '/documents/кураторы/бакалавриат/3-курс/кураторы.pdf',
+                  type: 'folder',
+                  name: 'Кураторы 3 курс',
+                  path: '/documents/кураторы/бакалавриат/3-курс/кураторы',
                   size: '0.9 MB',
-                  icon: 'fas fa-file-pdf'
+                  icon: 'fas fa-folder-pdf'
                 }
               ]
             },
@@ -249,11 +249,11 @@ export const documentsData = {
               icon: 'fas fa-folder',
               children: [
                 {
-                  type: 'file',
-                  name: 'Кураторы 4 курс.pdf',
-                  path: '/documents/кураторы/бакалавриат/4-курс/кураторы.pdf',
+                  type: 'folder',
+                  name: 'Кураторы 4 курс',
+                  path: '/documents/кураторы/бакалавриат/4-курс/кураторы',
                   size: '1.0 MB',
-                  icon: 'fas fa-file-pdf'
+                  icon: 'fas fa-folder-pdf'
                 }
               ]
             }
@@ -266,11 +266,11 @@ export const documentsData = {
           icon: 'fas fa-folder',
           children: [
             {
-              type: 'file',
-              name: 'Кураторы магистратура.pdf',
-              path: '/documents/кураторы/магистратура/кураторы.pdf',
+              type: 'folder',
+              name: 'Кураторы магистратура',
+              path: '/documents/кураторы/магистратура/кураторы',
               size: '0.7 MB',
-              icon: 'fas fa-file-pdf'
+              icon: 'fas fa-folder-pdf'
             }
           ]
         }
