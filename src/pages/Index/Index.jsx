@@ -12,7 +12,8 @@ const Index = () => {
     '/images/h3.jpg',
     '/images/h4.jpg',
     '/images/h5.jpg',
-    '/images/h6.jpg'
+    '/images/h6.jpg',
+    '/images/h7.jpg'
   ];
 
   // Автоматическая смена слайдов
