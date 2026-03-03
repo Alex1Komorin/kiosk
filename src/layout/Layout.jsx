@@ -30,6 +30,9 @@ const Layout = ({ children }) => {
         case 'documents':
           navigate('/documents');
           break;
+        case 'balloon': // Добавляем обработку для игры
+          navigate('/balloonGame');
+          break;
         default:
           navigate('/');
       }
@@ -44,6 +47,9 @@ const Layout = ({ children }) => {
           break;
         case 'documents':
           navigate('/documents');
+          break;
+        case 'balloon': // Добавляем обработку для игры
+          navigate('/balloonGame');
           break;
         default:
           navigate('/');
@@ -69,6 +75,16 @@ const Layout = ({ children }) => {
   const isInDocuments = location.pathname.startsWith('/documents');
   const isInLinks = location.pathname === '/links';
   const isOnHomePage = !currentUrl && !isInDocuments && !isInLinks;
+  
+  // Проверяем, находимся ли мы на странице с игрой для подсветки активной секции
+  const isBalloonGamePage = location.pathname === '/balloonGame';
+  
+  // Устанавливаем активную секцию если мы на странице игры
+  React.useEffect(() => {
+    if (isBalloonGamePage) {
+      setActiveSection('balloon');
+    }
+  }, [isBalloonGamePage]);
 
   const renderContent = () => {
     switch (activeSection) {
@@ -132,6 +148,29 @@ const Layout = ({ children }) => {
           </div>
         );
 
+      case 'balloon':
+        return (
+          <div className="content-container">
+            <div className="content-header balloon-header">
+              <h3 className="content-title">
+                <span role="img" aria-label="цветы">💐</span>
+                С 8 Марта!
+                <span role="img" aria-label="кофе">☕</span>
+              </h3>
+            </div>
+            
+            <div className="content-scrollable">
+              <div className="content-items">
+                <div className="balloon-info">
+                  <p className="balloon-description">
+                    Нажми на шарик — получи IT-поздравление!
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
       default:
         // Когда активный раздел null (на главной), не показываем контент
         return null;
@@ -140,19 +179,9 @@ const Layout = ({ children }) => {
 
   return (
     <div className="layout">
-      <div className={`main-content`}>
+      <div className={`main-content ${isSidebarVisible ? 'sidebar-visible' : 'sidebar-hidden'}`}>
         <div className="content">
-          {currentUrl ? (
-            <iframe
-              src={currentUrl}
-              title="Веб-сайт"
-              className="website-frame"
-              frameBorder="0"
-              allowFullScreen
-            />
-          ) : (
-            children
-          )}
+          {children}
         </div>
       </div>
 
@@ -182,6 +211,15 @@ const Layout = ({ children }) => {
             >
               <i className="fas fa-file"></i>
               Документы
+            </button>
+            {/* Кнопка для игры на 8 марта */}
+            <button 
+              className={`main-btn balloon-btn ${activeSection === 'balloon' ? 'active' : ''}`}
+              onClick={() => handleSectionChange('balloon')}
+            >
+              
+              8 Марта
+              
             </button>
           </div>
         </div>

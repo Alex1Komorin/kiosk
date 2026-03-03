@@ -5,6 +5,7 @@ import { ActivityProvider } from './contexts/ActivityContext';
 import { UrlProvider } from './contexts/UrlContext'; 
 import InactivityWarning from './components/InactivityWarning/InactivityWarning';
 import Index from './pages/Index/Index';
+import BalloonGamePage from './pages/BalloonGamePage';
 import Layout from './layout/Layout';
 import DocumentPage from './pages/DocumentsPage/DocumentPage';
 import LinksPage from './pages/LinkPage/LinkPage';
@@ -32,13 +33,20 @@ function App() {
     <Router>
       <div className="app">
         <ActivityProviderWithRoute>
-          <UrlProvider> {/* Добавьте UrlProvider здесь */}
+          <UrlProvider>
             <Routes>
               <Route path="/" element={
                 <Layout>
                   <Index />
                 </Layout>
               } />
+
+              <Route path="/balloonGame" element={
+                <Layout>
+                  <BalloonGamePage /> {/* Используем правильное имя компонента */}
+                </Layout>
+              } />
+
               <Route path="/documents" element={
                 <Layout>
                   <DocumentPage />
@@ -56,7 +64,7 @@ function App() {
               } />
             </Routes>
             <InactivityWarning />
-          </UrlProvider> {/* Закройте UrlProvider здесь */}
+          </UrlProvider>
         </ActivityProviderWithRoute>
       </div>
     </Router>
