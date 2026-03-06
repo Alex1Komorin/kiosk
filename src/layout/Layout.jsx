@@ -30,11 +30,8 @@ const Layout = ({ children }) => {
         case 'documents':
           navigate('/documents');
           break;
-        case 'balloon':
-          navigate('/balloonGame');
-          break;
-        case 'visualNovel':
-          navigate('/visual-novel');
+        case 'games':
+          navigate('/games');
           break;
         default:
           navigate('/');
@@ -51,11 +48,8 @@ const Layout = ({ children }) => {
         case 'documents':
           navigate('/documents');
           break;
-        case 'balloon':
-          navigate('/balloonGame');
-          break;
-        case 'visualNovel':
-          navigate('/visual-novel');
+        case 'games':
+          navigate('/games');
           break;
         default:
           navigate('/');
@@ -80,24 +74,22 @@ const Layout = ({ children }) => {
   // Проверяем, на какой странице мы находимся для подсветки активной секции
   const isInDocuments = location.pathname.startsWith('/documents');
   const isInLinks = location.pathname === '/links';
-  const isBalloonGamePage = location.pathname === '/balloonGame';
-  const isVisualNovelPage = location.pathname === '/visual-novel';
-  const isOnHomePage = !currentUrl && !isInDocuments && !isInLinks && !isBalloonGamePage && !isVisualNovelPage;
-  
+  const isGamesPage = location.pathname === '/games' || 
+                      location.pathname.startsWith('/games/'); // Все подпути игр
+  const isOnHomePage = !currentUrl && !isInDocuments && !isInLinks && !isGamesPage;
+
   // Устанавливаем активную секцию в зависимости от текущего пути
   useEffect(() => {
     if (isInDocuments) {
       setActiveSection('documents');
     } else if (isInLinks) {
       setActiveSection('links');
-    } else if (isBalloonGamePage) {
-      setActiveSection('balloon');
-    } else if (isVisualNovelPage) {
-      setActiveSection('visualNovel');
+    } else if (isGamesPage) {
+      setActiveSection('games');
     } else if (isOnHomePage) {
       setActiveSection(null);
     }
-  }, [location.pathname, isInDocuments, isInLinks, isBalloonGamePage, isVisualNovelPage, isOnHomePage]);
+  }, [location.pathname, isInDocuments, isInLinks, isGamesPage, isOnHomePage]);
 
   const renderContent = () => {
     switch (activeSection) {
@@ -161,45 +153,38 @@ const Layout = ({ children }) => {
           </div>
         );
 
-      case 'balloon':
+      case 'games':
         return (
           <div className="content-container">
-            <div className="content-header balloon-header">
-              <h3 className="content-title">
-                <span role="img" aria-label="цветы">💐</span>
-                С 8 Марта!
-                <span role="img" aria-label="кофе">☕</span>
-              </h3>
-            </div>
-            
-            <div className="content-scrollable">
-              <div className="content-items">
-                <div className="balloon-info">
-                  <p className="balloon-description">
-                    Нажми на шарик — получи IT-поздравление!
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-
-      case 'visualNovel':
-        return (
-          <div className="content-container">
-            <div className="content-header visual-novel-header">
+            <div className="content-header games-header">
               <h3 className="content-title">
                 <i className="fas fa-gamepad"></i>
-                Визуальная новелла
+                Игры
               </h3>
             </div>
             
             <div className="content-scrollable">
               <div className="content-items">
-                <div className="visual-novel-info">
-                  <p className="visual-novel-description">
-                    Интерактивная история с выбором решений
-                  </p>
+                <div 
+                  className="content-item game-item" 
+                  onClick={() => navigate('/games/balloon')}
+                >
+                  <h4>
+                    <span role="img" aria-label="шарик">🎈</span>
+                    Воздушные шарики
+                  </h4>
+                  <p className="description">Собери IT-поздравления с 8 Марта!</p>
+                </div>
+
+                <div 
+                  className="content-item game-item" 
+                  onClick={() => navigate('/games/puzzle')}
+                >
+                  <h4>
+                    <span role="img" aria-label="пазл">🧩</span>
+                    Пазлы
+                  </h4>
+                  <p className="description">Собери картинку с роботами к 8 Марта</p>
                 </div>
               </div>
             </div>
@@ -232,10 +217,9 @@ const Layout = ({ children }) => {
 
       {/* Сайдбар с анимацией */}
       <div className={`sidebar ${isSidebarVisible ? 'visible' : 'hidden'}`}>
-        {/* Добавлен тег img для изображения */}
         <div className="sidebar-image-container">
           <img 
-            src="/images/logo.png" // Замените на ваш путь к изображению
+            src="/images/logo.png"
             alt="Логотип" 
             className="sidebar-image"
           />
@@ -257,28 +241,18 @@ const Layout = ({ children }) => {
               <i className="fas fa-file"></i>
               Документы
             </button>
-            {/* Кнопка для игры на 8 марта */}
+            {/* Единая кнопка для всех игр */}
             <button 
-              className={`main-btn balloon-btn ${activeSection === 'balloon' ? 'active' : ''}`}
-              onClick={() => handleSectionChange('balloon')}
-            >
-              <span role="img" aria-label="цветы">💐</span>
-              8 Марта
-              <span role="img" aria-label="кофе">☕</span>
-            </button>
-            {/* Кнопка для визуальной новеллы */}
-            <button 
-              className={`main-btn visual-novel-btn ${activeSection === 'visualNovel' ? 'active' : ''}`}
-              onClick={() => handleSectionChange('visualNovel')}
+              className={`main-btn games-btn ${activeSection === 'games' ? 'active' : ''}`}
+              onClick={() => handleSectionChange('games')}
             >
               <i className="fas fa-gamepad"></i>
-              Новелла
+              Игры
             </button>
           </div>
         </div>
 
         <div className="scroll-content-container">
-          {/* Добавляем текст, когда никакой раздел не выбран */}
           {activeSection === null && (
             <div className="welcome-message">
               <p>Выберите интересующий вас раздел!</p>
@@ -288,7 +262,6 @@ const Layout = ({ children }) => {
         </div>
 
         <div className="bottom-container">
-          {/* Показываем кнопку дома если открыта ссылка или выбран какой-то раздел */}
           {(currentUrl || activeSection !== null) && (
             <div className="home-button-container">
               <button className="main-btn" onClick={handleHomeClick}>
@@ -299,7 +272,6 @@ const Layout = ({ children }) => {
           )}
         </div>
 
-        {/* Кнопка переключения сайдбара - внутри сайдбара */}
         <button 
           className="sidebar-toggle"
           onClick={toggleSidebar}

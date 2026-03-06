@@ -5,8 +5,10 @@ import { ActivityProvider } from './contexts/ActivityContext';
 import { UrlProvider } from './contexts/UrlContext'; 
 import InactivityWarning from './components/InactivityWarning/InactivityWarning';
 import Index from './pages/Index/Index';
+import GamesPage from './pages/gamesPage/gamesPage';
 import BalloonGamePage from './pages/BalloonGamePage';
 import VisualNovelPage from './pages/visualNivelPage';
+import PuzzlePage from './pages/PuzzlePage';
 import Layout from './layout/Layout';
 import DocumentPage from './pages/DocumentsPage/DocumentPage';
 import LinksPage from './pages/LinkPage/LinkPage';
@@ -42,16 +44,29 @@ function App() {
                 </Layout>
               } />
 
-              <Route path="/balloonGame" element={
+              {/* Страница со списком игр */}
+              <Route path="/games" element={
+                <Layout>
+                  <GamesPage />
+                </Layout>
+              } />
+
+              {/* Отдельные игры */}
+              <Route path="/games/balloon" element={
                 <Layout>
                   <BalloonGamePage />
                 </Layout>
               } />
 
-              {/* Новый маршрут для визуальной новеллы */}
-              <Route path="/visual-novel" element={
+              <Route path="/games/novel" element={
                 <Layout>
                   <VisualNovelPage />
+                </Layout>
+              } />
+
+              <Route path="/games/puzzle" element={
+                <Layout>
+                  <PuzzlePage />
                 </Layout>
               } />
 
