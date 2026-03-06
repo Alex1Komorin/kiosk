@@ -1,5 +1,5 @@
 // src/layout/Layout.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useUrl } from '../contexts/UrlContext';
 import { linksData } from '../data/linksData';
@@ -30,8 +30,11 @@ const Layout = ({ children }) => {
         case 'documents':
           navigate('/documents');
           break;
-        case 'balloon': // Добавляем обработку для игры
+        case 'balloon':
           navigate('/balloonGame');
+          break;
+        case 'visualNovel':
+          navigate('/visual-novel');
           break;
         default:
           navigate('/');
@@ -48,8 +51,11 @@ const Layout = ({ children }) => {
         case 'documents':
           navigate('/documents');
           break;
-        case 'balloon': // Добавляем обработку для игры
+        case 'balloon':
           navigate('/balloonGame');
+          break;
+        case 'visualNovel':
+          navigate('/visual-novel');
           break;
         default:
           navigate('/');
@@ -71,20 +77,27 @@ const Layout = ({ children }) => {
     navigate(`/documents${folderPath}`);
   };
 
-  // Проверяем, находимся ли мы на странице документов или ссылок
+  // Проверяем, на какой странице мы находимся для подсветки активной секции
   const isInDocuments = location.pathname.startsWith('/documents');
   const isInLinks = location.pathname === '/links';
-  const isOnHomePage = !currentUrl && !isInDocuments && !isInLinks;
-  
-  // Проверяем, находимся ли мы на странице с игрой для подсветки активной секции
   const isBalloonGamePage = location.pathname === '/balloonGame';
+  const isVisualNovelPage = location.pathname === '/visual-novel';
+  const isOnHomePage = !currentUrl && !isInDocuments && !isInLinks && !isBalloonGamePage && !isVisualNovelPage;
   
-  // Устанавливаем активную секцию если мы на странице игры
-  React.useEffect(() => {
-    if (isBalloonGamePage) {
+  // Устанавливаем активную секцию в зависимости от текущего пути
+  useEffect(() => {
+    if (isInDocuments) {
+      setActiveSection('documents');
+    } else if (isInLinks) {
+      setActiveSection('links');
+    } else if (isBalloonGamePage) {
       setActiveSection('balloon');
+    } else if (isVisualNovelPage) {
+      setActiveSection('visualNovel');
+    } else if (isOnHomePage) {
+      setActiveSection(null);
     }
-  }, [isBalloonGamePage]);
+  }, [location.pathname, isInDocuments, isInLinks, isBalloonGamePage, isVisualNovelPage, isOnHomePage]);
 
   const renderContent = () => {
     switch (activeSection) {
@@ -171,6 +184,28 @@ const Layout = ({ children }) => {
           </div>
         );
 
+      case 'visualNovel':
+        return (
+          <div className="content-container">
+            <div className="content-header visual-novel-header">
+              <h3 className="content-title">
+                <i className="fas fa-gamepad"></i>
+                Визуальная новелла
+              </h3>
+            </div>
+            
+            <div className="content-scrollable">
+              <div className="content-items">
+                <div className="visual-novel-info">
+                  <p className="visual-novel-description">
+                    Интерактивная история с выбором решений
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
       default:
         // Когда активный раздел null (на главной), не показываем контент
         return null;
@@ -181,7 +216,17 @@ const Layout = ({ children }) => {
     <div className="layout">
       <div className={`main-content ${isSidebarVisible ? 'sidebar-visible' : 'sidebar-hidden'}`}>
         <div className="content">
-          {children}
+          {currentUrl ? (
+            <iframe
+              src={currentUrl}
+              title="Веб-сайт"
+              className="website-frame"
+              frameBorder="0"
+              allowFullScreen
+            />
+          ) : (
+            children
+          )}
         </div>
       </div>
 
@@ -217,9 +262,17 @@ const Layout = ({ children }) => {
               className={`main-btn balloon-btn ${activeSection === 'balloon' ? 'active' : ''}`}
               onClick={() => handleSectionChange('balloon')}
             >
-              
+              <span role="img" aria-label="цветы">💐</span>
               8 Марта
-              
+              <span role="img" aria-label="кофе">☕</span>
+            </button>
+            {/* Кнопка для визуальной новеллы */}
+            <button 
+              className={`main-btn visual-novel-btn ${activeSection === 'visualNovel' ? 'active' : ''}`}
+              onClick={() => handleSectionChange('visualNovel')}
+            >
+              <i className="fas fa-gamepad"></i>
+              Новелла
             </button>
           </div>
         </div>

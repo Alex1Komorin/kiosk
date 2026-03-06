@@ -6,6 +6,7 @@ import { UrlProvider } from './contexts/UrlContext';
 import InactivityWarning from './components/InactivityWarning/InactivityWarning';
 import Index from './pages/Index/Index';
 import BalloonGamePage from './pages/BalloonGamePage';
+import VisualNovelPage from './pages/visualNivelPage';
 import Layout from './layout/Layout';
 import DocumentPage from './pages/DocumentsPage/DocumentPage';
 import LinksPage from './pages/LinkPage/LinkPage';
@@ -43,7 +44,14 @@ function App() {
 
               <Route path="/balloonGame" element={
                 <Layout>
-                  <BalloonGamePage /> {/* Используем правильное имя компонента */}
+                  <BalloonGamePage />
+                </Layout>
+              } />
+
+              {/* Новый маршрут для визуальной новеллы */}
+              <Route path="/visual-novel" element={
+                <Layout>
+                  <VisualNovelPage />
                 </Layout>
               } />
 
@@ -52,11 +60,13 @@ function App() {
                   <DocumentPage />
                 </Layout>
               } />
+              
               <Route path="/links" element={
                 <Layout>
                   <LinksPage />
                 </Layout>
               } />
+              
               <Route path="/documents/:folderPath/*" element={
                 <Layout>
                   <DocumentPage />
