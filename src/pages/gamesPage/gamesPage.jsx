@@ -15,14 +15,14 @@ const GamesPage = () => {
       color: '#ff4d9d',
       path: '/games/balloon'
     },
-    // {
-    //   id: 'novel',
-    //   title: 'Визуальная новелла',
-    //   description: 'Интерактивная история с выбором решений',
-    //   icon: '📖',
-    //   color: '#5f27cd',
-    //   path: '/games/novel'
-    // },
+    {
+      id: 'novel',
+      title: 'Визуальная новелла',
+      description: 'Интерактивная история с выбором решений',
+      icon: '📖',
+      color: '#5f27cd',
+      path: '/games/novel'
+    },
     {
       id: 'puzzle',
       title: 'Пазлы',

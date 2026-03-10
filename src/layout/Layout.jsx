@@ -178,6 +178,17 @@ const Layout = ({ children }) => {
 
                 <div 
                   className="content-item game-item" 
+                  onClick={() => navigate('/games/novel')}
+                >
+                  <h4>
+                    <i className="fas fa-gamepad"></i>
+                    Визуальная новелла
+                  </h4>
+                  <p className="description">Интерактивная история с выбором решений</p>
+                </div>
+
+                <div 
+                  className="content-item game-item" 
                   onClick={() => navigate('/games/puzzle')}
                 >
                   <h4>

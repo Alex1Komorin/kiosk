@@ -4,10 +4,75 @@
 (function () {
   "use strict";
 
+  // =========================================================
+// ПРОФАЙЛЕР ВРЕМЕНИ
+// =========================================================
+var profiler = {
+    startTime: Date.now(),
+    marks: {},
+    
+    mark: function(name) {
+        this.marks[name] = Date.now() - this.startTime;
+        console.log('[PROFILER]', name, ':', this.marks[name] + 'ms');
+    },
+    
+    getReport: function() {
+        var report = "Время загрузки и выполнения:\n";
+        report += "  Старт: 0ms\n";
+        
+        // Сортируем метки по времени
+        var sortedMarks = Object.keys(this.marks).sort(function(a, b) {
+            return profiler.marks[a] - profiler.marks[b];
+        });
+        
+        var lastTime = 0;
+        sortedMarks.forEach(function(name) {
+            var time = profiler.marks[name];
+            report += "  " + name + ": " + time + "ms (+" + (time - lastTime) + "ms)\n";
+            lastTime = time;
+        });
+        
+        var totalTime = Date.now() - profiler.startTime;
+        report += "\n  Общее время: " + totalTime + "ms (" + (totalTime/1000).toFixed(2) + "с)\n";
+        
+        // Оценка сложности сценария
+        if (window.STORY) {
+            var sceneCount = window.STORY.scenes ? window.STORY.scenes.length : 0;
+            var actionCount = 0;
+            window.STORY.scenes.forEach(function(scene) {
+                actionCount += scene.actions ? scene.actions.length : 0;
+            });
+            
+            report += "\nСложность сценария:\n";
+            report += "  Сцен: " + sceneCount + "\n";
+            report += "  Действий: " + actionCount + "\n";
+            report += "  Среднее время на сцену: " + (totalTime / Math.max(1, sceneCount)).toFixed(2) + "ms\n";
+            report += "  Среднее время на действие: " + (totalTime / Math.max(1, actionCount)).toFixed(2) + "ms\n";
+        }
+        
+        return report;
+    }
+};
+
+// Ставим первую метку
+profiler.mark('Скрипт начал загрузку');
+
+let __charSeq = 0;
+let __activeCharSeq = 0;
+
   // ---------- DOM ----------
   var elTitle = document.getElementById("title");
   var elBg = document.getElementById("bgLayer");
   var elChar = document.getElementById("charLayer");
+
+  // Жёстко скрываем персонажа на старте, чтобы не было первого "всплеска" когда появляется большого размера
+  if (elChar) {
+      elChar.classList.add("hidden");
+      elChar.src = "";
+      elChar.style.height = "0px";
+      elChar.style.maxHeight = "none";
+  }
+
   var elOverlay = document.getElementById("overlay");
 
   var elDialog = document.getElementById("dialog");
@@ -32,6 +97,7 @@
   var elBlurBgLayer = document.getElementById("blurBgLayer");
   var elBlurBgImage = document.getElementById("blurBgImage");
   
+
   // Для отладки
   console.log('[Engine] blurBgLayer:', elBlurBgLayer);
   console.log('[Engine] blurBgImage:', elBlurBgImage);
@@ -76,6 +142,8 @@
   });
 
 
+  profiler.mark('DOM загружен');
+
 
   // ---------- Проверка story ----------
   if (!window.STORY) {
@@ -85,12 +153,14 @@
     // Ждём загрузки от story-loader.js
     window.__onStoryLoaded = function(story) {
       console.log('[Engine] Сценарий загружен, перезапускаем');
-      
+      profiler.mark('Сценарий загружен парсером');
+
       // Обновляем STORY
       window.STORY = story;
       
       // Перестраиваем карту сцен
       buildSceneMap();
+      
       
       // Обновляем заголовок
       if (story.meta && story.meta.title) {
@@ -103,6 +173,7 @@
       // Применяем настройки аудио
       setAudioFromStoryDefaults();
       
+      profiler.mark('Запускаем сценарий');
       // Запускаем сценарий
       restart();
     };
@@ -112,7 +183,7 @@
 
   var STORY = window.STORY;
   console.log('[Engine] Сценарий найден сразу:', STORY.meta.title);
-
+  profiler.mark('Сценарий найден сразу');
 
   // ========== ЗАМЕНИТЕ НА ЭТОТ КОД ==========
   console.log('[Engine] STORY.assets:', STORY.assets);
@@ -128,7 +199,7 @@
   
   // Применяем настройки отступов
   applySpacingSettings();
-
+  profiler.mark('Настройки отступов применены');
 
   // =========================================================
   // НАСТРОЙКИ ИНТЕРФЕЙСА (масштаб)
@@ -138,12 +209,13 @@
   // 1.0 = стандарт
   // 0.9 = немного меньше
   // 1.1 = немного больше
-  var UI_FONT_SCALE = 2;
+  var UI_FONT_SCALE = 1.4;
+  console.log('[SCALE] UI_FONT_SCALE initialized:', UI_FONT_SCALE);
 
   // Высота экрана, под которую делался дизайн
   // используется для автоадаптации
-  var UI_REFERENCE_HEIGHT = 1920;
-
+  var UI_REFERENCE_HEIGHT = 1440;
+  console.log('[SCALE] UI_REFERENCE_HEIGHT initialized:', UI_REFERENCE_HEIGHT);
 
   // ---------- Состояние движка ----------
   var state = {
@@ -172,7 +244,7 @@
     bgm: new Audio(),
     sfx: new Audio(),
     muted: true,
-    masterVolume: 0.4,
+    masterVolume: 0.2,
     // для плавного затухания (если понадобится)
     fadeTimer: null
   };
@@ -180,12 +252,14 @@
   // Чтобы музыка не включалась слишком громко при старте
   audio.bgm.loop = true;
   setAudioFromStoryDefaults();
+  profiler.mark('Аудио настроено');
 
   applyUiScale();
   window.addEventListener("resize", applyUiScale);
 
   // ---------- Подготовка сцен ----------
   buildSceneMap();
+  profiler.mark('Карта сцен построена');
 
   // Заголовок
   if (STORY.meta && STORY.meta.title) {
@@ -237,7 +311,7 @@
 
   sliderVolume.addEventListener("input", function () {
     var v = parseInt(sliderVolume.value, 10);
-    if (isNaN(v)) v = 80;
+    if (isNaN(v)) v = 20;
     audio.masterVolume = clamp(v / 100, 0, 1);
     applyAudioSettings();
   });
@@ -301,6 +375,7 @@
     }
 
     runCurrent();
+    profiler.mark('Первый запуск выполнен');
   }
 
   function runCurrent() {
@@ -310,8 +385,17 @@
       "index:", state.actionIndex
     );
 
+    console.log('[FLOW] runCurrent:start', {
+      sceneId: state.sceneId,
+      actionIndex: state.actionIndex,
+      waitingNext: state.waitingNext,
+      nextLocked: state.nextLocked,
+      inGame: state.inGame
+    });
+
     // Запускаем выполнение action'ов, пока не дойдём до "say/text/choice/game", где нужно ждать.
     state.waitingNext = false;
+    state.nextLocked = false;
 
     // безопасность: если сцены нет
     var scene = state.sceneMap[state.sceneId];
@@ -339,16 +423,61 @@
       }
 
       var action = scene.actions[state.actionIndex];
+      console.log('[FLOW] runCurrent:action picked', {
+        sceneId: state.sceneId,
+        actionIndexBeforeInc: state.actionIndex,
+        action: action,
+        waitingNext: state.waitingNext,
+        nextLocked: state.nextLocked
+      });
       state.actionIndex++;
 
       if (!action || !action.type) continue;
 
       var shouldWait = executeAction(action);
-      if (shouldWait) {
-        state.waitingNext = true;
-        state.nextLocked = false; // готов принять ОДИН next
+
+      console.log('[FLOW] runCurrent:after executeAction', {
+        sceneId: state.sceneId,
+        actionIndexAfterInc: state.actionIndex,
+        actionType: action && action.type,
+        shouldWait: shouldWait,
+        waitingNext: state.waitingNext,
+        nextLocked: state.nextLocked
+      });
+
+      if (shouldWait === "async") {
+
+        console.log('[FLOW] runCurrent:enter async wait', {
+          sceneId: state.sceneId,
+          actionIndex: state.actionIndex,
+          actionType: action && action.type,
+          waitingNextBefore: state.waitingNext,
+          nextLockedBefore: state.nextLocked
+        });
+
+
+        // Ждём внутреннего завершения действия (например, загрузки персонажа),
+        // но НЕ разрешаем пользовательский клик "дальше".
+        state.waitingNext = false;
+        state.nextLocked = true;
         return;
       }
+
+      if (shouldWait === true) {
+        console.log('[FLOW] runCurrent:enter user wait', {
+          sceneId: state.sceneId,
+          actionIndex: state.actionIndex,
+          actionType: action && action.type,
+          waitingNextBefore: state.waitingNext,
+          nextLockedBefore: state.nextLocked
+        });
+
+        // Обычное ожидание пользовательского next
+        state.waitingNext = true;
+        state.nextLocked = false;
+        return;
+      }
+      
     }
   }
 
@@ -392,17 +521,15 @@
 
         // Новый формат: { type: "char", charId: "anna", emotion: "neutral" }
         if (action.charId) {
-
             console.log('[Engine CHAR] New format - charId:', action.charId, 'emotion:', action.emotion);
-        
-            // Проверяем структуру assets
+
             console.log('[Engine CHAR] STORY.assets:', STORY.assets);
             console.log('[Engine CHAR] STORY.assets.characters:', STORY.assets?.characters);
 
             if (STORY.assets?.characters) {
                 const char = STORY.assets.characters[action.charId];
                 console.log('[Engine CHAR] Character data for', action.charId, ':', char);
-                
+
                 if (char?.images) {
                     console.log('[Engine CHAR] Available emotions:', Object.keys(char.images));
                     console.log('[Engine CHAR] Requested emotion:', action.emotion);
@@ -412,15 +539,112 @@
 
             const src = resolveAsset(null, action.charId, action.emotion);
             console.log('[Engine CHAR] Resolved src:', src);
-            setCharacter(src, action.pos, action.charId);
-        } else {
-            // Старый формат для обратной совместимости
-            console.log('[Engine CHAR] Old format - src:', action.src);
-            const src = resolveAsset(action.src);
-            console.log('[Engine CHAR] Resolved src (old):', src);
-            setCharacter(resolveAsset(action.src), action.pos);
+
+            console.log('[SCRIPT FLOW] char action -> setCharacter', {
+                actionIndex: state.actionIndex - 1,
+                action: action,
+                resolvedSrc: src,
+                pos: action.pos,
+                charId: action.charId
+            });
+
+            // Новый формат с пустым src = просто скрыть персонажа
+            if (!src) {
+                console.log('[SCRIPT FLOW] char action(new) -> hide immediately', {
+                    sceneId: state.sceneId,
+                    actionIndex: state.actionIndex - 1,
+                    action: action
+                });
+
+                setCharacter(null, action.pos, action.charId);
+                return false;
+            }
+
+            // Новый формат с картинкой = async
+            setCharacter(src, action.pos, action.charId, function() {
+                console.log('[FLOW] char(new):done callback start', {
+                    sceneId: state.sceneId,
+                    actionIndex: state.actionIndex,
+                    waitingNextBefore: state.waitingNext,
+                    nextLockedBefore: state.nextLocked
+                });
+
+                state.nextLocked = false;
+                state.waitingNext = false;
+
+                console.log('[FLOW] char(new):done callback before runCurrent', {
+                    sceneId: state.sceneId,
+                    actionIndex: state.actionIndex,
+                    waitingNextAfterReset: state.waitingNext,
+                    nextLockedAfterReset: state.nextLocked
+                });
+
+                runCurrent();
+            });
+
+            console.log('[SCRIPT FLOW] char action(new) paused until image load', {
+                sceneId: state.sceneId,
+                actionIndex: state.actionIndex - 1,
+                action: action
+            });
+
+            return "async";
         }
-        return false;
+
+        // Старый формат
+        console.log('[Engine CHAR] Old format - src:', action.src);
+
+        const resolved = resolveAsset(action.src);
+        console.log('[Engine CHAR] Resolved src (old):', resolved);
+
+        console.log('[SCRIPT FLOW] char action(old) -> setCharacter', {
+            actionIndex: state.actionIndex - 1,
+            action: action,
+            resolvedSrc: resolved,
+            pos: action.pos
+        });
+
+        // Старый формат с null = просто скрыть персонажа
+        if (!resolved) {
+            console.log('[SCRIPT FLOW] char action(old) -> hide immediately', {
+                sceneId: state.sceneId,
+                actionIndex: state.actionIndex - 1,
+                action: action
+            });
+
+            setCharacter(null, action.pos, null);
+            return false;
+        }
+
+        // Старый формат с картинкой = async
+        setCharacter(resolved, action.pos, null, function() {
+            console.log('[FLOW] char(old):done callback start', {
+                sceneId: state.sceneId,
+                actionIndex: state.actionIndex,
+                waitingNextBefore: state.waitingNext,
+                nextLockedBefore: state.nextLocked
+            });
+
+            state.nextLocked = false;
+            state.waitingNext = false;
+
+            console.log('[FLOW] char(old):done callback before runCurrent', {
+                sceneId: state.sceneId,
+                actionIndex: state.actionIndex,
+                waitingNextAfterReset: state.waitingNext,
+                nextLockedAfterReset: state.nextLocked
+            });
+
+            runCurrent();
+        });
+
+        console.log('[SCRIPT FLOW] char action(old) paused until image load', {
+            sceneId: state.sceneId,
+            actionIndex: state.actionIndex - 1,
+            action: action
+        });
+
+        return "async";
 
       case "say":
         // Новый формат: { type: "say", charVar: "anna", text: "..." }
@@ -574,45 +798,114 @@
     // CSS должен работать сам через переменные
   }
 
-  function setCharacter(src, pos, charId) {
-    console.log('[Engine setCharacter] Called with:', { src, pos, charId });
-    console.log('[Engine setCharacter] elChar element:', elChar);
+  function setCharacter(src, pos, charId, done) {
     
-    if (!src) {
-        console.log('[Engine setCharacter] No src, hiding character');
-        elChar.classList.add("hidden");
-        elChar.src = "";
-        return;
-    }
-    
-    console.log('[Engine setCharacter] Setting src:', src);
-    elChar.src = src;
-    elChar.classList.remove("hidden");
-    
-    // Проверяем, загрузилось ли изображение
-    elChar.onload = function() {
-        console.log('[Engine setCharacter] Image loaded successfully:', src);
-    };
-    elChar.onerror = function() {
-        console.log('[Engine setCharacter] Image failed to load:', src);
-    };
-    
-    // Сохраняем ID персонажа для возможного использования
-    if (charId) {
-        elChar.dataset.charId = charId;
-    }
+      console.log('[Engine setCharacter] Called with:', { src, pos, charId });
+      console.log('[Engine setCharacter] elChar element:', elChar);
 
-    // pos — опционально (например: "center", "left", "right")
-    if (pos === "left") {
-        elChar.style.left = "35%";
-        elChar.style.transform = "translateX(-50%)";
-    } else if (pos === "right") {
-        elChar.style.left = "65%";
-        elChar.style.transform = "translateX(-50%)";
-    } else {
-        elChar.style.left = "50%";
-        elChar.style.transform = "translateX(-50%)";
-    }
+      const seq = ++__charSeq;
+      __activeCharSeq = seq;
+
+      console.log('[CHAR FLOW] setCharacter:start', {
+        seq,
+        src,
+        pos,
+        charId,
+        currentSrc: elChar ? elChar.getAttribute('src') : null,
+        hidden: elChar ? elChar.classList.contains('hidden') : null,
+        currentHeight: elChar ? elChar.style.height : null
+      });
+
+
+      if (!src) {
+          console.warn('[CHAR FLOW] hide character', {
+              src,
+              currentDomSrc: elChar.currentSrc || elChar.src,
+              hiddenBeforeHide: elChar.classList.contains('hidden'),
+              currentHeight: elChar.style.height,
+              currentOffsetHeight: elChar.offsetHeight,
+              charId: elChar.dataset ? elChar.dataset.charId : null
+          });
+
+          console.log('[Engine setCharacter] No src, hiding character');
+          elChar.classList.add("hidden");
+          elChar.src = "";
+
+          if (done) done();
+          return;
+      }
+
+      // Позиционирование можно применить заранее
+      if (pos === "left") {
+          elChar.style.left = "35%";
+          elChar.style.transform = "translateX(-50%)";
+      } else if (pos === "right") {
+          elChar.style.left = "65%";
+          elChar.style.transform = "translateX(-50%)";
+      } else {
+          elChar.style.left = "50%";
+          elChar.style.transform = "translateX(-50%)";
+      }
+
+      if (charId) {
+          elChar.dataset.charId = charId;
+      }
+
+      // Скрываем до полной подготовки
+      elChar.classList.add("hidden");
+      elChar.style.height = "0px";
+      elChar.style.maxHeight = "none";
+
+      elChar.onload = null;
+      elChar.onerror = null;
+
+      elChar.onload = function() {
+          console.log('[Engine setCharacter] Image loaded successfully:', src);
+
+          console.log('[CHAR FLOW] onload', {
+            seq,
+            activeSeq: __activeCharSeq,
+            src,
+            domSrc: elChar.currentSrc || elChar.src,
+            hiddenBeforeShow: elChar.classList.contains('hidden'),
+            heightBeforeScale: elChar.style.height
+          });
+
+
+          // Сначала показываем, чтобы adjustCharacterScale не вышел по hidden
+          elChar.classList.remove("hidden");
+
+          // Потом применяем правильный размер
+          adjustCharacterScale();
+
+          // И даём браузеру кадр закрепить layout
+          requestAnimationFrame(function() {
+              adjustCharacterScale();
+              if (done) done();
+          });
+      };
+
+      elChar.onerror = function() {
+          console.log('[Engine setCharacter] Image failed to load:', src);
+
+          console.log('[CHAR FLOW] onerror', {
+            seq,
+            activeSeq: __activeCharSeq,
+            src,
+            domSrc: elChar.currentSrc || elChar.src
+          });
+      };
+
+      if (seq !== __activeCharSeq) {
+        console.warn('[CHAR FLOW] stale onload ignored', {
+          seq,
+          activeSeq: __activeCharSeq,
+          src
+        });
+      }
+
+      console.log('[Engine setCharacter] Setting src:', src);
+      elChar.src = src;
   }
 
   function showDialog(name, text, color) {
@@ -1062,25 +1355,111 @@
   }
 
 
-  // =========================================================
-  // МАСШТАБ ИНТЕРФЕЙСА
-  // =========================================================
+// =========================================================
+// МАСШТАБ ИНТЕРФЕЙСА
+// =========================================================
 
-  function applyUiScale() {
-
-    // автоматический коэффициент по высоте экрана
+function applyUiScale() {
+    // JS считает только корневой масштаб,
+    // а размеры конкретных компонентов берутся из CSS-токенов.
     var autoScale = window.innerHeight / UI_REFERENCE_HEIGHT;
+    autoScale = clamp(autoScale, 0.25, 10);
 
-    // ограничиваем чтобы интерфейс не ломался
-    autoScale = clamp(autoScale, 0.85, 1.25);
+    var finalScale = UI_FONT_SCALE * autoScale;
+    finalScale = clamp(finalScale, 0.25, 10);
 
-    // итоговый масштаб
-    var finalScale = clamp(UI_FONT_SCALE * autoScale, 0.75, 1.4);
-
-    // применяем к CSS
     document.documentElement.style.setProperty("--uiScale", finalScale);
+
+    // Должно совпадать с --baseFontPx в CSS.
+    var baseFontPx = 16;
+    var baseFontSize = baseFontPx * finalScale;
+    document.documentElement.style.setProperty("--baseFontSize", baseFontSize + 'px');
+
+    console.log('[SCALE DEBUG]', {
+      innerWidth: window.innerWidth,
+      innerHeight: window.innerHeight,
+      referenceHeight: UI_REFERENCE_HEIGHT,
+      autoScale: autoScale,
+      uiFontScale: UI_FONT_SCALE,
+      finalScale: finalScale,
+      baseFontPx: baseFontPx,
+      baseFontSize: baseFontSize,
+      cssVarBaseFontSize: getComputedStyle(document.documentElement).getPropertyValue('--baseFontSize').trim(),
+      htmlFontSize: getComputedStyle(document.documentElement).fontSize
+    });
+}
+
+
+// Вызываем при загрузке
+setTimeout(function() {
+    applyUiScale();
+}, 100);
+
+// Также добавляем логи для события resize
+window.addEventListener("resize", function() {
+    applyUiScale();
+    adjustCharacterScale();
+});
+
+
+  // =========================================================
+  // ДИНАМИЧЕСКОЕ МАСШТАБИРОВАНИЕ ПЕРСОНАЖЕЙ
+  // =========================================================
+  function adjustCharacterScale() {
+
+    console.log('[CHAR SCALE] start', {
+      src: elChar ? (elChar.currentSrc || elChar.src) : null,
+      hidden: elChar ? elChar.classList.contains('hidden') : null,
+      styleHeightBefore: elChar ? elChar.style.height : null,
+      naturalWidth: elChar ? elChar.naturalWidth : null,
+      naturalHeight: elChar ? elChar.naturalHeight : null,
+      windowHeight: window.innerHeight
+    });
+
+    var char = document.getElementById('charLayer');
+    if (!char) return;
+    
+    var topSpacing = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--topSpacing')) || 0;
+    var bottomSpacing = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--bottomSpacing')) || 0;
+    
+    // Высота доступная для персонажа (с учетом отступов)
+    var availableHeight = window.innerHeight - topSpacing - bottomSpacing;
+    
+    // Максимальная высота персонажа (не более 85% экрана)
+    var targetCharHeight = Math.min(availableHeight * 0.85, window.innerHeight * 0.85);
+    
+    // Применяем к персонажу
+    char.style.height = targetCharHeight + 'px';
+
+    console.log('[CHAR SCALE] applied', {
+      src: char.currentSrc || char.src,
+      targetCharHeight,
+      styleHeightAfter: char.style.height,
+      offsetHeight: char.offsetHeight
+    });
+
+    // Сбрасываем max-height, чтобы не было конфликтов
+    char.style.maxHeight = 'none';
+    
+    console.log('[Engine] Character scale applied:', {
+      windowHeight: window.innerHeight,
+      topSpacing: topSpacing,
+      bottomSpacing: bottomSpacing,
+      availableHeight: availableHeight,
+      targetCharHeight: targetCharHeight,
+      actualHeight: char.offsetHeight
+    });
+
+    // Проверяем фактическую высоту после загрузки изображения
+    setTimeout(function() {
+      console.log('[Engine] Character actual height after load:', char.offsetHeight);
+    }, 200);
   }
 
+// Также вызываем при изменении размера
+window.addEventListener("resize", adjustCharacterScale);
+
+  
   // =========================================================
   //                   UTILS
   // =========================================================
@@ -1137,7 +1516,13 @@
   function renderStats() {
 
     // Показываем индикатор загрузки
-    elStatsBody.value = "Анализ файлов...";
+    elStatsBody.value = "Сбор информации...";
+
+    // Сначала собираем информацию об окружении
+    var envInfo = collectEnvironmentInfo();
+
+    // Добавляем информацию профилера
+    var profilerInfo = profiler.getReport();
     
     // Асинхронно проверяем файлы
     checkAssetsFiles().then(fileStats => {
@@ -1149,16 +1534,16 @@
 
       var text = "";
 
+      text += "Версия программы: __VERSION__\n\n";
+
       text += "=== СТАТИСТИКА СЦЕНАРИЯ ===\n\n";
       text += "Название: " + (STORY.meta && STORY.meta.title ? STORY.meta.title : "(без названия)") + "\n";
       text += "Сцен: " + stats.sceneCount + "\n";
       text += "Меню выбора: " + stats.choiceCount + "\n\n";
 
-
-      
       text += "=== ПРОВЕРКА ФАЙЛОВ ===\n\n";
-      
-      // Отсутствующие файлы
+        
+      // Отсутствующие файлы - проверяем ВСЕГДА, независимо от наличия звука
       if (fileStats.missing.length > 0) {
         text += "❌ ОТСУТСТВУЮТ ФАЙЛЫ:\n";
         fileStats.missing.forEach(item => {
@@ -1172,7 +1557,29 @@
         text += "✅ Все файлы найдены\n\n";
       }
       
-      // Статистика по файлам
+      // Ошибки размеров изображений
+      if (fileStats.sizeErrors.length > 0) {
+        text += "❌ ПРОБЛЕМЫ С РАЗМЕРАМИ ИЗОБРАЖЕНИЙ:\n\n";
+        
+        fileStats.sizeErrors.forEach(item => {
+          text += `Файл: ${item.path}\n`;
+          text += `  Текущий размер: ${item.width}×${item.height}\n`;
+          if (item.category === 'bg') {
+            text += `  Требуется: не менее 1080×1920\n`;
+          } else if (item.category === 'char') {
+            text += `  Требуется: не менее 500×1200\n`;
+          }
+          text += `  Проблемы: ${item.errors.join(', ')}\n`;
+          if (item.refs) {
+            text += `  Используется в: ${item.refs.join(', ')}\n`;
+          }
+          text += "\n";
+        });
+      } else {
+        text += "✅ Все изображения соответствуют требованиям по размеру\n\n";
+      }
+      
+
       text += "=== СТАТИСТИКА ФАЙЛОВ ===\n\n";
       text += "Всего файлов: " + fileStats.files.length + "\n";
       
@@ -1186,24 +1593,8 @@
       
       text += "  Изображения: " + imageCount + "\n";
       text += "  Аудио: " + audioCount + "\n\n";
+
       
-      // Размеры
-      text += "Объем:\n";
-      text += "  Изображения: " + Math.round(fileStats.imagesSize / 1024) + " KB\n";
-      text += "  Аудио: " + Math.round(fileStats.audioSize / 1024) + " KB\n";
-      text += "  Всего: " + Math.round(fileStats.totalSize / 1024) + " KB (" + 
-        (fileStats.totalSize / 1024 / 1024).toFixed(2) + " MB)\n\n";
-      
-
-      text += "Фоны (использовано): " + stats.uniqueBackgrounds + "\n";
-      text += "Персонажи (использовано): " + stats.uniqueCharacters + "\n";
-      text += "Всего изображений персонажей: " + stats.characterImageCount + "\n\n";
-
-      text += "Фраз персонажей: " + stats.sayCount + "\n";
-      text += "Авторских экранов: " + stats.textCount + "\n\n";
-
-      text += "Смен музыки (bgm): " + stats.bgmActions + "\n";
-      text += "Звуков (sfx): " + stats.sfxActions + "\n\n";
 
 
       text += "=== ОБЪЁМ ТЕКСТА ===\n\n";
@@ -1245,9 +1636,140 @@
         }
       }
 
+      // ========== ПРОФАЙЛЕР ==========
+      text += "=== ПРОФАЙЛЕР ВРЕМЕНИ ===\n\n";
+      text += profilerInfo;
+      text += "\n";
 
-      // После вычисления stats, errors, textInfo, reach, cycles
-      // (примерно строка 720-730)
+      // ========== ВРЕМЯ ЗАГРУЗКИ СЦЕНАРИЯ ==========
+      text += "=== ВРЕМЯ ЗАГРУЗКИ СЦЕНАРИЯ ===\n\n";
+      
+      if (window.LOADER_STATS) {
+          var marks = window.LOADER_STATS.marks;
+
+          // Находим максимальное время (последнюю метку)
+          var maxTime = 0;
+          for (var key in marks) {
+              if (marks[key] > maxTime) {
+                  maxTime = marks[key];
+              }
+          }
+
+          var totalLoaderTime = maxTime; // Используем последнюю метку
+          // var totalLoaderTime = marks.parsing_end || marks.story_assigned || 0;
+          var parsingTime = marks.parsing_end || 0;
+          var processingTime = totalLoaderTime - parsingTime;
+
+          text += "Общее время загрузчика: " + totalLoaderTime + "ms\n";
+          text += "  Парсинг: " + parsingTime + "ms\n";
+          text += "  Обработка и передача: " + processingTime + "ms\n\n";
+          
+          text += "Детализация:\n";
+          text += "  Старт: 0ms\n";
+          
+          // Сортируем метки по времени
+          var sortedMarks = Object.keys(marks).sort(function(a, b) {
+              return marks[a] - marks[b];
+          });
+          
+          var lastTime = 0;
+          sortedMarks.forEach(function(name) {
+              var time = marks[name];
+              text += "  " + name + ": " + time + "ms (+" + (time - lastTime) + "ms)\n";
+              lastTime = time;
+          });
+          
+          text += "\n";
+          text += "Размер сценария:\n";
+          text += "  Сцен: " + window.LOADER_STATS.scenesCount + "\n";
+          text += "  Действий: " + window.LOADER_STATS.actionsCount + "\n";
+          text += "  Фонов: " + window.LOADER_STATS.backgroundsCount + "\n";
+          text += "  Персонажей: " + window.LOADER_STATS.charactersCount + "\n";
+          text += "  Аудио: " + window.LOADER_STATS.audioCount + "\n";
+          text += "  Время на сцену: " + (totalLoaderTime / Math.max(1, window.LOADER_STATS.scenesCount)).toFixed(2) + "ms\n";
+          text += "  Время на действие: " + (totalLoaderTime / Math.max(1, window.LOADER_STATS.actionsCount)).toFixed(2) + "ms\n\n";
+
+          // Прогноз для больших сценариев
+          var estimatedFor100Scenes = (totalLoaderTime / window.LOADER_STATS.scenesCount) * 100;
+          var estimatedFor1000Actions = (totalLoaderTime / window.LOADER_STATS.actionsCount) * 1000;
+          
+          // Прогноз для больших сценариев
+          var estimatedFor100Scenes = (totalLoaderTime / window.LOADER_STATS.scenesCount) * 100;
+          var estimatedFor1000Actions = (totalLoaderTime / window.LOADER_STATS.actionsCount) * 1000;
+
+          // Детальный прогноз по типам действий
+          var sayCount = stats.sayCount || 0;        // фразы персонажей
+          var textCount = stats.textCount || 0;      // авторский текст
+          var choiceCount = stats.choiceCount || 0;  // меню выбора
+          var bgmCount = stats.bgmActions || 0;      // смены музыки
+          var bgCount = stats.uniqueBackgrounds || 0; // смены фонов
+
+          var totalDialogActions = sayCount + textCount;
+          var totalInteractiveActions = choiceCount;
+
+          text += "Прогноз производительности:\n";
+          text += "  На 100 сцен: ~" + Math.round(estimatedFor100Scenes) + "ms (" + (estimatedFor100Scenes/1000).toFixed(1) + "с)\n";
+          text += "  На 1000 действий: ~" + Math.round(estimatedFor1000Actions) + "ms (" + (estimatedFor1000Actions/1000).toFixed(1) + "с)\n\n";
+
+          text += "Детальный прогноз по типам действий (на 1000 шт):\n";
+
+          if (sayCount > 0) {
+              var timePerSay = totalLoaderTime / sayCount;
+              var estimated1000Say = timePerSay * 1000;
+              text += "  Фразы персонажей: ~" + Math.round(estimated1000Say) + "ms";
+              text += " (по " + timePerSay.toFixed(2) + "ms на фразу)\n";
+          }
+
+          if (textCount > 0) {
+              var timePerText = totalLoaderTime / textCount;
+              var estimated1000Text = timePerText * 1000;
+              text += "  Авторский текст: ~" + Math.round(estimated1000Text) + "ms";
+              text += " (по " + timePerText.toFixed(2) + "ms на текст)\n";
+          }
+
+          if (choiceCount > 0) {
+              var timePerChoice = totalLoaderTime / choiceCount;
+              var estimated1000Choice = timePerChoice * 1000;
+              text += "  Меню выбора: ~" + Math.round(estimated1000Choice) + "ms";
+              text += " (по " + timePerChoice.toFixed(2) + "ms на меню)\n";
+          }
+
+          if (bgmCount > 0) {
+              var timePerBgm = totalLoaderTime / bgmCount;
+              var estimated1000Bgm = timePerBgm * 1000;
+              text += "  Смена музыки: ~" + Math.round(estimated1000Bgm) + "ms";
+              text += " (по " + timePerBgm.toFixed(2) + "ms на смену)\n";
+          }
+
+          if (bgCount > 0) {
+              var timePerBg = totalLoaderTime / bgCount;
+              var estimated1000Bg = timePerBg * 1000;
+              text += "  Смена фона: ~" + Math.round(estimated1000Bg) + "ms";
+              text += " (по " + timePerBg.toFixed(2) + "ms на смену)\n";
+          }
+
+          text += "\n";
+
+          // Прогноз для типичной новеллы
+          text += "Прогноз для новеллы среднего размера:\n";
+          text += "  500 фраз + 50 меню:\n";
+          var mediumNovelTime = (timePerSay * 500) + (timePerChoice * 50);
+          text += "  ~" + Math.round(mediumNovelTime) + "ms (" + (mediumNovelTime/1000).toFixed(1) + "с)\n\n";
+
+          text += "Прогноз для большой новеллы:\n";
+          text += "  2000 фраз + 200 меню + 100 фонов + 50 музыки:\n";
+          var largeNovelTime = (timePerSay * 2000) + (timePerChoice * 200) + (timePerBg * 100) + (timePerBgm * 50);
+          text += "  ~" + Math.round(largeNovelTime) + "ms (" + (largeNovelTime/1000).toFixed(1) + "с)\n\n";
+
+      } else {
+          text += "Данные загрузчика недоступны\n\n";
+      }
+
+
+      // ========== ИНФОРМАЦИЯ ОБ ОКРУЖЕНИИ ==========
+      text += "=== ИНФОРМАЦИЯ ОБ УСТРОЙСТВЕ ===\n\n";
+      text += envInfo;
+      text += "\n";
 
       // Добавляем JSON сценария для отладки
       text += "\n\n=== JSON СЦЕНАРИЯ ===\n\n";
@@ -1272,199 +1794,328 @@
   }
 
 
- 
-  // Отброшен вариант: Проверка файлов через чтение первых 32 байт не возможно - ошибки статистики - указано, что файлов нет когда они есть
+// Новая функция для сбора информации об окружении
+function collectEnvironmentInfo() {
+  var info = "";
+    
+    // Размеры окна
+    info += "Размеры окна:\n";
+    info += "  window.innerWidth: " + window.innerWidth + "px\n";
+    info += "  window.innerHeight: " + window.innerHeight + "px\n";
+    info += "  window.outerWidth: " + window.outerWidth + "px\n";
+    info += "  window.outerHeight: " + window.outerHeight + "px\n";
+    info += "  screen.width: " + screen.width + "px\n";
+    info += "  screen.height: " + screen.height + "px\n";
+    info += "  screen.availWidth: " + screen.availWidth + "px\n";
+    info += "  screen.availHeight: " + screen.availHeight + "px\n";
+    info += "  devicePixelRatio: " + window.devicePixelRatio + "\n\n";
+    
+    // Соотношение сторон
+    var aspectRatio = (window.innerWidth / window.innerHeight).toFixed(2);
+    info += "Соотношение сторон: " + aspectRatio + " (" + aspectRatio + ":1)\n";
+    info += "Ориентация: " + (window.innerHeight > window.innerWidth ? "вертикальная" : "горизонтальная") + "\n\n";
+    
+    // CSS переменные
+    var rootStyle = getComputedStyle(document.documentElement);
+    var uiScale = rootStyle.getPropertyValue('--uiScale').trim();
+    var baseFontPx = rootStyle.getPropertyValue('--baseFontPx').trim();
+    var baseFontSize = rootStyle.getPropertyValue('--baseFontSize').trim();
+    var uiBottomOffset = rootStyle.getPropertyValue('--uiBottomOffset').trim();
+    var topSpacing = rootStyle.getPropertyValue('--topSpacing').trim();
+    var bottomSpacing = rootStyle.getPropertyValue('--bottomSpacing').trim();
+    
+    info += "CSS переменные:\n";
+    info += "  --uiScale: " + uiScale + "\n";
+    info += "  --baseFontPx: " + baseFontPx + "\n";
+    info += "  --baseFontSize: " + baseFontSize + "\n";
+    info += "  --uiBottomOffset: " + uiBottomOffset + "\n";
+    info += "  --topSpacing: " + topSpacing + "px\n";
+    info += "  --bottomSpacing: " + bottomSpacing + "px\n\n";
+    
+    // JS переменные масштабирования
+    info += "JS настройки масштаба:\n";
+    info += "  UI_FONT_SCALE: " + UI_FONT_SCALE + "\n";
+    info += "  UI_REFERENCE_HEIGHT: " + UI_REFERENCE_HEIGHT + "\n\n";
+    
+    // Размеры элементов интерфейса
+    var dialog = document.getElementById('dialog');
+    if (dialog) {
+        var dialogStyle = getComputedStyle(dialog);
+        info += "Диалог:\n";
+        info += "  width: " + dialogStyle.width + "\n";
+        info += "  height: " + dialogStyle.height + "\n";
+        info += "  padding: " + dialogStyle.padding + "\n";
+        info += "  font-size: " + dialogStyle.fontSize + "\n";
+        info += "  bottom: " + dialogStyle.bottom + "\n";
+        info += "  классы: " + dialog.className + "\n\n";
+    }
+    
+    var nameBox = document.getElementById('nameBox');
+    if (nameBox && !nameBox.classList.contains('hidden')) {
+        var nameStyle = getComputedStyle(nameBox);
+        info += "Имя персонажа:\n";
+        info += "  padding: " + nameStyle.padding + "\n";
+        info += "  font-size: " + nameStyle.fontSize + "\n";
+        info += "  margin-bottom: " + nameStyle.marginBottom + "\n\n";
+    }
+    
+    var choices = document.getElementById('choices');
+    if (choices && !choices.classList.contains('hidden')) {
+        var choicesStyle = getComputedStyle(choices);
+        var choiceBtn = document.querySelector('.choiceBtn');
+        info += "Меню выбора:\n";
+        info += "  контейнер bottom: " + choicesStyle.bottom + "\n";
+        info += "  gap: " + choicesStyle.gap + "\n";
+        
+        if (choiceBtn) {
+            var btnStyle = getComputedStyle(choiceBtn);
+            info += "  кнопка padding: " + btnStyle.padding + "\n";
+            info += "  кнопка font-size: " + btnStyle.fontSize + "\n";
+        }
+        info += "\n";
+    }
+    
+    var char = document.getElementById('charLayer');
+    if (char && !char.classList.contains('hidden')) {
+        info += "Персонаж:\n";
+        info += "  высота (JS): " + char.style.height + "\n";
+        info += "  фактическая высота: " + char.offsetHeight + "px\n";
+        info += "  max-height (CSS): " + getComputedStyle(char).maxHeight + "\n";
+        info += "  bottom: " + getComputedStyle(char).bottom + "\n\n";
+    }
+    
+    // Информация о браузере
+    info += "Браузер:\n";
+    info += "  userAgent: " + navigator.userAgent + "\n";
+    info += "  язык: " + navigator.language + "\n";
+    info += "  платформа: " + navigator.platform + "\n";
+    
+    return info;
+}
 
-    // Проверка файлов через Image/Audio объекты (работает в file://)
+
+  // Проверка файлов через fetch с HEAD запросом (работает в file:// ограниченно)
+  // Проверка файлов на соответствие требованиям
   function checkAssetsFiles() {
     return new Promise((resolve) => {
-      const result = {
-        missing: [],
-        totalSize: 0,
-        imagesSize: 0,
-        audioSize: 0,
-        files: []
-      };
-      
-      if (!STORY.assets) {
-        resolve(result);
-        return;
-      }
-      
-      // Собираем все файлы из ассетов
-      const allFiles = [];
-      
-      // Фоны
-      if (STORY.assets.backgrounds) {
-        Object.entries(STORY.assets.backgrounds).forEach(([id, path]) => {
-          allFiles.push({ id, path, type: 'image', category: 'bg', ref: id });
-        });
-      }
-      
-      // Персонажи (изображения)
-      if (STORY.assets.characters) {
-        Object.entries(STORY.assets.characters).forEach(([charId, char]) => {
-          if (char.images) {
-            Object.entries(char.images).forEach(([emotion, path]) => {
-              allFiles.push({ 
-                id: `${charId}_${emotion}`, 
-                path, 
-                type: 'image', 
-                category: 'char',
-                ref: `${charId} (${emotion})`
-              });
+        const result = {
+            missing: [],
+            sizeErrors: [], // файлы с неправильными размерами
+            files: []
+        };
+        
+        if (!STORY.assets) {
+            resolve(result);
+            return;
+        }
+        
+        // Собираем все файлы из ассетов
+        const allFiles = [];
+        
+        // Фоны
+        if (STORY.assets.backgrounds) {
+            Object.entries(STORY.assets.backgrounds).forEach(([id, path]) => {
+                allFiles.push({ id, path, type: 'bg', category: 'background', ref: id });
             });
-          }
-        });
-      }
-      
-      // Аудио
-      if (STORY.assets.audio) {
-        Object.entries(STORY.assets.audio).forEach(([id, path]) => {
-          allFiles.push({ id, path, type: 'audio', category: 'audio', ref: id });
-        });
-      }
-      
-      if (allFiles.length === 0) {
-        resolve(result);
-        return;
-      }
-      
-      // Группируем по пути
-      const pathGroups = {};
-      allFiles.forEach(file => {
-        if (!pathGroups[file.path]) {
-          pathGroups[file.path] = [];
         }
-        pathGroups[file.path].push(file);
-      });
-      
-      const uniquePaths = Object.keys(pathGroups);
-      let loadedCount = 0;
-      let errorCount = 0;
-      const totalPaths = uniquePaths.length;
-      
-      const fileResults = {};
-      
-      function checkComplete() {
-        if (loadedCount + errorCount === totalPaths) {
-          // Собираем результаты
-          uniquePaths.forEach(path => {
-            if (fileResults[path] && fileResults[path].success) {
-              result.files.push(fileResults[path].data);
-              
-              if (path.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
-                result.imagesSize += fileResults[path].data.estimatedSize;
-              } else {
-                result.audioSize += fileResults[path].data.estimatedSize;
-              }
-              result.totalSize += fileResults[path].data.estimatedSize;
-            } else {
-              result.missing.push({
-                path: path,
-                refs: pathGroups[path].map(f => `${f.category}: ${f.ref}`)
-              });
-            }
+        
+        // Персонажи (изображения)
+        if (STORY.assets.characters) {
+            Object.entries(STORY.assets.characters).forEach(([charId, char]) => {
+                if (char.images) {
+                    Object.entries(char.images).forEach(([emotion, path]) => {
+                        allFiles.push({ 
+                            id: `${charId}_${emotion}`, 
+                            path, 
+                            type: 'char', 
+                            category: 'character',
+                            ref: `${charId} (${emotion})`,
+                            charId: charId,
+                            emotion: emotion
+                        });
+                    });
+                }
+            });
+        }
+        
+        // Аудио
+        if (STORY.assets.audio) {
+          Object.entries(STORY.assets.audio).forEach(([id, path]) => {
+            allFiles.push({ 
+              id: id, 
+              path: path, 
+              type: 'audio', 
+              category: 'audio', 
+              ref: id 
+            });
           });
-          
-          resolve(result);
         }
-      }
-      
-      // Проверяем каждый уникальный файл
-      uniquePaths.forEach(path => {
-        if (path.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
-          // Проверка изображения
-          const img = new Image();
-          let isResolved = false;
-          
-          const timeout = setTimeout(() => {
-            if (!isResolved) {
-              isResolved = true;
-              errorCount++;
-              checkComplete();
-            }
-          }, 10000);
-          
-          img.onload = function() {
-            if (isResolved) return;
-            isResolved = true;
-            clearTimeout(timeout);
-            
-            // Оцениваем размер
-            const estimatedSize = img.width * img.height * 4;
-            
-            fileResults[path] = {
-              success: true,
-              data: {
-                path: path,
-                width: img.width,
-                height: img.height,
-                estimatedSize: estimatedSize,
-                estimatedSizeKB: Math.round(estimatedSize / 1024),
-                refs: pathGroups[path].map(f => `${f.category}: ${f.ref}`)
-              }
-            };
-            
-            loadedCount++;
-            checkComplete();
-          };
-          
-          img.onerror = function() {
-            if (isResolved) return;
-            isResolved = true;
-            clearTimeout(timeout);
-            
-            errorCount++;
-            checkComplete();
-          };
-          
-          img.src = path;
-        } else {
-          // Проверка аудио
-          const audio = new Audio();
-          let isResolved = false;
-          
-          const timeout = setTimeout(() => {
-            if (!isResolved) {
-              isResolved = true;
-              errorCount++;
-              checkComplete();
-            }
-          }, 10000);
-          
-          audio.oncanplaythrough = function() {
-            if (isResolved) return;
-            isResolved = true;
-            clearTimeout(timeout);
-            
-            fileResults[path] = {
-              success: true,
-              data: {
-                path: path,
-                duration: Math.round(audio.duration),
-                estimatedSize: (audio.duration || 60) * 16000,
-                estimatedSizeKB: Math.round(((audio.duration || 60) * 16000) / 1024),
-                refs: pathGroups[path].map(f => `${f.category}: ${f.ref}`)
-              }
-            };
-            
-            loadedCount++;
-            checkComplete();
-          };
-          
-          audio.onerror = function() {
-            if (isResolved) return;
-            isResolved = true;
-            clearTimeout(timeout);
-            
-            errorCount++;
-            checkComplete();
-          };
-          
-          audio.src = path;
+
+        if (allFiles.length === 0) {
+            resolve(result);
+            return;
         }
-      });
+        
+        // Группируем по пути
+        const pathGroups = {};
+        allFiles.forEach(file => {
+            if (!pathGroups[file.path]) {
+                pathGroups[file.path] = [];
+            }
+            pathGroups[file.path].push(file);
+        });
+        
+        const uniquePaths = Object.keys(pathGroups);
+        let loadedCount = 0;
+        let errorCount = 0;
+        const totalPaths = uniquePaths.length;
+        
+        const fileResults = {};
+        
+        function checkComplete() {
+            if (loadedCount + errorCount === totalPaths) {
+                // Собираем результаты
+                uniquePaths.forEach(path => {
+                    if (fileResults[path] && fileResults[path].success) {
+                        result.files.push(fileResults[path].data);
+                        
+                        // Проверяем соответствие требованиям
+                        const fileData = fileResults[path].data;
+                        if (fileData.width && fileData.height) {
+                            let required = { width: 0, height: 0 };
+                            
+                            if (fileData.category === 'bg') {
+                                required = { width: 1080, height: 1920 };
+                            } else if (fileData.category === 'char') {
+                                required = { width: 500, height: 1200 };
+                            }
+                            
+                            if (required.width > 0 && required.height > 0) {
+                                const errors = [];
+                                if (fileData.width < required.width) {
+                                    errors.push(`ширина ${fileData.width}px < ${required.width}px`);
+                                }
+                                if (fileData.height < required.height) {
+                                    errors.push(`высота ${fileData.height}px < ${required.height}px`);
+                                }
+                                
+                                if (errors.length > 0) {
+                                    result.sizeErrors.push({
+                                        path: path,
+                                        refs: pathGroups[path].map(f => `${f.category}: ${f.ref}`),
+                                        width: fileData.width,
+                                        height: fileData.height,
+                                        required: required,
+                                        errors: errors
+                                    });
+                                }
+                            }
+                        }
+                    } else {
+                        result.missing.push({
+                            path: path,
+                            refs: pathGroups[path].map(f => `${f.category}: ${f.ref}`)
+                        });
+                    }
+                });
+                
+                resolve(result);
+            }
+        }
+        
+        // Проверяем каждый уникальный файл через Image объект
+        uniquePaths.forEach(path => {
+            if (path.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
+                // Проверка изображения
+                const img = new Image();
+                let isResolved = false;
+                
+                const timeout = setTimeout(() => {
+                    if (!isResolved) {
+                        isResolved = true;
+                        errorCount++;
+                        checkComplete();
+                    }
+                }, 5000);
+                
+                img.onload = function() {
+                    if (isResolved) return;
+                    isResolved = true;
+                    clearTimeout(timeout);
+                    
+                    // Определяем категорию по первому файлу в группе
+                    const firstFile = pathGroups[path][0];
+                    const category = firstFile.type; // 'bg' или 'char'
+                    
+                    fileResults[path] = {
+                        success: true,
+                        data: {
+                            path: path,
+                            width: img.width,
+                            height: img.height,
+                            category: category,
+                            refs: pathGroups[path].map(f => `${f.category}: ${f.ref}`)
+                        }
+                    };
+                    
+                    loadedCount++;
+                    checkComplete();
+                };
+                
+                img.onerror = function() {
+                    if (isResolved) return;
+                    isResolved = true;
+                    clearTimeout(timeout);
+                    
+                    errorCount++;
+                    checkComplete();
+                };
+                
+                img.src = path + '?' + Date.now(); // добавляем timestamp чтобы избежать кэша
+              } else if (path.match(/\.(mp3|wav|ogg|flac|m4a)$/i)) {
+                // Проверка аудиофайла
+                const audio = new Audio();
+                let isResolved = false;
+                
+                const timeout = setTimeout(() => {
+                  if (!isResolved) {
+                    isResolved = true;
+                    errorCount++;
+                    checkComplete();
+                  }
+                }, 5000);
+                
+                audio.oncanplaythrough = function() {
+                  if (isResolved) return;
+                  isResolved = true;
+                  clearTimeout(timeout);
+                  
+                  fileResults[path] = {
+                    success: true,
+                    data: {
+                      path: path,
+                      category: 'audio',
+                      duration: Math.round(audio.duration),
+                      refs: pathGroups[path].map(f => `${f.category}: ${f.ref}`)
+                    }
+                  };
+                  
+                  loadedCount++;
+                  checkComplete();
+                };
+                
+                audio.onerror = function() {
+                  if (isResolved) return;
+                  isResolved = true;
+                  clearTimeout(timeout);
+                  
+                  errorCount++;
+                  checkComplete();
+                };
+                
+                audio.src = path + '?' + Date.now();
+            }
+        });
     });
   }
 
@@ -2005,6 +2656,8 @@ function applySpacingSettings() {
   document.documentElement.style.setProperty('--bottomSpacing', bottomSpacing + 'px');
   
   console.log(`[Engine] Отступы: сверху ${topSpacing}px, снизу ${bottomSpacing}px`);
+
+  adjustCharacterScale(); // пересчитываем размер персонажа с debounce
 }
 
   // Управление размытым фоном

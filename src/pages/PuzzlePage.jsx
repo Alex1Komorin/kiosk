@@ -11,7 +11,7 @@ const PuzzlePage = () => {
       background: '#0b1020'
     }}>
       <iframe
-        src="https://barilo.ru/games/ai/puzzle/game.html?x=3&y=5&image=8march2026-robots&res=table"
+        src="https://barilo.ru/games/ai/puzzle/game.html?x=4&y=6&image=8march2026-robots&res=table"
         style={{
           width: '100%',
           height: '100%',

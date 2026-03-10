@@ -11,7 +11,7 @@ const VisualNovelPage = () => {
       background: '#000' // на случай если iframe не загрузится
     }}>
       <iframe
-        src="/VisualNovelVertical-main/index.html"
+        src="/VisualNovelVertical/index.html"
         style={{
           width: '100%',
           height: '100%',
