@@ -76,5 +76,11 @@ export const linksData = [
     title: 'Аудитории и их наполнение',
     url: 'https://docs.google.com/spreadsheets/d/1sN-2QYR2nOeZ91coKSBT8JHKyPhNHdBxx5q-xzQZcOc/edit?gid=0#gid=0',
     icon: 'fas fa-chalkboard'
+  },
+  {
+    id: 15,
+    title: 'Аудитории и их наполнение',
+    url: 'https://itschool.kosgos.ru/',
+    icon: 'fas fa-chalkboard'
   }
 ]

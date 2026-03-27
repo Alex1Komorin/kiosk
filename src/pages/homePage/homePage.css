@@ -1,0 +1,166 @@
+/* homePage.css */
+.page-container {
+  width: 100%;
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: var(--color-white);
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+.background-pattern {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 80%;
+  height: 80%;
+  object-fit: cover;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.grid-card {
+  border-radius: 30px;
+  padding: 1.5rem;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 2;
+}
+
+.grid-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.grid-card img {
+  width: 70%;
+  height: auto;
+  max-height: 60%;
+  object-fit: contain;
+  margin-bottom: 1rem;
+}
+
+.grid-card p {
+  color: white;
+  font-size: clamp(0.875rem, 4vw, 1.1rem);
+  font-weight: 500;
+  text-align: center;
+  margin: 0;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  line-height: 1.3;
+}
+
+.grid-card.disabled {
+  cursor: not-allowed;
+}
+
+.grid-card.disabled:hover {
+  transform: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Адаптивность для планшетов */
+@media (max-width: 1024px) {
+  .page-container {
+    padding: 1.5rem;
+  }
+  
+  .grid-container {
+    gap: 1.25rem;
+  }
+  
+  .grid-card {
+    padding: 1.25rem;
+  }
+}
+
+/* Адаптивность для маленьких планшетов */
+@media (max-width: 768px) {
+  .page-container {
+    padding: 1rem;
+  }
+  
+  .grid-container {
+    gap: 1rem;
+  }
+  
+  .grid-card {
+    padding: 1rem;
+  }
+  
+  .grid-card img {
+    width: 65%;
+    margin-bottom: 0.75rem;
+  }
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 640px) {
+  .grid-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  
+  .grid-card img {
+    width: 60%;
+  }
+}
+
+/* Адаптивность для очень маленьких экранов */
+@media (max-width: 480px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    max-width: 300px;
+  }
+  
+  .page-container {
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .grid-card {
+    padding: 1.5rem;
+  }
+  
+  .grid-card img {
+    width: 50%;
+    margin-bottom: 1rem;
+  }
+}
+
+/* Адаптивность для очень больших экранов */
+@media (min-width: 1920px) {
+  .grid-container {
+    max-width: 1600px;
+    gap: 2rem;
+  }
+  
+  .grid-card {
+    padding: 2rem;
+  }
+  
+  .grid-card p {
+    font-size: 1.3rem;
+  }
+}

@@ -3,15 +3,19 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { ActivityProvider } from './contexts/ActivityContext';
 import { UrlProvider } from './contexts/UrlContext'; 
+import { TextSizeProvider } from './contexts/TextSizeContext';
 import InactivityWarning from './components/InactivityWarning/InactivityWarning';
 import Index from './pages/Index/Index';
 import GamesPage from './pages/gamesPage/gamesPage';
 import BalloonGamePage from './pages/BalloonGamePage';
 import VisualNovelPage from './pages/visualNivelPage';
 import PuzzlePage from './pages/PuzzlePage';
-import Layout from './layout/Layout';
+import Eios from './pages/eios';
+import Sidebar from './layout/SidebarLayout';
 import DocumentPage from './pages/DocumentsPage/DocumentPage';
+import ContactPage from './pages/сontactPage/сontactPage';
 import LinksPage from './pages/LinkPage/LinkPage';
+import HomePage from './pages/homePage/homePage';
 import useGlobalBlocker from './hooks/UseGlobalBlocker';
 import './App.css';
 
@@ -35,62 +39,82 @@ function App() {
   return (
     <Router>
       <div className="app">
+        <TextSizeProvider>
         <ActivityProviderWithRoute>
           <UrlProvider>
             <Routes>
-              <Route path="/" element={
-                <Layout>
+              <Route path="/home" element={
+                <Sidebar>
                   <Index />
-                </Layout>
+                </Sidebar>
+              } />
+
+              <Route path="/" element={
+                <Sidebar>
+                  <HomePage />
+                </Sidebar>
               } />
 
               {/* Страница со списком игр */}
               <Route path="/games" element={
-                <Layout>
+                <Sidebar>
                   <GamesPage />
-                </Layout>
+                </Sidebar>
               } />
 
               {/* Отдельные игры */}
               <Route path="/games/balloon" element={
-                <Layout>
+                <Sidebar>
                   <BalloonGamePage />
-                </Layout>
+                </Sidebar>
               } />
 
               <Route path="/games/novel" element={
-                <Layout>
+                <Sidebar>
                   <VisualNovelPage />
-                </Layout>
+                </Sidebar>
               } />
 
               <Route path="/games/puzzle" element={
-                <Layout>
+                <Sidebar>
                   <PuzzlePage />
-                </Layout>
+                </Sidebar>
+              } />
+
+              <Route path="/external" element={
+                <Sidebar>
+                  <Eios />
+                </Sidebar>
+              } />
+
+              <Route path="/contact" element={
+                <Sidebar>
+                  <ContactPage />
+                </Sidebar>
               } />
 
               <Route path="/documents" element={
-                <Layout>
+                <Sidebar>
                   <DocumentPage />
-                </Layout>
+                </Sidebar>
               } />
               
               <Route path="/links" element={
-                <Layout>
+                <Sidebar>
                   <LinksPage />
-                </Layout>
+                </Sidebar>
               } />
               
               <Route path="/documents/:folderPath/*" element={
-                <Layout>
+                <Sidebar>
                   <DocumentPage />
-                </Layout>
+                </Sidebar>
               } />
             </Routes>
             <InactivityWarning />
           </UrlProvider>
         </ActivityProviderWithRoute>
+        </TextSizeProvider>
       </div>
     </Router>
   );

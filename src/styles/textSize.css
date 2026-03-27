@@ -1,0 +1,38 @@
+/* src/index.css или src/App.css */
+:root {
+  --text-scale: 1;
+  --base-font-size: 16px;
+  
+  /* Рекурсивные CSS переменные для текста */
+  --text-xs: calc(var(--base-font-size) * 0.75);
+  --text-sm: calc(var(--base-font-size) * 0.875);
+  --text-base: var(--base-font-size);
+  --text-lg: calc(var(--base-font-size) * 1.125);
+  --text-xl: calc(var(--base-font-size) * 1.25);
+  --text-2xl: calc(var(--base-font-size) * 1.5);
+  --text-3xl: calc(var(--base-font-size) * 1.875);
+  --text-4xl: calc(var(--base-font-size) * 2.25);
+  --text-5xl: calc(var(--base-font-size) * 3);
+}
+
+/* Применяем глобальные размеры текста */
+html {
+  font-size: var(--base-font-size);
+}
+
+body {
+  font-size: var(--text-base);
+}
+
+/* Опционально: медиа-запросы для минимальных размеров */
+@media (max-width: 768px) {
+  :root {
+    --text-base: clamp(12px, 4vw, 16px);
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --text-base: clamp(12px, 3.5vw, 14px);
+  }
+}
