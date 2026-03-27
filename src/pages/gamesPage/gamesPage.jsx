@@ -10,19 +10,19 @@ const GamesPage = () => {
     {
       id: 'balloon',
       title: 'Воздушные шарики',
-      image: '/images/games/balloon.svg',
+      image: '/images/gamesIcons/baloon.png',
       path: '/games/balloon'
     },
     {
       id: 'novel',
       title: 'Визуальная новелла',
-      image: '/images/games/novel.svg',
+      image: '/images/gamesIcons/novel.png',
       path: '/games/novel'
     },
     {
       id: 'puzzle',
       title: 'Пазлы к 8 марта',
-      image: '/images/games/puzzle.svg',
+      image: '/images/gamesIcons/puzzle.png',
       path: '/games/puzzle'
     }
   ];
@@ -32,12 +32,12 @@ const GamesPage = () => {
     <div className="games-grid">
       {games.map(game => (
         <div key={game.id} className="game-card-wrapper">
-          <div
-            className="game-card"
+          <img 
+            src={game.image} 
+            alt={game.title} 
+            className="game-card-image"
             onClick={() => navigate(game.path)}
-          >
-            <img src={game.image} alt={game.title} className="game-card-image" />
-          </div>
+          />
           <p className="game-card-title">{game.title}</p>
         </div>
       ))}
