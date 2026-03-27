@@ -26,8 +26,18 @@ body {
      4) Если мелкие варианты выбора — правьте --choices-* и --choice-*.
   */
 
+  /* Настройки из story.js */
+
+  --topSpacing: 500px;
+  --bottomSpacing: 800px;
+
+  --blurStrength: 50px;
+  --blurBrightness: 0.9;
+  --blurOpacity: 0.95;
+
+
   /* Технические переменные сцены: задаются JS и/или сценарием */
-  --uiBottomOffset: calc(14px + env(safe-area-inset-bottom, 0px));
+  --uiBottomOffset: calc(0.875rem + env(safe-area-inset-bottom, 0px));
   --topSpacing: 0px;
   --bottomSpacing: 0px;
 
@@ -147,6 +157,55 @@ body {
   --compact-choice-padding-y: 0.55em;
   --compact-choice-padding-x: 0.65em;
   --compact-choice-font-size: 0.88em;
+
+  /* =========================================================
+     НАСТРОЙКИ ГРАФА MERMAID
+     ========================================================= */
+  --graph-bg: #ffffff;
+  --graph-padding: 1rem;
+  --graph-label-color: #000000;
+  --graph-label-font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  
+  /* Настройки для текста над линиями */
+  --graph-edgeLabel-bg: #ffffff;
+  --graph-edgeLabel-border: 1px solid #999;
+  --graph-edgeLabel-radius: 8px;  /* Увеличено для скругления */
+  --graph-edgeLabel-padding: 4px 10px;  /* Увеличено для лучшего вида */
+  --graph-edgeLabel-font-size: 11px;
+  --graph-edgeLabel-color: #000000;
+  
+  /* Настройки для узлов (общие) */
+  --graph-node-fill: #fff3e0;
+  --graph-node-stroke: #666;
+  --graph-node-stroke-width: 1px;
+  --graph-node-radius: 12px;  /* ДОБАВЛЕНО: скругление углов узлов */
+  
+  /* Настройки для стартовых узлов */
+  --graph-node-start-fill: #e1f5e1;
+  --graph-node-start-stroke: #00ff00;
+  --graph-node-start-stroke-width: 2px;
+  --graph-node-start-radius: 15px;  /* ДОБАВЛЕНО: скругление для стартовых */
+  
+  /* Настройки для недостижимых узлов */
+  --graph-node-unreachable-fill: #ffebee;
+  --graph-node-unreachable-stroke: #ff0000;
+  --graph-node-unreachable-stroke-dasharray: 5 5;
+  --graph-node-unreachable-stroke-width: 2px;
+  --graph-node-unreachable-radius: 12px;  /* ДОБАВЛЕНО: скругление для недостижимых */
+  
+  /* Настройки для финальных узлов */
+  --graph-node-final-fill: #f3e5f5;
+  --graph-node-final-stroke: #9c27b0;
+  --graph-node-final-stroke-width: 2px;
+  --graph-node-final-radius: 14px;  /* ДОБАВЛЕНО: скругление для финальных */
+  
+  /* Фон контейнера графа */
+  --graph-container-bg: #1a1a1a;
+
+  --char-shadow-y: 0.75rem;
+  --char-shadow-blur: 1.5rem;
+  --char-shadow-color: rgba(0,0,0,0.55);
+
 }
 
 /* Контейнер приложения */
@@ -187,7 +246,7 @@ body {
   /* max-width и max-height не использовать, управляется через JS */
   object-fit: contain;      /* персонажа обычно не режем */
   object-position: center bottom;
-  filter: drop-shadow(0 12px 24px rgba(0,0,0,0.55));
+  filter: drop-shadow(0 var(--char-shadow-y) var(--char-shadow-blur) var(--char-shadow-color));
   z-index: 3; /* ВЫШЕ всего */
   pointer-events: none; /* чтобы клики проходили сквозь персонажа */
 }
@@ -250,6 +309,12 @@ body {
   line-height: 1.1;
 }
 
+.icon-btn .btn-icon {
+  display: inline-block;
+  line-height: 1;
+  transform: scale(1.8);
+  transform-origin: center;
+}
 
 
 /* Слайдер громкости */
@@ -365,35 +430,89 @@ body {
   margin-top: var(--dialog-hint-gap);
 }
 
-/* Выбор */
+/* =========================================================
+   ВЫБОР: панель, заголовок и кнопки
+   ========================================================= */
+
 .choices {
   position: absolute;
   left: var(--choices-side-offset);
   right: var(--choices-side-offset);
-  top: var(--choices-top-offset);
-  bottom: calc(var(--uiBottomOffset) + var(--bottomSpacing) + var(--dialog-bottom-gap));
+  bottom: calc(var(--bottomSpacing) + var(--dialog-bottom-gap));
+  z-index: 30;
+}
 
+.choicePanel {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
   gap: var(--choices-gap);
-  font-size: var(--dialog-font-size);
+  padding: 0.95em;
+  border-radius: calc(var(--choice-radius) + 0.2em);
+  background: rgba(0,0,0,0.40);
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.28);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
 
-  z-index: 11;
+.choiceTitle {
+  text-align: center;
+  font-size: 0.92em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.92;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+}
+
+.choiceList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--choices-gap);
 }
 
 .choiceBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
   width: 100%;
   min-height: var(--choice-min-height);
-  text-align: left;
   padding: var(--choice-padding-y) var(--choice-padding-x);
-  border-radius: var(--choice-radius);
-  background: rgba(0,0,0,0.55);
-  border: var(--ui-border-width) solid rgba(255,255,255,0.18);
-  color: #fff;
+
+  font: inherit;
   font-size: var(--choice-font-size);
-  line-height: 1.3;
+  line-height: 1.35;
+  text-align: left;
+  color: #fff;
+
+  background: rgba(0,0,0,0.40);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: var(--choice-radius);
+
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
 }
+
+.choiceBtn:hover,
+.choiceBtn:focus-visible {
+  background: rgba(0,0,0,0.40);
+  border-color: rgba(255,255,255,0.32);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.choiceNum {
+  flex: 0 0 auto;
+  min-width: 1.8em;
+  font-weight: 700;
+  opacity: 0.95;
+}
+
+.choiceLabel {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 
 /* Модалка мини-игры */
 .gameModal {
@@ -405,13 +524,18 @@ body {
   justify-content: center;
   padding: var(--modal-padding);
   z-index: 60;
+  touch-action: none;
+}
+
+.gameFrame,
+.gameControls,
+#btnCloseGame {
+  touch-action: auto;
 }
 
 .gameFrameWrap {
   width: 100%;
   height: 100%;
-  max-width: var(--modal-frame-max-width);
-  max-height: var(--modal-frame-max-height);
   display: flex;
   flex-direction: column;
   gap: var(--modal-gap);
@@ -448,15 +572,15 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--modal-padding);
+  /* padding: var(--modal-padding); */
   z-index: 50;
 }
 
 .statsCard {
-  width: 100%;
-  height: 100%;
-  max-width: var(--modal-frame-max-width);
-  max-height: var(--modal-frame-max-height);
+  width: calc(100% - 4rem);  /* Отступы 2rem с каждой стороны */
+  height: calc(100% - 4rem); /* Отступы 2rem сверху и снизу */
+  /* max-width: var(--modal-frame-max-width); */  /* Закомментируйте или удалите */
+  /* max-height: var(--modal-frame-max-height); */ /* Закомментируйте или удалите */
   border-radius: calc(var(--modal-radius) + 0.1rem);
   background: rgba(0,0,0,0.70);
   border: var(--ui-border-width) solid rgba(255,255,255,0.18);
@@ -567,8 +691,8 @@ body {
   height: 100%;
   object-fit: cover; /* растягиваем на всю высоту */
   object-position: center;
-  filter: blur(50px) brightness(0.9);
-  opacity: 0.95;
+  filter: blur(var(--blurStrength)) brightness(var(--blurBrightness));
+  opacity: var(--blurOpacity);
   transform: scale(1.2); /* увеличиваем чтобы скрыть края */
 }
 
@@ -609,3 +733,637 @@ body {
 .dialog.no-name {
   padding-top: var(--dialog-no-name-padding-top);
 }
+
+
+
+
+
+
+
+/* Добавьте в engine.css */
+
+.statsViewContainer {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: rgba(0,0,0,0.6);
+}
+
+.statsBody, .graphContainer {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: auto;
+  transition: opacity 0.3s ease;
+}
+
+.graphContainer {
+  background: #1a1a1a;
+  padding: 0; /* Убираем padding, так как теперь внутри будет wrapper */
+}
+
+.graphControls {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem var(--modal-padding) var(--modal-padding);
+  border-top: var(--ui-border-width) solid rgba(255,255,255,0.12);
+  justify-content: flex-end;
+}
+
+
+/* Адаптация для мобильных */
+@media (max-width: 600px) {
+  .graphControls {
+    flex-wrap: wrap;
+  }
+  
+  .graphControls .btn {
+    flex: 1 1 auto;
+  }
+
+  .statsCard {
+    width: calc(100% - 2rem);  /* Отступы 1rem с каждой стороны */
+    height: calc(100% - 2rem); /* Отступы 1rem сверху и снизу */
+  } 
+}
+
+/* Замените существующие стили для Mermaid на эти */
+
+/* График на белом фоне */
+.graphContainer .mermaid {
+  background: var(--graph-bg) !important;
+}
+
+/* Базовые стили для всех элементов */
+.graphContainer .mermaid .label {
+  color: var(--graph-label-color) !important;
+  font-family: var(--graph-label-font) !important;
+}
+
+.graphContainer .mermaid .label text {
+  fill: var(--graph-label-color) !important;
+}
+
+/* Стили для текста над линиями */
+.graphContainer .mermaid .edgeLabel {
+  background: var(--graph-edgeLabel-bg) !important;
+  
+  border-radius: var(--graph-edgeLabel-radius) !important;
+  padding: var(--graph-edgeLabel-padding) !important;
+  font-size: var(--graph-edgeLabel-font-size) !important;
+  color: var(--graph-edgeLabel-color) !important;
+  font-weight: normal !important;
+  box-shadow: none !important;
+  line-height: 1.2 !important;
+}
+
+.graphContainer .mermaid .edgeLabel span {
+  color: var(--graph-edgeLabel-color) !important;
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Убираем лишние фоновые элементы */
+.graphContainer .mermaid .edgeLabel rect {
+  fill: var(--graph-edgeLabel-bg) !important;
+  stroke: #999 !important;
+  stroke-width: 1px !important;
+}
+
+.graphContainer .mermaid .edgeLabel foreignObject {
+  overflow: visible !important;
+}
+
+/* Стили для узлов (общие) */
+.graphContainer .mermaid .node rect,
+.graphContainer .mermaid .node circle,
+.graphContainer .mermaid .node polygon {
+  fill: var(--graph-node-fill) !important;
+  stroke: var(--graph-node-stroke) !important;
+  stroke-width: var(--graph-node-stroke-width) !important;
+  rx: var(--graph-node-radius) !important;  /* ДОБАВЛЕНО: скругление по горизонтали */
+  ry: var(--graph-node-radius) !important;  /* ДОБАВЛЕНО: скругление по вертикали */
+}
+
+/* Стартовые узлы */
+.graphContainer .mermaid .node.start rect {
+  fill: var(--graph-node-start-fill) !important;
+  stroke: var(--graph-node-start-stroke) !important;
+  stroke-width: var(--graph-node-start-stroke-width) !important;
+  rx: var(--graph-node-start-radius) !important;
+  ry: var(--graph-node-start-radius) !important;
+}
+
+/* Недостижимые узлы */
+.graphContainer .mermaid .node.unreachable rect {
+  fill: var(--graph-node-unreachable-fill) !important;
+  stroke: var(--graph-node-unreachable-stroke) !important;
+  stroke-dasharray: var(--graph-node-unreachable-stroke-dasharray) !important;
+  stroke-width: var(--graph-node-unreachable-stroke-width) !important;
+  rx: var(--graph-node-unreachable-radius) !important;
+  ry: var(--graph-node-unreachable-radius) !important;
+}
+
+/* Финальные узлы */
+.graphContainer .mermaid .node.final rect {
+  fill: var(--graph-node-final-fill) !important;
+  stroke: var(--graph-node-final-stroke) !important;
+  stroke-width: var(--graph-node-final-stroke-width) !important;
+  rx: var(--graph-node-final-radius) !important;
+  ry: var(--graph-node-final-radius) !important;
+}
+
+/* Фон контейнера графа */
+.graphContainer {
+  background: var(--graph-container-bg);
+  padding: var(--graph-padding);
+}
+
+.graphContainer.panning {
+  cursor: grabbing;
+}
+
+/* Wrapper для panzoom */
+.panzoom-wrapper {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  touch-action: none;
+}
+
+/* Контент для панорамирования */
+.panzoom-content {
+  transform-origin: 0 0;
+  width: fit-content;
+  height: fit-content;
+  min-width: 100%;
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Контейнер для mermaid графа с внутренним padding */
+.mermaid-wrapper {
+  display: inline-block;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  margin: auto;
+}
+
+/* Панель управления масштабом */
+.graph-zoom-controls {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  gap: 8px;
+  z-index: 100;
+  background: rgba(0,0,0,0.7);
+  padding: 8px;
+  border-radius: 40px;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.graph-zoom-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.3);
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.graph-zoom-btn:hover {
+  background: rgba(255,255,255,0.3);
+  transform: scale(1.1);
+}
+
+.graph-zoom-btn:active {
+  transform: scale(0.95);
+}
+
+.graph-zoom-reset {
+  width: auto;
+  padding: 0 15px;
+  border-radius: 40px;
+  font-size: 14px;
+}
+
+/* Индикатор масштаба */
+.graph-zoom-level {
+  color: white;
+  font-size: 14px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  background: rgba(255,255,255,0.1);
+  border-radius: 40px;
+  margin-right: 5px;
+}
+
+
+
+/* Улучшенные стили для изображений в графе Mermaid */
+
+.graphContainer .mermaid .node div {
+  overflow: visible !important;
+  position: relative !important;
+}
+
+/* Сами изображения */
+.graphContainer .mermaid .node img {
+  display: inline-block !important;  /* Вместо block, чтобы быть в строке */
+  width: 80px !important;
+  height: 120px !important;
+  object-fit: cover !important;
+  background-color: #f0f0f0 !important;
+  border-radius: 4px !important;
+  border: 1px solid #ccc !important;
+  transition: transform 0.2s ease !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+  margin: 0 !important;  /* Убираем отступы */
+  vertical-align: middle !important; /* Выравнивание по вертикали */
+  position: relative !important;  /* Для правильного наложения */
+  z-index: 1 !important;
+  cursor: zoom-in !important;
+
+  /* Убираем любые ограничения */
+  max-width: none !important;
+  max-height: none !important;
+}
+
+.graphContainer .mermaid .node img:hover {
+  transform: scale(3) !important;
+  z-index: 1000 !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3) !important;
+}
+
+/* Статистика узла */
+.graphContainer .mermaid .node-stats {
+  line-height: 1.4 !important;
+  margin-top: 2px !important;
+  white-space: nowrap !important;
+  text-align: center !important;
+}
+
+/* Контейнер узла Mermaid - должен допускать перекрытие */
+.graphContainer .mermaid .node {
+  overflow: visible !important;  /* Разрешаем выход за границы */
+  z-index: auto !important;
+}
+
+/* Увеличенное состояние */
+.graphContainer .mermaid .node img.zoomed {
+  transform: scale(3) !important;
+  z-index: 9999 !important;  /* Очень высокий z-index, чтобы быть поверх всего */
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3) !important;
+  position: relative !important;
+  cursor: zoom-out !important;
+}
+
+/* Все возможные обертки внутри узла */
+.graphContainer .mermaid .node * {
+  overflow: visible !important;
+}
+
+/* Контейнер для изображений в узле - переопределяем все возможные уровни */
+.graphContainer .mermaid .node td,
+.graphContainer .mermaid .node span,
+.graphContainer .mermaid .node foreignObject,
+.graphContainer .mermaid .node > * {
+  overflow: visible !important;
+  position: relative !important;
+  z-index: auto !important;
+}
+
+/* Увеличенное состояние - перекрывает всё */
+.graphContainer .mermaid .node img.zoomed,
+.graphContainer .mermaid .node img:hover {
+  transform: scale(3) !important;
+  
+  
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3) !important;
+  position: relative !important;
+  cursor: zoom-out !important;
+  
+  /* Убираем возможные ограничения родителя */
+  isolation: isolate !important;
+}
+
+/* Специально для Mermaid foreignObject */
+.graphContainer .mermaid foreignObject {
+  overflow: visible !important;
+}
+
+.graphContainer .mermaid foreignObject * {
+  overflow: visible !important;
+}
+
+/* Для мобильных устройств уменьшаем количество колонок */
+@media (max-width: 600px) {
+  .bg-images-container {
+    grid-template-columns: repeat(3, minmax(40px, 1fr));
+  }
+}
+
+/* Контейнер для изображений - только один раз! */
+.bg-images-container {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 2px !important;
+  margin: 4px auto !important;
+  background-color: rgba(255,255,255,0.3) !important;
+  border-radius: 6px !important;
+  padding: 8px !important;
+  box-sizing: border-box !important;
+  border: none !important;            /* Убираем контур */
+}
+
+/* Миниатюры - только один раз! */
+.bg-thumbnail {
+  width: 40px !important;
+  height: 40px !important;
+  object-fit: cover !important;
+  background-color: #f0f0f0 !important;
+  border-radius: 8px !important;     /* Увеличено скругление углов */
+  border: none !important;            /* Убираем серый контур */
+  transition: transform 0.2s ease !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+  cursor: zoom-in !important;
+  flex-shrink: 0 !important;
+  padding: 2px !important;           /* Добавляем внутренний отступ */
+  box-sizing: border-box !important;  /* Чтобы padding не увеличивал размер */
+}
+
+
+/* Отключаем конфликтующие стили для изображений в узлах */
+.graphContainer .mermaid .node img {
+  all: unset !important; /* Сбрасываем все предыдущие стили */
+  display: inline-block !important;
+  width: 40px !important;
+  height: 40px !important;
+  object-fit: cover !important;
+  background-color: #f0f0f0 !important;
+  border-radius: 8px !important;     /* Увеличено скругление углов */
+  border: none !important;            /* Убираем серый контур */
+  transition: transform 0.2s ease !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+  margin: 0 1px !important;
+  vertical-align: middle !important;
+  cursor: zoom-in !important;
+}
+
+.graphContainer .mermaid .node img:hover {
+  transform: scale(3.5) !important;
+  z-index: 9999 !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3) !important;
+  cursor: zoom-out !important;
+}
+
+
+
+
+
+/* Контейнер для эмоций персонажа */
+.char-emotions-container {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 2px !important;
+  margin-top: 4px !important;
+  background-color: transparent !important;
+  border-radius: 8px !important;
+  padding: 2px !important;
+}
+
+/* Миниатюры эмоций */
+.char-emotion-thumbnail {
+  width: 40px !important;
+  height: 40px !important;
+  object-fit: contain !important;
+  background-color: #f0f0f0 !important;
+  border-radius: 8px !important;
+  border: none !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+  transition: transform 0.2s ease !important;
+  cursor: zoom-in !important;
+  flex-shrink: 0 !important;
+}
+
+.char-emotion-thumbnail:hover {
+  transform: scale(3.5) !important;
+  z-index: 9999 !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3) !important;
+  cursor: zoom-out !important;
+}
+
+
+
+/* Увеличенные миниатюры для фонов */
+.bg-thumbnail.large {
+  width: 50px !important;
+  height: 50px !important;
+}
+
+
+
+
+
+
+
+/* =========================================================
+   УНИФИЦИРОВАННЫЕ СЕРЫЕ ТОНА ДЛЯ ГРАФА
+   Светло-серый для фона, темно-серый для контура
+   ========================================================= */
+
+/* Общий класс для группы персонажей */
+.characters-group > rect {
+  fill: #e0e0e0 !important;        /* Светло-серый фон */
+  stroke: #808080 !important;       /* Темно-серый контур */
+  stroke-width: 2px !important;
+}
+
+.characters-group .label {
+  color: #333333 !important;        /* Темно-серый текст */
+}
+
+/* Класс для узлов персонажей */
+.character-node > rect {
+  fill: #d0d0d0 !important;        /* Светло-серый фон (чуть темнее группы) */
+  stroke: #808080 !important;       /* Темно-серый контур */
+  stroke-width: 1px !important;
+}
+
+.character-node .label {
+  color: #333333 !important;        /* Темно-серый текст */
+}
+
+/* Класс для группы фонов */
+.backgrounds-group > rect {
+  fill: #c0c0c0 !important;        /* Средне-серый фон */
+  stroke: #606060 !important;       /* Темно-серый контур */
+  stroke-width: 2px !important;
+}
+
+.backgrounds-group .label {
+  color: #333333 !important;        /* Темно-серый текст */
+}
+
+/* Класс для группы игр */
+.games-group > rect {
+  fill: #c0c0c0 !important;
+  stroke: #606060 !important;
+  stroke-width: 2px !important;
+}
+
+.games-group .label {
+  color: #333333 !important;
+}
+
+.games-list-container {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  margin: 6px auto 0 !important;
+  padding: 6px 8px !important;
+  background-color: rgba(220,220,220,0.3) !important;
+  border-radius: 8px !important;
+  min-width: 160px !important;
+}
+
+.game-list-item {
+  padding: 3px 8px !important;
+  border-radius: 6px !important;
+  background: rgba(255,255,255,0.55) !important;
+  border: 1px solid rgba(96,96,96,0.25) !important;
+  color: #333333 !important;
+  font-size: 12px !important;
+  line-height: 1.3 !important;
+  text-align: left !important;
+  white-space: nowrap !important;
+}
+
+.game-list-empty {
+  color: #555555 !important;
+  font-size: 12px !important;
+  font-style: italic !important;
+  text-align: center !important;
+}
+
+/* Контейнер для эмоций персонажа */
+.char-emotions-container {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 4px !important;
+  margin-top: 6px !important;
+  padding: 4px !important;
+  background-color: rgba(200,200,200,0.2) !important;
+  border-radius: 8px !important;
+}
+
+/* Миниатюры эмоций */
+.char-emotion-thumbnail {
+  width: 40px !important;
+  height: 40px !important;
+  object-fit: contain !important;
+  background-color: #f0f0f0 !important;
+  border-radius: 6px !important;
+  border: 1px solid #a0a0a0 !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  cursor: zoom-in !important;
+}
+
+.char-emotion-thumbnail:hover {
+  transform: scale(3.5) !important;
+  z-index: 9999 !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3) !important;
+  border: 1px solid #606060 !important;
+  cursor: zoom-out !important;
+}
+
+/* Контейнер для фонов */
+.bg-images-container {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 4px !important;
+  margin: 6px auto !important;
+  padding: 6px !important;
+  background-color: rgba(220,220,220,0.3) !important;
+  border-radius: 8px !important;
+}
+
+/* Миниатюры фонов (обычные) */
+.bg-thumbnail {
+  width: 40px !important;
+  height: 40px !important;
+  object-fit: cover !important;
+  background-color: #e8e8e8 !important;
+  border-radius: 6px !important;
+  border: 1px solid #a0a0a0 !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  cursor: zoom-in !important;
+}
+
+/* Увеличенные миниатюры для фонов */
+.bg-thumbnail.large {
+  width: 50px !important;
+  height: 50px !important;
+}
+
+.bg-thumbnail:hover {
+  transform: scale(3.5) !important;
+  z-index: 9999 !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3) !important;
+  border: 1px solid #606060 !important;
+  cursor: zoom-out !important;
+}
+
+/* Стили для текста в узлах */
+.characters-group .label span,
+.character-node .label span,
+.backgrounds-group .label span,
+.games-group .label span {
+  color: #333333 !important;
+  font-weight: 500 !important;
+}
+
+.characters-group .label b,
+.character-node .label b,
+.backgrounds-group .label b,
+.games-group .label b {
+  color: #222222 !important;
+  font-weight: 700 !important;
+}
+
+.characters-group .label i,
+.character-node .label i,
+.backgrounds-group .label i,
+.games-group .label i {
+  color: #444444 !important;
+  font-style: italic !important;
+}
+
