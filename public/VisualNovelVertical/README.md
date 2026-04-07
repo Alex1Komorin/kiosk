@@ -58,15 +58,7 @@ No setup. No dependencies. Just open `index.html` and start.
 -   🔀 **branching storylines**
 -   🎵 background music support
 -   📊 built-in **resource loading statistics**
--   📘 **Script & Game Specification:** [SPECIFICATION.md](SPECIFICATION.md)
-
----
-
-## 📘 Specification
-
-Full scripting and mini-game integration specification:
-
-👉 [SPECIFICATION.md](SPECIFICATION.md)
+-   📘 **Specifications:** [Story scripting](SPEC-STORY.md), [Mini-games](SPEC-GAME.md)
 
 ---
 
@@ -125,15 +117,20 @@ This engine is suitable for:
     project/
     │
     ├── index.html
-    ├── engine.css
-    ├── engine.js
-    ├── story-loader.js
-    │
     ├── story.js
-    │
     ├── README.md
     ├── LICENSE
-    ├── SPECIFICATION.md   ← scripting & mini-game specification
+    ├── NOTICE.md
+    │
+    ├── engine/
+    │    ├── engine.css
+    │    ├── engine.js
+    │    └── story-loader.js
+    │
+    ├── docs/
+    │    └── specs/
+    │         ├── SPEC-STORY.md      ← scripting specification
+    │         └── SPEC-GAME.md       ← mini-game specification
     │
     ├── lib/
     └── assets/
@@ -179,28 +176,29 @@ Example:
 window.STORY_TEXT = `
 
 [meta]
-title: Demo Story
-startScene: intro
+title = Demo Story
+startScene = intro
+lang = en
 
 [bg]
-campusHall file=assets/backgrounds/bg_campus_hall.jpg
+campusHall file=assets/backgrounds/bg-campus-hall.jpg
 
 [char]
-anna emotion=neutral image=assets/characters/ch_anna_neutral.png name="Анна" color=#0F0
-anna emotion=smile file=assets/characters/ch_anna.png  # добавление эмоций персонажу anna
-igor emotion=neutral file=assets/characters/ch_igor_neutral.png name="Игорь" color=#F00
+anna emotion=neutral file=assets/characters/ch-anna-neutral.png name="Анна" color=#0F0
+anna emotion=smile file=assets/characters/ch-anna.png  # добавление эмоций персонажу anna
+igor emotion=neutral file=assets/characters/ch-igor-neutral.png name="Игорь" color=#F00
 
-igor name="Игорь" image=assets/characters/ch_igor_smile.png  # Если не указана эмоция, то считается neutral
+igor name="Игорь" file=assets/characters/ch-igor-smile.png  # Если не указана эмоция, то считается neutral
 igor color=#F00  # можно отдельно дополнять значения для персонажа
 
 [audio]
-bgmDay file=assets/audio/bgm_campus_day.mp3
+bgmDay file=assets/audio/bgm-campus-day.mp3
 
 [var]
 resultGame = 0
 
 [game]
-gameCoffeeRush file=assets/games/coffee_rush.html result=resultGame
+gameCoffeeRush file=assets/games/coffee-rush.html
 
 [scene]
 scene intro
@@ -215,27 +213,27 @@ menu
 "Go to the lab" -> lab_scene
 "Go to the cafe" -> cafe_scene
 
+
+scene cafe_scene
+game gameCoffeeRush difficulty=3 result=resultGame
+
+if resultGame == 1 -> good_end
+if resultGame == 0 -> bad_end
+
 `;
 ```
 
 ---
 
-## 📘 Script Specification
+## 📘 Specifications
 
-The full scripting language specification is available in:
+### Story Scripting
 
-👉 [SPECIFICATION.md](SPECIFICATION.md)
+See [docs/specs/SPEC-STORY.md](docs/specs/SPEC-STORY.md).
 
-This document describes:
-- all script sections
-- command syntax
-- variables and logic
-- mini-game integration
-- strict rules for AI-generated games
+### Mini-games
 
-If you are:
-- writing a story → read this first
-- building a mini-game → follow the strict contract inside
+See [docs/specs/SPEC-GAME.md](docs/specs/SPEC-GAME.md).
 
 ---
 
@@ -289,7 +287,7 @@ The engine supports embedding mini-games via iframe.
 ⚠️ Important:
 Mini-games must follow the strict communication protocol described in:
 
-👉 [SPECIFICATION.md](SPECIFICATION.md)
+👉 [docs/specs/SPEC-GAME.md](docs/specs/SPEC-GAME.md)
 
 This includes:
 - initialization via `gameInit`
@@ -325,8 +323,8 @@ installations**.
 
 ### Source Code
 
-The engine source code (`engine.js`, `engine.css`, `index.html`,
-`story-loader.js`) is licensed under the **MIT License**.
+The engine source code (`engine/engine.js`, `engine/engine.css`, `index.html`,
+`engine/story-loader.js`) is licensed under the **MIT License**.
 
 Copyright (c) 2026 Ilya Barilo
 

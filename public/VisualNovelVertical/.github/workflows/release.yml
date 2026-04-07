@@ -1,0 +1,192 @@
+# Сборка zip архива для релиза GitHub
+name: Build ZIP for Release
+
+on:
+  # Запускать после публикации релиза
+  release:
+    types: [published]
+  
+  # Ручной запуск из вкладки Actions
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Тег версии, например v0.1.0.2"
+        required: true
+        type: string
+      upload_to_release:
+        description: "Загрузить архивы в релиз"
+        required: true
+        default: true
+        type: boolean
+      deploy_pages:
+        description: "Deploy demo to GitHub Pages"
+        required: true
+        default: true
+        type: boolean
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+permissions:
+  # Нужно для загрузки файлов в релиз
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: release-pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    env:
+      APP_NAME: ${{ github.event.repository.name }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Detect version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "release" ]; then
+            VERSION="${{ github.event.release.tag_name }}"
+          else
+            VERSION="${{ inputs.tag }}"
+          fi
+
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          
+      - name: Prepare release folder
+        run: |
+          # VERSION уже подготовлена в Detect version
+
+          mkdir -p "build/$APP_NAME"
+          mkdir -p "build/$APP_NAME/assets"
+          mkdir -p "build/$APP_NAME/assets/backgrounds"
+          mkdir -p "build/$APP_NAME/assets/characters"
+          mkdir -p "build/$APP_NAME/assets/audio"
+          mkdir -p "build/$APP_NAME/assets/games"
+          mkdir -p "build/$APP_NAME/lib"
+          mkdir -p "build/$APP_NAME/engine"
+          mkdir -p "build/$APP_NAME/tools"
+          mkdir -p "build/$APP_NAME/docs/specs"
+
+          # Копируем основные файлы проекта
+          [ -f index.html ] && cp index.html "build/$APP_NAME/"
+          [ -f story.js ] && cp story.js "build/$APP_NAME/"
+          [ -f README.md ] && cp README.md "build/$APP_NAME/"
+          [ -f LICENSE ] && cp LICENSE "build/$APP_NAME/"
+          [ -f NOTICE.md ] && cp NOTICE.md "build/$APP_NAME/"
+          [ -f tools/game-tester.html ] && cp tools/game-tester.html "build/$APP_NAME/tools/"
+
+          [ -f engine/engine.css ] && cp engine/engine.css "build/$APP_NAME/engine/"
+          [ -f engine/engine.js ] && cp engine/engine.js "build/$APP_NAME/engine/"
+          [ -f engine/story-loader.js ] && cp engine/story-loader.js "build/$APP_NAME/engine/"
+
+          [ -f docs/specs/SPEC_STORY.md ] && cp docs/specs/SPEC_STORY.md "build/$APP_NAME/docs/specs/"
+          [ -f docs/specs/SPEC_GAME.md ] && cp docs/specs/SPEC_GAME.md "build/$APP_NAME/docs/specs/"
+
+          [ -f lib/mermaid.min.js ] && cp lib/mermaid.min.js "build/$APP_NAME/lib/"
+          # [ -f lib/mermaid-editor.html ] && cp lib/mermaid-editor.html "build/$APP_NAME/lib/"
+
+          # Копируем медиафайлы из assets/backgrounds
+          if [ -d assets/backgrounds ]; then
+            find assets/backgrounds -type f \( \
+              -iname "*.jpg" -o \
+              -iname "*.jpeg" -o \
+              -iname "*.png" \
+            \) -exec cp {} "build/$APP_NAME/assets/backgrounds/" \;
+          fi
+
+          # Копируем медиафайлы из assets/characters
+          if [ -d assets/characters ]; then
+            find assets/characters -type f \( \
+              -iname "*.jpg" -o \
+              -iname "*.jpeg" -o \
+              -iname "*.png" \
+            \) -exec cp {} "build/$APP_NAME/assets/characters/" \;
+          fi
+
+          # Копируем медиафайлы из assets/audio
+          if [ -d assets/audio ]; then
+            find assets/audio -type f \( \
+              -iname "*.mp3" -o \
+              -iname "*.wav" \
+            \) -exec cp {} "build/$APP_NAME/assets/audio/" \;
+          fi
+
+          # Копируем мини-игры и изображения к ним
+          if [ -d assets/games ]; then
+            find assets/games -type f \( \
+              -iname "*.jpg" -o \
+              -iname "*.jpeg" -o \
+              -iname "*.png" -o \
+              -iname "*.html" \
+            \) -exec cp {} "build/$APP_NAME/assets/games/" \;
+          fi
+
+      - name: Prepare site build
+        shell: bash
+        run: |
+          mkdir -p build/site
+          cp -r build/$APP_NAME/* build/site/
+
+      - name: Inject version into engine/engine.js
+        shell: bash
+        run: |
+
+          # Подставляем номер версии в engine/engine.js
+          VERSION_SAFE=$(printf '%s' "$VERSION" | sed 's/[\/&]/\\&/g')
+
+          for TARGET in \
+            "build/$APP_NAME/engine/engine.js" \
+            "build/site/engine/engine.js"
+          do
+            if [ -f "$TARGET" ]; then
+              sed -i "0,/__VERSION__/s/__VERSION__/$VERSION_SAFE/" "$TARGET"
+            fi
+          done
+
+      - name: Create ZIP archive
+        run: |
+          # VERSION уже подготовлена в Detect version
+
+          cd build
+          zip -r "../${APP_NAME}-${VERSION}.zip" "$APP_NAME"
+          cd ..
+
+          cp "${APP_NAME}-${VERSION}.zip" "${APP_NAME}-latest.zip"
+
+      - name: Upload to release
+        if: github.event_name == 'release' || inputs.upload_to_release == true
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.VERSION }}
+          files: |
+            ${{ github.event.repository.name }}-${{ env.VERSION }}.zip
+            ${{ github.event.repository.name }}-latest.zip
+
+      - name: Setup Pages
+        if: github.event_name == 'release' || inputs.deploy_pages == true
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        if: github.event_name == 'release' || inputs.deploy_pages == true
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/site
+
+      - name: Debug build
+        run: ls -R build
+
+      - name: Deploy to GitHub Pages
+        if: github.event_name == 'release' || inputs.deploy_pages == true
+        id: deployment
+        uses: actions/deploy-pages@v4
