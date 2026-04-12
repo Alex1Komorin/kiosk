@@ -61,7 +61,7 @@
 
 .grid-card p {
   color: white;
-  font-size: clamp(0.875rem, 4vw, 1.1rem);
+  font-size: 3rem;
   font-weight: 500;
   text-align: center;
   margin: 0;
@@ -146,21 +146,5 @@
   .grid-card img {
     width: 50%;
     margin-bottom: 1rem;
-  }
-}
-
-/* Адаптивность для очень больших экранов */
-@media (min-width: 1920px) {
-  .grid-container {
-    max-width: 1600px;
-    gap: 2rem;
-  }
-  
-  .grid-card {
-    padding: 2rem;
-  }
-  
-  .grid-card p {
-    font-size: 1.3rem;
   }
 }

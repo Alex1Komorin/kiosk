@@ -16,6 +16,7 @@ import DocumentPage from './pages/DocumentsPage/DocumentPage';
 import ContactPage from './pages/сontactPage/сontactPage';
 import LinksPage from './pages/LinkPage/LinkPage';
 import HomePage from './pages/homePage/homePage';
+import SliderPage from './pages/associationsPage/associationsPage';
 import useGlobalBlocker from './hooks/UseGlobalBlocker';
 import './App.css';
 
@@ -52,6 +53,12 @@ function App() {
               <Route path="/" element={
                 <Sidebar>
                   <HomePage />
+                </Sidebar>
+              } />
+              
+              <Route path="/associations" element={
+                <Sidebar>
+                  <SliderPage />
                 </Sidebar>
               } />
 

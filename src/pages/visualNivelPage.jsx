@@ -11,7 +11,7 @@ const VisualNovelPage = () => {
       background: '#000' // на случай если iframe не загрузится
     }}>
       <iframe
-        src="/VisualNovelVertical/index.html?topSpacing=500&bottomSpacing=800"
+        src="https://ilyabarilo.github.io/vn-vertical-engine/index.html?topSpacing=500&bottomSpacing=800"
         style={{
           width: '100%',
           height: '100%',
