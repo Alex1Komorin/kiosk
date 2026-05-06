@@ -13,7 +13,7 @@ const SliderPage = () => {
     'assotiations/project/3d-vr.png',
     'assotiations/project/ol-math.png',
     'assotiations/project/sport-proga.png',
-    'assotiations/student/media.jpg',
+    'assotiations/student/media.png',
     'assotiations/student/play.png',
     'assotiations/student/mask.png',
     'assotiations/student/idea.png',
