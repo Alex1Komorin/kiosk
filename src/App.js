@@ -89,7 +89,7 @@ function App() {
                 </Sidebar>
               } />
 
-              <Route path="/games/new-game" element={
+              <Route path="/games/korpusb-games" element={
                 <Sidebar>
                   <NewGame />
                 </Sidebar>

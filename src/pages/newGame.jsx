@@ -20,7 +20,7 @@ const NewGame = () => {
           padding: 0,
           display: 'block'
         }}
-        title="Новая игра"
+        title="korpusb-games"
         allow="fullscreen"
       />
     </div>

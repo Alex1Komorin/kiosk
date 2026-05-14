@@ -26,10 +26,10 @@ const GamesPage = () => {
       path: '/games/puzzle'
     },
         {
-      id: 'puzzle',
-      title: 'Новая игра',
+      id: 'korpusb-games',
+      title: 'Корпус Б',
       image: '/images/gamesIcons/novel.png',
-      path: '/games/new-game'
+      path: '/games/korpusb-games'
     }
   ];
 
