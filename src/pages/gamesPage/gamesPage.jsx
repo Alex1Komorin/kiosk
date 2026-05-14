@@ -24,6 +24,12 @@ const GamesPage = () => {
       title: 'Пазлы к 8 марта',
       image: '/images/gamesIcons/puzzle.png',
       path: '/games/puzzle'
+    },
+        {
+      id: 'puzzle',
+      title: 'Новая игра',
+      image: '/images/gamesIcons/novel.png',
+      path: '/games/new-game'
     }
   ];
 

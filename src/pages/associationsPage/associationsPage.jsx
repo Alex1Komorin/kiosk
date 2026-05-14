@@ -5,7 +5,6 @@ import './/associationsPage.css';
 const SliderPage = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Массив с изображениями (замените на свои ссылки)
   const images = [
     'assotiations/project/e-sport.png',
     'assotiations/project/it-pro.png',

@@ -16,6 +16,7 @@ import DocumentPage from './pages/DocumentsPage/DocumentPage';
 import ContactPage from './pages/сontactPage/сontactPage';
 import LinksPage from './pages/LinkPage/LinkPage';
 import HomePage from './pages/homePage/homePage';
+import NewGame from './pages/newGame'
 import SliderPage from './pages/associationsPage/associationsPage';
 import useGlobalBlocker from './hooks/UseGlobalBlocker';
 import './App.css';
@@ -85,6 +86,12 @@ function App() {
               <Route path="/games/puzzle" element={
                 <Sidebar>
                   <PuzzlePage />
+                </Sidebar>
+              } />
+
+              <Route path="/games/new-game" element={
+                <Sidebar>
+                  <NewGame />
                 </Sidebar>
               } />
 
