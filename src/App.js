@@ -10,6 +10,8 @@ import GamesPage from './pages/gamesPage/gamesPage';
 import BalloonGamePage from './pages/BalloonGamePage';
 import VisualNovelPage from './pages/visualNivelPage';
 import PuzzlePage from './pages/PuzzlePage';
+import VirtualTourPage from './pages/VirtualTourPage';
+import FreshmanAdaptationPage from './pages/FreshmanAdaptationPage';
 import Eios from './pages/eios';
 import Sidebar from './layout/SidebarLayout';
 import DocumentPage from './pages/DocumentsPage/DocumentPage';
@@ -92,6 +94,18 @@ function App() {
               <Route path="/games/korpusb-games" element={
                 <Sidebar>
                   <NewGame />
+                </Sidebar>
+              } />
+
+              <Route path="/games/virtual-tour" element={
+                <Sidebar>
+                  <VirtualTourPage />
+                </Sidebar>
+              } />
+
+              <Route path="/games/freshman-adaptation" element={
+                <Sidebar>
+                  <FreshmanAdaptationPage />
                 </Sidebar>
               } />
 

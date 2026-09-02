@@ -25,11 +25,23 @@ const GamesPage = () => {
       image: '/images/gamesIcons/puzzle.png',
       path: '/games/puzzle'
     },
-        {
+    {
       id: 'korpusb-games',
       title: 'Корпус Б',
       image: '/images/gamesIcons/novel.png',
       path: '/games/korpusb-games'
+    },
+    {
+      id: 'virtual-tour',
+      title: 'Виртуальная экскурсия по корпусу',
+      image: '/images/gamesIcons/novel.png',
+      path: '/games/virtual-tour'
+    },
+    {
+      id: 'freshman-adaptation',
+      title: 'Адаптация первокурсников',
+      image: '/mascot.png',
+      path: '/games/freshman-adaptation'
     }
   ];
 
