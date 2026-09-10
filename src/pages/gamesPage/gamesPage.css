@@ -9,7 +9,7 @@
 
 .games-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 3rem;
   margin: 0 auto;
   width: 100%;
@@ -20,12 +20,13 @@
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+  min-width: 0;
 }
 
 .game-card {
-  background: linear-gradient(135deg, var(--color-primary-blue) 0%, var(--color-primary-blue) 75%, var(--color-dark-blue) 100%);
-  border-radius: 30px;
-  padding: 1.5rem;
+  background: none;
+  border-radius: 0;
+  padding: 0;
   aspect-ratio: 1 / 1;
   width: 100%;
   display: flex;
@@ -33,18 +34,17 @@
   justify-content: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: none;
 }
 
 .game-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+  transform: scale(1.03);
+  box-shadow: none;
 }
 
 .game-card-image {
   width: 100%;
-  height: auto;
-  max-height: 100%;
+  height: 100%;
   object-fit: contain;
   border-radius: 30px;
 }
@@ -64,7 +64,7 @@
   }
   
   .games-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1rem;
   }
   
@@ -76,7 +76,7 @@
 /* Адаптивность для мобильных устройств */
 @media (max-width: 640px) {
   .games-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1rem;
   }
   

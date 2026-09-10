@@ -6,9 +6,9 @@ import './contactPage.css';
 const ContactPage = () => {
   const navigate = useNavigate();
 
-  const handleCardClick = (url) => {
-    if (url) {
-      navigate(`/external?url=${encodeURIComponent(url)}`);
+  const handleCardClick = (gameId) => {
+    if (gameId) {
+      navigate(`/games/${gameId}`);
     }
   };
 
@@ -17,7 +17,7 @@ const ContactPage = () => {
       <div className="contact-grid">
         <div 
           className="contact-card-wrapper"
-          onClick={() => handleCardClick('https://kosgos.ru/')}
+          onClick={() => handleCardClick('kosgos-site')}
         >
           <img 
             src="/кгу.png" 
@@ -29,7 +29,7 @@ const ContactPage = () => {
         
         <div 
           className="contact-card-wrapper"
-          onClick={() => handleCardClick('https://itschool.kosgos.ru/')}
+          onClick={() => handleCardClick('ivitsh-site')}
         >
           <img 
             src="/ВИТШ.png" 

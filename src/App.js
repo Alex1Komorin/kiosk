@@ -7,18 +7,12 @@ import { TextSizeProvider } from './contexts/TextSizeContext';
 import InactivityWarning from './components/InactivityWarning/InactivityWarning';
 import Index from './pages/Index/Index';
 import GamesPage from './pages/gamesPage/gamesPage';
-import BalloonGamePage from './pages/BalloonGamePage';
-import VisualNovelPage from './pages/visualNivelPage';
-import PuzzlePage from './pages/PuzzlePage';
-import VirtualTourPage from './pages/VirtualTourPage';
-import FreshmanAdaptationPage from './pages/FreshmanAdaptationPage';
-import Eios from './pages/eios';
+import GamePage from './pages/GamePage';
 import Sidebar from './layout/SidebarLayout';
 import DocumentPage from './pages/DocumentsPage/DocumentPage';
 import ContactPage from './pages/сontactPage/сontactPage';
 import LinksPage from './pages/LinkPage/LinkPage';
 import HomePage from './pages/homePage/homePage';
-import NewGame from './pages/newGame'
 import SliderPage from './pages/associationsPage/associationsPage';
 import useGlobalBlocker from './hooks/UseGlobalBlocker';
 import './App.css';
@@ -72,46 +66,9 @@ function App() {
                 </Sidebar>
               } />
 
-              {/* Отдельные игры */}
-              <Route path="/games/balloon" element={
+              <Route path="/games/:gameId" element={
                 <Sidebar>
-                  <BalloonGamePage />
-                </Sidebar>
-              } />
-
-              <Route path="/games/novel" element={
-                <Sidebar>
-                  <VisualNovelPage />
-                </Sidebar>
-              } />
-
-              <Route path="/games/puzzle" element={
-                <Sidebar>
-                  <PuzzlePage />
-                </Sidebar>
-              } />
-
-              <Route path="/games/korpusb-games" element={
-                <Sidebar>
-                  <NewGame />
-                </Sidebar>
-              } />
-
-              <Route path="/games/virtual-tour" element={
-                <Sidebar>
-                  <VirtualTourPage />
-                </Sidebar>
-              } />
-
-              <Route path="/games/freshman-adaptation" element={
-                <Sidebar>
-                  <FreshmanAdaptationPage />
-                </Sidebar>
-              } />
-
-              <Route path="/external" element={
-                <Sidebar>
-                  <Eios />
+                  <GamePage />
                 </Sidebar>
               } />
 
