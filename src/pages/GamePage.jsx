@@ -15,7 +15,14 @@ const GamePage = () => {
     return <div>Игра не настроена</div>;
   }
 
-  return <ScaledIframe src={game.url} title={game.title} background={game.background} />;
+  return (
+    <ScaledIframe
+      src={game.url}
+      title={game.title}
+      background={game.background}
+      initialScale={game.iframeScale}
+    />
+  );
 };
 
 export default GamePage;

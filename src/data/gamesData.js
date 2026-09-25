@@ -53,7 +53,8 @@ export const games = [
     title: 'Виртуальная экскурсия по корпусу',
     image: '/images/gamesIcons/virtual-tour.svg',
     url: 'https://360.kosgos.ru',
-    background: '#0b1020'
+    background: '#0b1020',
+    iframeScale: 1
   },
   {
     id: 'freshman-adaptation',
