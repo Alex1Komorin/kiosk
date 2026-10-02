@@ -14,7 +14,7 @@ const GridPage = () => {
     { id: 4, image: '/images/homeIcons/контактная информация.svg', title: 'Контактная информация', link: '/contact', external: false, gradient: 'linear-gradient(135deg, var(--color-primary-blue) 0%, var(--color-purple) 100%)' },
     { id: 5, image: '/images/homeIcons/объединения.svg', title: 'Объединения', link: "/associations", external: false, gradient: 'linear-gradient(135deg, var(--color-purple) 0%, var(--color-primary-blue) 100%)' },
     { id: 6, image: '/images/homeIcons/о важном.svg', title: 'О важном', link: null, external: false, gradient: 'linear-gradient(135deg, var(--color-primary-blue) 0%, var(--color-cyan) 100%)' },
-    { id: 7, image: '/images/homeIcons/навигация.svg', title: 'Навигация', link: '/games/virtual-tour', external: false, gradient: 'linear-gradient(135deg, var(--color-purple) 0%, var(--color-primary-blue) 100%)' },
+    { id: 7, image: '/images/homeIcons/навигация.svg', title: '3Д экскурсия', link: '/games/virtual-tour', external: false, gradient: 'linear-gradient(135deg, var(--color-purple) 0%, var(--color-primary-blue) 100%)' },
   ];
 
   const handleCardClick = (card) => {

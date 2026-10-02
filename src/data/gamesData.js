@@ -59,7 +59,7 @@ export const games = [
   {
     id: 'freshman-adaptation',
     title: 'Адаптация первокурсников',
-    image: '/mascot.png',
+    image: '/vitshik-transperent.png',
     url: 'https://ivitsh-portal.kosgos.ru',
     background: '#ffffff'
   }

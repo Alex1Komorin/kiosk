@@ -12,7 +12,10 @@ const GamesPage = () => {
     <div className="games-grid">
       {games.filter((game) => game.showInGames !== false).map(game => (
         <div key={game.id} className="game-card-wrapper">
-          <div className="game-card" onClick={() => navigate(`/games/${game.id}`)}>
+          <div
+            className="game-image-container"
+            onClick={() => navigate(`/games/${game.id}`)}
+          >
             <img
               src={game.image}
               alt={game.title}
